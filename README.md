@@ -39,19 +39,29 @@ cp .env.example .env
 ```
 
 - Generar la llave de la aplicación
+
 ```bash
 php artisan key:generate
 ```
 
 - Ejecutar migraciones y seeds
+
 ```
 php artisan migrate --seed
 ```
 
 - Iniciar los servidores
+
 ```bash
 php artisan serve
 npm run dev
 ```
+
 Si el php artisan serve no funciona, puedes usar esto ``php -S 127.0.0.1:3644 -t public
 ``
+
+- Crear un usuario super admin
+
+```bash
+php artisan shield:super-admin
+```
