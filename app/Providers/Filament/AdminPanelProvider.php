@@ -47,9 +47,10 @@ class AdminPanelProvider extends PanelProvider
                 'info' => Color::hex('#527bea'),
             ])
             ->spa()
-            ->font('Poppins')
+//            ->font('Poppins')
 //            ->brandLogo(asset('brand/imagotipoNegro.png'))
 //            ->darkModeBrandLogo(asset('brand/imagotipoBlanco.png'))
+            ->darkMode(false)
             ->brandLogoHeight('3.5rem')
             ->sidebarCollapsibleOnDesktop()
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
