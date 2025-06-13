@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('product_customizations_options', function (Blueprint $table) {
-            $table->id();
+            $table->id()->startingValue(1001);
             $table->foreignId('customization_id');
             $table->string('name');
             $table->integer('extra_price')->default(0);

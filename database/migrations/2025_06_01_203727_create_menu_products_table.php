@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('menu_products', function (Blueprint $table) {
-            $table->id();
+            $table->id()->startingValue(1001);
             $table->foreignId('category_id');
             $table->string('name');
             $table->string('description')->nullable();

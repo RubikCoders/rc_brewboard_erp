@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->id();
+            $table->id()->startingValue(1001);
             $table->foreignId('employee_id')->constrained('employees');
             $table->string('customer_name');
             $table->integer('total');

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\EmployeeRole;
 use Illuminate\Database\Seeder;
 
 class EmployeeRoleSeeder extends Seeder
@@ -12,6 +12,15 @@ class EmployeeRoleSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        EmployeeRole::create([
+            'name' => 'Administrador',
+            'description' => 'Personal administrativo'
+        ]);
+
+        EmployeeRole::create([
+            'name' => 'Bartender',
+            'description' => 'Personal que atiende a los clientes y prepara los pedidos'
+        ]);
+
     }
 }

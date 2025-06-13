@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('employees', function (Blueprint $table) {
-            $table->id();
+            $table->id()->startingValue(1001);
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->foreignId('role_id')->constrained('employee_roles');
             $table->string('name');
@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->string('phone');
             $table->string('emergency_contact');
             $table->string('nss');
-            $table->dateTime('entry_date');
+            $table->date('entry_date');
             $table->softDeletes();
             $table->timestamps();
         });

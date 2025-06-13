@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('product_customizations', function (Blueprint $table) {
-            $table->id();
+            $table->id()->startingValue(1001);
             $table->foreignId('product_id');
             $table->string('name');
             $table->timestamps();

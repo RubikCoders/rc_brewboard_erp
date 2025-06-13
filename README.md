@@ -65,3 +65,5 @@ Si el php artisan serve no funciona, puedes usar esto ``php -S 127.0.0.1:3644 -t
 ```bash
 php artisan shield:super-admin
 ```
+
+
