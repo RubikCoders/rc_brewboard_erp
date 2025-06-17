@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id()->startingValue(1001);
             $table->foreignId('product_id');
             $table->string('name');
+            $table->boolean('required');
             $table->timestamps();
 
             $table->foreign('product_id')->references('id')->on('menu_products')->onUpdate('cascade')->onDelete('cascade');

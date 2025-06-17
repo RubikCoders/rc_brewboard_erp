@@ -5,13 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static create(array $array)
+ */
 class MenuProduct extends Model
 {
     /** @use HasFactory<\Database\Factories\MenuProductFactory> */
     use HasFactory;
 
     protected $fillable = [
-        'menu_category_id',
+        'category_id',
         'name',
         'description',
         'ingredients',

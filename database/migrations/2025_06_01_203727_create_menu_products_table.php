@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->foreignId('category_id');
             $table->string('name');
             $table->string('description')->nullable();
-            $table->json('ingredients')->nullable();
+            $table->string('ingredients')->nullable();
             $table->integer('base_price');
             $table->integer('estimated_time_min');
             $table->boolean('is_available')->default(true);

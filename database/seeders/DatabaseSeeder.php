@@ -16,7 +16,11 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             EmployeeRoleSeeder::class,
-            EmployeeSeeder::class
+            EmployeeSeeder::class,
+            MenuCategorySeeder::class,
+            MenuProductSeeder::class,
+            ProductCustomizationSeeder::class,
+            ProductCustomizationOptionSeeder::class
         ]);
     }
 }
