@@ -309,55 +309,55 @@ class ProductCustomizationSeeder extends Seeder
         //endregion
 
         //region Bebidas frias
-        // Latte frío (1007)
+        // Latte frío (1012)
         ProductCustomization::create([
             'id' => 1042,
-            'product_id' => 1007,
+            'product_id' => 1012,
             'name' => 'Tamaño',
             'required' => true,
         ]);
 
         ProductCustomization::create([
             'id' => 1043,
-            'product_id' => 1007,
+            'product_id' => 1012,
             'name' => 'Tipo de leche',
             'required' => true,
         ]);
 
-        // Capuccino frío (1008)
+        // Capuccino frío (1013)
         ProductCustomization::create([
             'id' => 1044,
-            'product_id' => 1008,
+            'product_id' => 1013,
             'name' => 'Tamaño',
             'required' => true,
         ]);
 
         ProductCustomization::create([
             'id' => 1045,
-            'product_id' => 1008,
+            'product_id' => 1013,
             'name' => 'Tipo de leche',
             'required' => true,
         ]);
 
-        // Cold Brew (1009)
+        // Cold Brew (1014)
         ProductCustomization::create([
             'id' => 1046,
-            'product_id' => 1009,
+            'product_id' => 1014,
             'name' => 'Tamaño',
             'required' => true,
         ]);
 
         ProductCustomization::create([
             'id' => 1047,
-            'product_id' => 1009,
+            'product_id' => 1014,
             'name' => 'Extras',
             'required' => false,
         ]);
 
-        // Americano frío (1010)
+        // Americano frío (1015)
         ProductCustomization::create([
             'id' => 1048,
-            'product_id' => 1010,
+            'product_id' => 1015,
             'name' => 'Tamaño',
             'required' => true,
         ]);
@@ -365,79 +365,79 @@ class ProductCustomizationSeeder extends Seeder
         // Frappe Café (1011)
         ProductCustomization::create([
             'id' => 1049,
-            'product_id' => 1011,
+            'product_id' => 1016,
             'name' => 'Sabor',
             'required' => true,
         ]);
 
         ProductCustomization::create([
             'id' => 1050,
-            'product_id' => 1011,
+            'product_id' => 1016,
             'name' => 'Tipo de leche',
             'required' => true,
         ]);
 
         ProductCustomization::create([
             'id' => 1051,
-            'product_id' => 1011,
+            'product_id' => 1016,
             'name' => 'Extras',
             'required' => false,
         ]);
 
-        // Chocolate frío (1012)
+        // Chocolate frío (1017)
         ProductCustomization::create([
             'id' => 1052,
-            'product_id' => 1012,
+            'product_id' => 1017,
             'name' => 'Presentación',
             'required' => true,
         ]);
 
         ProductCustomization::create([
             'id' => 1053,
-            'product_id' => 1012,
+            'product_id' => 1017,
             'name' => 'Tamaño',
             'required' => true,
         ]);
 
         ProductCustomization::create([
             'id' => 1054,
-            'product_id' => 1012,
+            'product_id' => 1017,
             'name' => 'Tipo de leche',
             'required' => true,
         ]);
 
         ProductCustomization::create([
             'id' => 1055,
-            'product_id' => 1012,
+            'product_id' => 1017,
             'name' => 'Extras',
             'required' => false,
         ]);
 
-        // Matcha frío (1013)
+        // Matcha frío (1018)
         ProductCustomization::create([
             'id' => 1056,
-            'product_id' => 1013,
+            'product_id' => 1018,
             'name' => 'Presentación',
             'required' => true,
         ]);
 
         ProductCustomization::create([
             'id' => 1057,
-            'product_id' => 1013,
+            'product_id' => 1018,
             'name' => 'Tamaño',
             'required' => true,
         ]);
 
         ProductCustomization::create([
             'id' => 1058,
-            'product_id' => 1013,
+            'product_id' => 1018,
             'name' => 'Tipo de leche',
             'required' => true,
         ]);
 
         ProductCustomization::create([
             'id' => 1059,
-            'product_id' => 1013,
+            'product_id' => 1018,
             'name' => 'Extras',
             'required' => false,
         ]);
@@ -445,112 +445,112 @@ class ProductCustomizationSeeder extends Seeder
         // Chai frío (1014)
         ProductCustomization::create([
             'id' => 1060,
-            'product_id' => 1014,
+            'product_id' => 1019,
             'name' => 'Sabor',
             'required' => true,
         ]);
 
         ProductCustomization::create([
             'id' => 1061,
-            'product_id' => 1014,
+            'product_id' => 1019,
             'name' => 'Presentación',
             'required' => true,
         ]);
 
         ProductCustomization::create([
             'id' => 1062,
-            'product_id' => 1014,
+            'product_id' => 1019,
             'name' => 'Tamaño',
             'required' => true,
         ]);
 
         ProductCustomization::create([
             'id' => 1063,
-            'product_id' => 1014,
+            'product_id' => 1019,
             'name' => 'Tipo de leche',
             'required' => true,
         ]);
 
         ProductCustomization::create([
             'id' => 1064,
-            'product_id' => 1014,
+            'product_id' => 1019,
             'name' => 'Extras',
             'required' => false,
         ]);
 
-        // Tisanas frías (1015)
+        // Tisanas frías (1020)
         ProductCustomization::create([
             'id' => 1065,
-            'product_id' => 1015,
+            'product_id' => 1020,
             'name' => 'Sabor',
             'required' => true,
         ]);
 
         ProductCustomization::create([
             'id' => 1066,
-            'product_id' => 1015,
+            'product_id' => 1020,
             'name' => 'Presentación',
             'required' => true,
         ]);
 
         ProductCustomization::create([
             'id' => 1067,
-            'product_id' => 1015,
+            'product_id' => 1020,
             'name' => 'Tamaño',
             'required' => true,
         ]);
 
         ProductCustomization::create([
             'id' => 1068,
-            'product_id' => 1015,
+            'product_id' => 1020,
             'name' => 'Extras',
             'required' => false,
         ]);
         //endregion
 
         //region Alimentos
-        // Paninis (1016)
+        // Paninis (1021)
         ProductCustomization::create([
             'id' => 1069,
-            'product_id' => 1016,
+            'product_id' => 1021,
             'name' => 'Tipo',
             'required' => true,
         ]);
 
         ProductCustomization::create([
             'id' => 1070,
-            'product_id' => 1016,
+            'product_id' => 1021,
             'name' => 'Pan',
             'required' => true,
         ]);
 
         ProductCustomization::create([
             'id' => 1071,
-            'product_id' => 1016,
+            'product_id' => 1021,
             'name' => 'Extras',
             'required' => false,
         ]);
 
-        // Rebanada de pastel (1017)
+        // Rebanada de pastel (1022)
         ProductCustomization::create([
             'id' => 1072,
-            'product_id' => 1017,
+            'product_id' => 1022,
             'name' => 'Sabor',
             'required' => true,
         ]);
 
-        // Galletas artesanales (1018)
+        // Galletas artesanales (1023)
         ProductCustomization::create([
             'id' => 1073,
-            'product_id' => 1018,
+            'product_id' => 1023,
             'name' => 'Cantidad',
             'required' => true,
         ]);
 
-        //  Brownie (1019)
+        //  Brownie (1024)
         ProductCustomization::create([
             'id' => 1074,
-            'product_id' => 1019,
+            'product_id' => 1024,
             'name' => 'Extras',
             'required' => false,
         ]);
