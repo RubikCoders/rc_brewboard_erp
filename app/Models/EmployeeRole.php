@@ -17,4 +17,11 @@ class EmployeeRole extends Model
         'name',
         'description'
     ];
+
+    //region Relationships
+    public function employees()
+    {
+        return $this->hasMany(Employee::class, 'role_id');
+    }
+    //endregion
 }

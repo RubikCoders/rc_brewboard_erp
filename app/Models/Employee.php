@@ -26,4 +26,21 @@ class Employee extends Model
         'nss',
         'entry_date',
     ];
+
+    //region Relationships
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(EmployeeRole::class, 'role_id');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+    //endregion
 }

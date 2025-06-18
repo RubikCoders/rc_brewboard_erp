@@ -52,6 +52,13 @@ class User extends Authenticatable
         ];
     }
 
+    //region Relationships
+    public function employee()
+    {
+        return $this->hasOne(Employee::class, 'user_id');
+    }
+    //endregion
+
     public function canAccessPanel(Panel $panel): bool
     {
         return true;

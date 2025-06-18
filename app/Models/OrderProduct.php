@@ -19,4 +19,21 @@ class OrderProduct extends Model
         'notes',
         'kitchen_status',
     ];
+
+    //region Relationships
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(MenuProduct::class, 'product_id');
+    }
+
+    public function customizations()
+    {
+        return $this->hasMany(OrderProductCustomization::class, 'order_product_id');
+    }
+    //endregion
 }

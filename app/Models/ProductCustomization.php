@@ -18,4 +18,21 @@ class ProductCustomization extends Model
         'name',
         'required'
     ];
+
+    //region Relationships
+    public function product()
+    {
+        return $this->belongsTo(MenuProduct::class, 'product_id');
+    }
+
+    public function options()
+    {
+        return $this->hasMany(ProductCustomizationOption::class, 'customization_id');
+    }
+
+    public function orderProductCustomizations()
+    {
+        return $this->hasMany(OrderProductCustomization::class, 'product_customization_id');
+    }
+    //endregion
 }

@@ -20,4 +20,23 @@ class Order extends Model
         'from',
         'status',
     ];
+
+    //region Relationships
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
+
+    public function orderProducts()
+    {
+        return $this->hasMany(OrderProduct::class);
+    }
+
+    public function products()
+    {
+        return $this->belongsToMany(MenuProduct::class, 'order_products')
+            ->using(OrderProduct::class)
+            ->withPivot(['quantity', 'is_delivered', 'total_price', 'notes', 'kitchen_status']);
+    }
+    //endregion
 }

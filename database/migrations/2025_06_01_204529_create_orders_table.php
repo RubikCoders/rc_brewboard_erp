@@ -18,7 +18,10 @@ return new class extends Migration {
             $table->integer('tax');
             $table->string('payment_method');
             $table->enum('from', ['erp', 'csp']);
-            $table->tinyInteger('status');
+            $table->tinyInteger('status'); 
+            // 0 - pendiente
+            // 1 - pagada
+            // 2 - cancelada
             $table->softDeletes();
             $table->timestamps();
         });

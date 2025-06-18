@@ -20,7 +20,10 @@ class DatabaseSeeder extends Seeder
             MenuCategorySeeder::class,
             MenuProductSeeder::class,
             ProductCustomizationSeeder::class,
-            ProductCustomizationOptionSeeder::class
+            ProductCustomizationOptionSeeder::class,
+            OrderSeeder::class,
+            OrderProductSeeder::class,
+            OrderProductCustomizationSeeder::class,
         ]);
     }
 }

@@ -16,8 +16,11 @@ class OrderProductCustomizationFactory extends Factory
      */
     public function definition(): array
     {
+        $orderProductId = $this->faker->numberBetween(1001, 2000);
+
         return [
-            //
+            "order_product_id" => $orderProductId,
+            "product_customization_id" => $this->faker->numberBetween(1001, 1200),
         ];
     }
 }

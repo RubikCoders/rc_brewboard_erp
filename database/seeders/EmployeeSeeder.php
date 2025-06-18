@@ -14,6 +14,7 @@ class EmployeeSeeder extends Seeder
     {
 //        Admin user
         Employee::create([
+            'id' => 1001,
             'user_id' => 7,
             'role_id' => 1001,
             'name' => 'Rodrigo',
@@ -28,6 +29,7 @@ class EmployeeSeeder extends Seeder
 
 //        Bartender User
         Employee::create([
+            'id' => 1002,
             'user_id' => 504,
             'role_id' => 1002,
             'name' => 'Regina',
@@ -42,6 +44,7 @@ class EmployeeSeeder extends Seeder
 
 //        Bartender user
         Employee::create([
+            'id' => 1003,
             'user_id' => 104,
             'role_id' => 1002,
             'name' => 'Cinthia',
@@ -56,6 +59,7 @@ class EmployeeSeeder extends Seeder
 
         //        Bartender user
         Employee::create([
+            'id' => 1004,
             'user_id' => 337,
             'role_id' => 1002,
             'name' => 'Antonio',

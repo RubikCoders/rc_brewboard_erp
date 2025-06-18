@@ -17,4 +17,11 @@ class MenuCategory extends Model
         'name',
         'description',
     ];
+
+    //region Relationships
+    public function products()
+    {
+        return $this->hasMany(MenuProduct::class, 'category_id');
+    }
+    //endregion
 }

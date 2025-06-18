@@ -20,4 +20,11 @@ class ProductCustomizationOption extends Model
         'name',
         'extra_price'
     ];
+
+    //region Relationships
+    public function customization()
+    {
+        return $this->belongsTo(ProductCustomization::class, 'customization_id');
+    }
+    //endregion
 }
