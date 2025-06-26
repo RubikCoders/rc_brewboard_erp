@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\OrderProductCustomization;
+use App\Models\OrderCustomization;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class OrderProductCustomizationSeeder extends Seeder
+class OrderCustomizationSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        OrderProductCustomization::factory()->count(5000)->create();
+        OrderCustomization::factory()->count(5000)->create();
     }
 }

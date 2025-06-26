@@ -10,14 +10,14 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('customizations_options', function (Blueprint $table) {
+        Schema::create('order_reviews', function (Blueprint $table) {
             $table->id()->startingValue(1001);
-            $table->foreignId('customization_id');
-            $table->string('name');
-            $table->integer('extra_price')->default(0);
+            $table->foreignId('order_id');
+            $table->integer('rating');
+            $table->text('comment')->nullable();
             $table->timestamps();
 
-            $table->foreign('customization_id')->references('id')->on('product_customizations')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('order_id')->references('id')->on('orders')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 
@@ -26,6 +26,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('customizations_options');
+        Schema::dropIfExists('order_reviews');
     }
 };

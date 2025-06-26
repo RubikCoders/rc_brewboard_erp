@@ -27,12 +27,17 @@ class ProductCustomization extends Model
 
     public function options()
     {
-        return $this->hasMany(ProductCustomizationOption::class, 'customization_id');
+        return $this->hasMany(CustomizationOption::class, 'customization_id');
     }
 
     public function orderProductCustomizations()
     {
-        return $this->hasMany(OrderProductCustomization::class, 'product_customization_id');
+        return $this->hasMany(OrderCustomization::class, 'product_customization_id');
+    }
+
+    public function inventory()
+    {
+        return $this->morphOne(Inventory::class, 'stockable');
     }
     //endregion
 }

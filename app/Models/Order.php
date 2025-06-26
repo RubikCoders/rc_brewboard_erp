@@ -38,5 +38,10 @@ class Order extends Model
             ->using(OrderProduct::class)
             ->withPivot(['quantity', 'is_delivered', 'total_price', 'notes', 'kitchen_status']);
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(OrderReview::class);
+    }
     //endregion
 }

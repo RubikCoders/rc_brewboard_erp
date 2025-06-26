@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Log;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\OrderProductCustomization>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\OrderCustomization>
  */
-class OrderProductCustomizationFactory extends Factory
+class OrderCustomizationFactory extends Factory
 {
     /**
      * Define the model's default state.

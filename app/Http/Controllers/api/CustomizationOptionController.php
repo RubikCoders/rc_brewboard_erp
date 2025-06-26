@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
-use App\Models\ProductCustomizationOption;
+use App\Models\CustomizationOption;
 use Illuminate\Http\JsonResponse;
 
-class ProductCustomizationOptionController extends Controller
+class CustomizationOptionController extends Controller
 {
     /**
      * Get all customization options by customization
@@ -16,7 +16,7 @@ class ProductCustomizationOptionController extends Controller
      */
     public function indexByCustomization($customizationId): JsonResponse
     {
-        $customizationOptions = ProductCustomizationOption::where("customization_id", $customizationId)
+        $customizationOptions = CustomizationOption::where("customization_id", $customizationId)
             ->orderBy("created_at", "desc")
             ->paginate(10);
         return response()->json($customizationOptions)->setStatusCode(200);
@@ -31,7 +31,7 @@ class ProductCustomizationOptionController extends Controller
      */
     public function showByCustomizationAndOption($customizationId, $optionId): JsonResponse
     {
-        $customizationOption = ProductCustomizationOption::where("customization_id", $customizationId)
+        $customizationOption = CustomizationOption::where("customization_id", $customizationId)
             ->where("id", $optionId)
             ->first();
         return response()->json($customizationOption)->setStatusCode(200);

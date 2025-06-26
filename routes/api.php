@@ -4,7 +4,7 @@ use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\MenuCategoryController;
 use App\Http\Controllers\Api\MenuProductController;
 use App\Http\Controllers\Api\ProductCustomizationController;
-use App\Http\Controllers\api\ProductCustomizationOptionController;
+use App\Http\Controllers\api\CustomizationOptionController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/user', function (Request $request) {
@@ -32,8 +32,8 @@ Route::group(["prefix" => "product-customization"], function () {
 
 // Customization options
 Route::group(["prefix" => "customization-option"], function () {
-    Route::get("/customization/{customization}", [ProductCustomizationOptionController::class, "indexByCustomization"]);
-    Route::get("/customization/{customization}/option/{option}", [ProductCustomizationOptionController::class, "showByCustomizationAndOption"]);
+    Route::get("/customization/{customization}", [CustomizationOptionController::class, "indexByCustomization"]);
+    Route::get("/customization/{customization}/option/{option}", [CustomizationOptionController::class, "showByCustomizationAndOption"]);
 });
 
 // Orders

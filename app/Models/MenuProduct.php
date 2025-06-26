@@ -38,5 +38,10 @@ class MenuProduct extends Model
     {
         return $this->hasMany(OrderProduct::class, 'product_id');
     }
+
+    public function inventory()
+    {
+        return $this->morphOne(Inventory::class, 'stockable');
+    }
     //endregion
 }
