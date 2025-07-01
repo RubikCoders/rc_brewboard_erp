@@ -33,7 +33,7 @@ class OrderProduct extends Model
 
     public function customizations()
     {
-        return $this->hasMany(OrderProductCustomization::class, 'order_product_id');
+        return $this->hasMany(OrderCustomization::class, 'order_product_id');
     }
     //endregion
 }
