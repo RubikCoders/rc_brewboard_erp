@@ -10,6 +10,12 @@ use Illuminate\Http\Request;
 
 class OrderCustomizationController extends Controller
 {
+
+    /**
+     * Store an order product customization
+     * @param \App\Http\Requests\Api\StoreOrderCustomization $request
+     * @return JsonResponse
+     */
     public function store(StoreOrderCustomization $request): JsonResponse
     {
         $validated = $request->validated();

@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 
 class OrderProductController extends Controller
 {
+    /**
+     * Store an order product
+     * @param \App\Http\Requests\Api\StoreOrderProduct $request
+     * @return JsonResponse
+     */
     public function store(StoreOrderProduct $request): JsonResponse
     {
         $validated = $request->validated();
