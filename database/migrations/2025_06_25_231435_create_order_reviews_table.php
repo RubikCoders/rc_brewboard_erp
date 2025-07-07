@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('order_reviews', function (Blueprint $table) {
             $table->id()->startingValue(1001);
             $table->foreignId('order_id');
-            $table->integer('rating');
+            $table->integer('rating'); // from 1 to 10
             $table->text('comment')->nullable();
             $table->timestamps();
 
