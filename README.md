@@ -70,9 +70,5 @@ php artisan serve
 npm run dev
 ```
 
-Si el php artisan serve no funciona, puedes usar esto ``php -S 127.0.0.1:3644 -t public
-``
-
-
-
+Si el php artisan serve no funciona, puedes usar esto ``php -S 127.0.0.1:3644 -t public``
 

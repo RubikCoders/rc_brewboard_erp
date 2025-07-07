@@ -25,7 +25,6 @@ class StoreOrderRequest extends FormRequest
             'employee_id' => 'nullable|exists:employees,id',
             'customer_name' => 'required|string|max:255',
             'total' => 'required|integer',
-            'tax' => 'required|integer',
             'payment_method' => 'required|string|max:255',
             'from' => 'required|string|max:255',
             'status' => 'required|integer'
@@ -47,9 +46,6 @@ class StoreOrderRequest extends FormRequest
 
             'total.required' => __("api/order.validation.total.required"),
             'total.integer' => __("api/order.validation.total.integer"),
-
-            'tax.required' => __("api/order.validation.tax.required"),
-            'tax.integer' => __("api/order.validation.tax.integer"),
 
             'payment_method.required' => __("api/order.validation.payment_method.required"),
             'payment_method.string' => __("api/order.validation.payment_method.string"),

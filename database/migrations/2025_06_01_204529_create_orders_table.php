@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->foreignId('employee_id')->nullable()->constrained('employees');
             $table->string('customer_name');
             $table->integer('total'); // In cents
-            $table->integer('tax'); // In cents
+            $table->integer('tax')->nullable(); // In cents
             $table->string('payment_method');
             $table->enum('from', ['erp', 'csp']);
             $table->tinyInteger('status');
