@@ -50,20 +50,25 @@ cp .env.example .env
 php artisan key:generate
 ```
 
+- Symlink para storage
+
+```bash
+php artisan storage:link
+```
+
 - Ejecutar migraciones y seeds
 
 ```bash
 php artisan migrate --seed
 ```
-- Crear un usuario super admin
 
+- Crear un usuario super admin
 
 ```bash
 php artisan shield:super-admin
 ```
 
 - Iniciar los servidores
-
 
 ```bash
 php artisan serve
