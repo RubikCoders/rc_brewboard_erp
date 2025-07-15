@@ -31,9 +31,9 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-//            Auth
+            //            Auth
             ->login()
-//            ->registration()
+            //            ->registration()
             ->profile()
             ->databaseNotifications()
             ->colors([
@@ -47,15 +47,14 @@ class AdminPanelProvider extends PanelProvider
                 'info' => Color::hex('#527bea'),
             ])
             ->spa()
-//            ->font('Poppins')
-//            ->brandLogo(asset('brand/imagotipoNegro.png'))
-//            ->darkModeBrandLogo(asset('brand/imagotipoBlanco.png'))
+            // ->font('Fustat')
+            //            ->brandLogo(asset('brand/imagotipoNegro.png'))
             ->darkMode(false)
             ->brandLogoHeight('3.5rem')
             ->sidebarCollapsibleOnDesktop()
+            ->discoverClusters(in: app_path('Filament/Clusters'), for: 'App\\Filament\\Clusters')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
-            ->discoverPages(in: app_path('Filament/Admin/Pages/Forms'), for: 'App\\Filament\\Admin\\Pages\\Forms')
             ->pages([
                 Pages\Dashboard::class,
             ])

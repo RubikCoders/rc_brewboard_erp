@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Money;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,8 +11,6 @@ class Order extends Model
 {
     /** @use HasFactory<\Database\Factories\OrderFactory> */
     use HasFactory, SoftDeletes;
-
-    public const IVA = 0.16;
 
     protected $fillable = [
         'employee_id',
@@ -23,25 +22,27 @@ class Order extends Model
         'status',
     ];
 
+
+
     //region Methods
     protected static function boot()
     {
         static::bootTraits();
 
-        static::creating(function (self $order) { 
+        static::creating(function (self $order) {
             $order->calculateTax($order, $order->total);
         });
     }
 
 
     /**
-     * Calculate tax (iva) for an order, managed by creating boot method
+     * Calculate tax (iva) for an order, managed by creating in boot method
      * @param self $order creating method
      * @param int $total to calculate tax
      * @author Angel Mendoza
      */
     private function calculateTax(self $order, int $total): self {
-        $order->tax = $total * self::IVA;
+        $order->tax = $total * Money::IVA;
         return $order;
     }
 

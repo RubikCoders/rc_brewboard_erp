@@ -1232,7 +1232,7 @@ class CustomizationOptionSeeder extends Seeder
         // extra_prices
         CustomizationOption::create([
             'customization_id' => 1071,
-            'name' => 'Queso extra_price',
+            'name' => 'Queso',
             'extra_price' => 4
         ]);
         CustomizationOption::create([
