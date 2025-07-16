@@ -10,6 +10,7 @@ use App\Models\CustomizationOption;
 use App\Models\Employee;
 use App\Models\MenuProduct;
 use App\Models\Order;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
@@ -52,7 +53,6 @@ class OrderResource extends Resource
 
     //endregion
 
-
     public static function getRelations(): array
     {
         return [
@@ -73,6 +73,7 @@ class OrderResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('id', 'desc')
             ->columns(self::tableColumns())
             ->filters([
                 //
@@ -145,13 +146,22 @@ class OrderResource extends Resource
     //endregion
 
     //region Form Methods
+
+    /**
+     * Form methods and structure
+     * @param Form $form
+     * @return Form
+     */
     public static function form(Form $form): Form
     {
         return $form
             ->schema(self::formFields());
     }
 
-
+    /**
+     * Declare form fields
+     * @return array
+     */
     protected static function formFields(): array
     {
         return [
@@ -208,11 +218,10 @@ class OrderResource extends Resource
                     $data = Pages\CreateOrder::cleanData($get("products"));
                     $total = Pages\CreateOrder::calculateTotal($data);
 
-                    $set("total", Money::format($total));
-                    $set("tax", Money::format(Pages\CreateOrder::calculateTax($total)));
+                    $set("total", $total);
+                    $set("tax", Pages\CreateOrder::calculateTax($total));
                 });
     }
-
 
     /**
      * Generate dynamic fields for product customizations
@@ -297,6 +306,11 @@ class OrderResource extends Resource
             });
     }
 
+    /**
+     * Wizard step to set customer data and payment info
+     * @return Wizard\Step
+     * @author Angel Mendoza
+     */
     private static function paymentStep(): Wizard\Step
     {
         return Wizard\Step::make(__("order.payment"))
@@ -335,12 +349,12 @@ class OrderResource extends Resource
                 Forms\Components\TextInput::make('total')
                     ->label(__("order.fields.total"))
                     ->columnSpan(6)
-                    ->suffix("$")
+                    ->prefix("$")
                     ->readOnly(),
                 Forms\Components\TextInput::make('tax')
                     ->label(__("order.fields.tax"))
                     ->columnSpan(6)
-                    ->suffix("$")
+                    ->prefix("$")
                     ->readOnly(),
             ]);
     }

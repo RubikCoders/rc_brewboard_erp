@@ -49,5 +49,9 @@ return [
 
     "actions" => [
         "create" => "Registrar"
+    ],
+
+    "notification" => [
+        "create" => "Orden registrada correctamente"
     ]
 ];

@@ -7,10 +7,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @method static create(array $array)
+ */
 class Order extends Model
 {
     /** @use HasFactory<\Database\Factories\OrderFactory> */
     use HasFactory, SoftDeletes;
+
+    public const FROM_CSP = 'csp';
+    public const FROM_ERP = 'erp';
+    public const STATUS_PENDING = 0;
+    public const STATUS_PAID = 1;
+    public const STATUS_CANCELLED = 2;
+
 
     protected $fillable = [
         'employee_id',
