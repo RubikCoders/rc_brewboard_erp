@@ -37,7 +37,7 @@ class CreateOrder extends CreateRecord
             'tax' => $data['tax'],
             'payment_method' => $data['payment_method'],
             'from' => Order::FROM_ERP,
-            'status' => Order::STATUS_PENDING,
+            'status' => Order::STATUS_WAITING,
         ]);
 
         // Create Order Products

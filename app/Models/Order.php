@@ -17,10 +17,10 @@ class Order extends Model
 
     public const FROM_CSP = 'csp';
     public const FROM_ERP = 'erp';
-    public const STATUS_PENDING = 0;
-    public const STATUS_PAID = 1;
-    public const STATUS_CANCELLED = 2;
 
+    public const STATUS_WAITING = 0;
+    public const STATUS_FINISHED = 1;
+    public const STATUS_CANCELLED = 2;
 
     protected $fillable = [
         'employee_id',
@@ -31,8 +31,6 @@ class Order extends Model
         'from',
         'status',
     ];
-
-
 
     //region Methods
     protected static function boot()
@@ -51,9 +49,21 @@ class Order extends Model
      * @param int $total to calculate tax
      * @author Angel Mendoza
      */
-    private function calculateTax(self $order, int $total): self {
+    private function calculateTax(self $order, int $total): self
+    {
         $order->tax = $total * Money::IVA;
         return $order;
+    }
+
+    /**
+     * Check if the order products are all delivered
+     * @param Order $order
+     * @return bool true when all are delivered
+     * @author Angel Mendoza
+     */
+    public static function allProductsDelivered(self $order): bool
+    {
+        return $order->orderProducts()->where('kitchen_status', '!=', 2)->doesntExist();
     }
 
     //endregion

@@ -4,26 +4,20 @@ namespace App\Filament\Clusters\Order\Resources;
 
 use App\Filament\Clusters\Order as OrderCluster;
 use App\Filament\Clusters\Order\Resources\OrderResource\Pages;
-use App\Filament\Clusters\Order\Resources\OrderResource\RelationManagers;
 use App\Helpers\Money;
 use App\Models\CustomizationOption;
 use App\Models\Employee;
 use App\Models\MenuProduct;
 use App\Models\Order;
-use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Columns\Layout\Panel;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Hamcrest\Core\Set;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\HtmlString;
 
@@ -34,6 +28,23 @@ class OrderResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-square-2-stack';
 
     protected static ?string $cluster = OrderCluster::class;
+
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListOrders::route('/'),
+            'create' => Pages\CreateOrder::route('/create'),
+            'edit' => Pages\EditOrder::route('/{record}/edit'),
+            'view' => Pages\ViewOrder::route('/{record}')
+        ];
+    }
 
     //region Label methods
     public static function getNavigationLabel(): string
@@ -53,22 +64,6 @@ class OrderResource extends Resource
 
     //endregion
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListOrders::route('/'),
-            'create' => Pages\CreateOrder::route('/create'),
-            'edit' => Pages\EditOrder::route('/{record}/edit'),
-        ];
-    }
-
     //region Table methods
     public static function table(Table $table): Table
     {
@@ -79,7 +74,7 @@ class OrderResource extends Resource
                 //
             ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
+                ViewAction::make('view')
             ])
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([
