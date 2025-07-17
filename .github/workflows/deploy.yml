@@ -21,12 +21,12 @@ jobs:
       - name: Sync project via rsync
         run: |
           rsync -avz --delete \
-            -e "ssh -o StrictHostKeyChecking=no" \
+            -e "ssh -o StrictHostKeyChecking=no -o IdentitiesOnly=yes" \
             ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home1/labor212/repositories/rc_brewboard_erp
 
       - name: Run post-deploy Laravel commands
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -o IdentitiesOnly=yes ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd /home1/labor212/repositories/rc_brewboard_erp
             composer install --no-interaction --prefer-dist --optimize-autoloader
             php artisan migrate --force
