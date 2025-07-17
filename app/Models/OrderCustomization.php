@@ -5,9 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class OrderProductCustomization extends Model
+/**
+ * @method static create(array $array)
+ */
+class OrderCustomization extends Model
 {
-    /** @use HasFactory<\Database\Factories\OrderProductCustomizationFactory> */
+    /** @use HasFactory<\Database\Factories\OrderCustomizationFactory> */
     use HasFactory;
 
     protected $fillable = [

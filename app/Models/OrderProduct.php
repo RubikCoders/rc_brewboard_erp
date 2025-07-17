@@ -5,10 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static create(array $array)
+ */
 class OrderProduct extends Model
 {
     /** @use HasFactory<\Database\Factories\OrderProductFactory> */
     use HasFactory;
+
+    public const KITCHEN_STATUS_IN_PROGRESS = 0;
+    public const KITCHEN_STATUS_READY = 1;
+    public const KITCHEN_STATUS_DELIVERED = 2;
 
     protected $fillable = [
         'order_id',
@@ -33,7 +40,7 @@ class OrderProduct extends Model
 
     public function customizations()
     {
-        return $this->hasMany(OrderProductCustomization::class, 'order_product_id');
+        return $this->hasMany(OrderCustomization::class, 'order_product_id');
     }
     //endregion
 }

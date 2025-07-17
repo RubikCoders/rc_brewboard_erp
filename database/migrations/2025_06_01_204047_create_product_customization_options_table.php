@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('product_customizations_options', function (Blueprint $table) {
+        Schema::create('customizations_options', function (Blueprint $table) {
             $table->id()->startingValue(1001);
             $table->foreignId('customization_id');
             $table->string('name');
@@ -26,6 +26,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_customizations_options');
+        Schema::dropIfExists('customizations_options');
     }
 };

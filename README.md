@@ -27,6 +27,12 @@ cd rc_brewboard_erp
 
 - Descargar las dependencias
 
+- Las credenciales son para instalar el tema
+username:
+    angelmedoza2004@gmail.com
+password:
+    722eafb8-704f-405d-a5bd-a893527e40e2
+
 ```bash
 composer install
 npm install
@@ -44,10 +50,22 @@ cp .env.example .env
 php artisan key:generate
 ```
 
+- Symlink para storage
+
+```bash
+php artisan storage:link
+```
+
 - Ejecutar migraciones y seeds
 
-```
+```bash
 php artisan migrate --seed
+```
+
+- Crear un usuario super admin
+
+```bash
+php artisan shield:super-admin
 ```
 
 - Iniciar los servidores
@@ -57,13 +75,5 @@ php artisan serve
 npm run dev
 ```
 
-Si el php artisan serve no funciona, puedes usar esto ``php -S 127.0.0.1:3644 -t public
-``
-
-- Crear un usuario super admin
-
-```bash
-php artisan shield:super-admin
-```
-
+Si el php artisan serve no funciona, puedes usar esto ``php -S 127.0.0.1:3644 -t public``
 

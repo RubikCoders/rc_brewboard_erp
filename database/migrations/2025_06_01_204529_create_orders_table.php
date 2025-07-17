@@ -12,13 +12,13 @@ return new class extends Migration {
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id()->startingValue(1001);
-            $table->foreignId('employee_id')->constrained('employees');
+            $table->foreignId('employee_id')->nullable()->constrained('employees');
             $table->string('customer_name');
-            $table->integer('total');
-            $table->integer('tax');
+            $table->integer('total'); // In cents
+            $table->integer('tax')->nullable(); // In cents
             $table->string('payment_method');
             $table->enum('from', ['erp', 'csp']);
-            $table->tinyInteger('status'); 
+            $table->tinyInteger('status');
             // 0 - pendiente
             // 1 - pagada
             // 2 - cancelada

@@ -2,14 +2,25 @@
 
 namespace App\Models;
 
+use App\Helpers\Money;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @method static create(array $array)
+ */
 class Order extends Model
 {
     /** @use HasFactory<\Database\Factories\OrderFactory> */
     use HasFactory, SoftDeletes;
+
+    public const FROM_CSP = 'csp';
+    public const FROM_ERP = 'erp';
+
+    public const STATUS_WAITING = 0;
+    public const STATUS_FINISHED = 1;
+    public const STATUS_CANCELLED = 2;
 
     protected $fillable = [
         'employee_id',
@@ -20,6 +31,42 @@ class Order extends Model
         'from',
         'status',
     ];
+
+    //region Methods
+    protected static function boot()
+    {
+        static::bootTraits();
+
+        static::creating(function (self $order) {
+            $order->calculateTax($order, $order->total);
+        });
+    }
+
+
+    /**
+     * Calculate tax (iva) for an order, managed by creating in boot method
+     * @param self $order creating method
+     * @param int $total to calculate tax
+     * @author Angel Mendoza
+     */
+    private function calculateTax(self $order, int $total): self
+    {
+        $order->tax = $total * Money::IVA;
+        return $order;
+    }
+
+    /**
+     * Check if the order products are all delivered
+     * @param Order $order
+     * @return bool true when all are delivered
+     * @author Angel Mendoza
+     */
+    public static function allProductsDelivered(self $order): bool
+    {
+        return $order->orderProducts()->where('kitchen_status', '!=', 2)->doesntExist();
+    }
+
+    //endregion
 
     //region Relationships
     public function employee()
@@ -37,6 +84,11 @@ class Order extends Model
         return $this->belongsToMany(MenuProduct::class, 'order_products')
             ->using(OrderProduct::class)
             ->withPivot(['quantity', 'is_delivered', 'total_price', 'notes', 'kitchen_status']);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(OrderReview::class);
     }
     //endregion
 }

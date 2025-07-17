@@ -13,6 +13,8 @@ return new class extends Migration {
         Schema::create('menu_products', function (Blueprint $table) {
             $table->id()->startingValue(1001);
             $table->foreignId('category_id');
+            $table->string('image_url')->nullable();
+            $table->string('image_path')->nullable();
             $table->string('name');
             $table->string('description')->nullable();
             $table->string('ingredients')->nullable();
