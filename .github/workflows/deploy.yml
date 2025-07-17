@@ -1,4 +1,4 @@
-name: Deploy rc_brewboard_erp via SSH (manual key injection)
+name: Deploy rc_brewboard_erp via SSH
 
 on:
   push:
@@ -28,6 +28,21 @@ jobs:
           rsync -avz --delete \
             -e "ssh -i ~/.ssh/id_rsa -o IdentitiesOnly=yes" \
             ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home1/labor212/repositories/rc_brewboard_erp
+
+      - name: Create Composer auth.json with credentials
+        run: |
+          ssh -i ~/.ssh/id_rsa -o IdentitiesOnly=yes ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
+            cat > /home1/labor212/repositories/rc_brewboard_erp/auth.json << EOL
+          {
+            "http-basic": {
+              "classic-theme.filapanel.com": {
+                "username": "${{ secrets.PACKAGE_USERNAME }}",
+                "password": "${{ secrets.PACKAGE_LICENSE_KEY }}"
+              }
+            }
+          }
+          EOL
+          EOF
 
       - name: Run post-deploy Laravel commands
         run: |
