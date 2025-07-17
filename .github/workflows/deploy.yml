@@ -1,0 +1,57 @@
+name: Deploy rc_brewboard_erp via SSH
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Add SSH private key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Add SSH host to known_hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Sync project via rsync excluding .env
+        run: |
+          rsync -avz --delete --exclude='.env' \
+            -e "ssh -i ~/.ssh/id_rsa -o IdentitiesOnly=yes" \
+            ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home1/labor212/repositories/rc_brewboard_erp
+
+      - name: Create Composer auth.json with credentials
+        run: |
+          ssh -i ~/.ssh/id_rsa -o IdentitiesOnly=yes ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
+            cat > /home1/labor212/repositories/rc_brewboard_erp/auth.json << EOL
+          {
+            "http-basic": {
+              "classic-theme.filapanel.com": {
+                "username": "${{ secrets.PACKAGE_USERNAME }}",
+                "password": "${{ secrets.PACKAGE_LICENSE_KEY }}"
+              }
+            }
+          }
+          EOL
+          EOF
+
+      - name: Run post-deploy Laravel commands
+        run: |
+          ssh -i ~/.ssh/id_rsa -o IdentitiesOnly=yes ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            cd /home1/labor212/repositories/rc_brewboard_erp
+            php artisan key:generate --force
+            composer install --no-interaction --prefer-dist --optimize-autoloader
+            php artisan migrate --force
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+          EOF
