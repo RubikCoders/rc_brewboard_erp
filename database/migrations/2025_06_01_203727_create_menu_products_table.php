@@ -18,8 +18,8 @@ return new class extends Migration {
             $table->string('name');
             $table->string('description')->nullable();
             $table->string('ingredients')->nullable();
-            $table->integer('base_price');
-            $table->integer('estimated_time_min');
+            $table->decimal('base_price');
+            $table->decimal('estimated_time_min');
             $table->boolean('is_available')->default(true);
             $table->timestamps();
 

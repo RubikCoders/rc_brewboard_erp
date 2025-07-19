@@ -192,6 +192,7 @@ class OrderResource extends Resource
                 ->schema([
                     Repeater::make("")
                         ->statePath("products")
+                        ->collapsible()
                         ->defaultItems(1)
                         ->columnSpan(12)
                         ->cloneable()

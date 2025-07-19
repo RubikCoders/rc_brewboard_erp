@@ -132,20 +132,34 @@ class ViewOrder extends ViewRecord
                 OrderProduct::KITCHEN_STATUS_DELIVERED => "<span style='color: #2c96e1; background-color: rgba(135,199,244,0.27); border: 1px solid #2c96e1; border-radius: 10px;margin-left: 10px; padding: 5px'>" . __("order.fields.kitchen_status.2") . "</span>",
             });
 
+            // Generate customization fields
+            $customizationsFields = [];
+            foreach ($orderProduct->customizations as $customization) {
+                $customizationsFields[] = Placeholder::make("customizations.{$customization->id}")
+                    ->label("")
+                    ->content(function () use ($customization): HtmlString {
+                        $label = $customization->customization->customization->name;
+                        $value = $customization->customization->name;
+                        return new HtmlString("<b>$label</b>: $value");
+                    });
+            }
+
             $fields[] = Section::make(new HtmlString($title . $status))
                 ->columnSpan(1)
                 ->collapsible()
                 ->schema([
-                    Placeholder::make('description')
-                        ->label(__("order.fields.description"))
-                        ->content($orderProduct->product->description),
+//                    Placeholder::make('description')
+//                        ->label(__("order.fields.description"))
+//                        ->content($orderProduct->product->description),
+                    ...$customizationsFields,
                     Placeholder::make('notes')
-                        ->label(__("order.fields.notes"))
+                        ->label(fn (): HtmlString => new HtmlString("<b>" . __("order.fields.notes") . "</b>"))
                         ->content($orderProduct->notes ?? '-'),
                     \Filament\Forms\Components\Actions::make([
                         Action::make('status_ready')
                             ->label(__("order.actions.status_ready"))
                             ->requiresConfirmation()
+                            ->size('xl')
                             ->color('gray')
                             ->visible($orderProduct->kitchen_status == OrderProduct::KITCHEN_STATUS_IN_PROGRESS && $this->record->status != Order::STATUS_CANCELLED)
                             ->action(function () use ($orderProduct) {
@@ -158,6 +172,7 @@ class ViewOrder extends ViewRecord
                             ->requiresConfirmation()
                             ->visible($orderProduct->kitchen_status == OrderProduct::KITCHEN_STATUS_READY && $this->record->status != Order::STATUS_CANCELLED)
                             ->color('primary')
+                            ->size('xl')
                             ->action(function () use ($orderProduct) {
                                 $orderProduct->update([
                                     'kitchen_status' => OrderProduct::KITCHEN_STATUS_DELIVERED

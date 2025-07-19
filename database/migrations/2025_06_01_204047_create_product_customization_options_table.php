@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id()->startingValue(1001);
             $table->foreignId('customization_id');
             $table->string('name');
-            $table->integer('extra_price')->default(0);
+            $table->decimal('extra_price')->default(0);
             $table->timestamps();
 
             $table->foreign('customization_id')->references('id')->on('product_customizations')->onUpdate('cascade')->onDelete('cascade');
