@@ -10,6 +10,6 @@ return [
 
     "actions" => [
         "view" => "Ver orden",
-        "status_ready" => "Marcar como entregado",
+        "status_ready" => "Entregar",
     ]
 ];

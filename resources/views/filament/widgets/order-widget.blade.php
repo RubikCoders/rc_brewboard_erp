@@ -195,7 +195,7 @@
 
         @media (min-width: 1024px) {
             .order-card {
-                width: 48%;
+                width: 48.5%;
             }
         }
     </style>
