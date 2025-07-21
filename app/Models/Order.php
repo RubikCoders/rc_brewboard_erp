@@ -66,6 +66,16 @@ class Order extends Model
         return $order->orderProducts()->where('kitchen_status', '!=', 2)->doesntExist();
     }
 
+    public static function calculateEstimatedTime(self $order): int {
+        $estimatedTime = 0;
+
+        foreach($order->orderProducts as $orderProduct){
+            $estimatedTime += $orderProduct->product->estimated_time_min;
+        }
+
+        return $estimatedTime;
+    }
+
     //endregion
 
     //region Relationships
