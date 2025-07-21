@@ -18,16 +18,17 @@ use Filament\Resources\Resource;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\HtmlString;
 
 class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
-
+    protected static ?int $navigationSort = 1;
     protected static ?string $navigationIcon = 'heroicon-o-square-2-stack';
 
-//    protected static ?string $cluster = OrderCluster::class;
+    protected static ?string $cluster = OrderCluster::class;
 
     public static function getRelations(): array
     {
@@ -203,20 +204,56 @@ class OrderResource extends Resource
                                 ->native(false)
                                 ->searchable()
                                 ->required()
-                                ->options(MenuProduct::getAvailableGroupedByCategory())
+                                ->options(function () {
+                                    return MenuProduct::with('category')
+                                        ->where('is_available', 1)
+                                        ->get()
+                                        ->groupBy(fn($product) => $product->category->name)
+                                        ->map(function ($products) {
+                                            return $products->mapWithKeys(function ($product) {
+                                                return [
+                                                    $product->id => static::getCleanOptionString($product)
+                                                ];
+                                            });
+                                        })
+                                        ->toArray();
+                                })
                                 ->reactive()
-                                ->live(),
+                                ->live()
+                                ->allowHtml()
+                                ->getSearchResultsUsing(function (string $search) {
+                                    $products = MenuProduct::where('name', 'like', "%{$search}%")->limit(50)->get();
+
+                                    return $products->mapWithKeys(function ($product) {
+                                        return [$product->getKey() => static::getCleanOptionString($product)];
+                                    })->toArray();
+                                })
+                                ->getOptionLabelUsing(function ($value): string {
+                                    $product = MenuProduct::find($value);
+
+                                    return static::getCleanOptionString($product);
+                                }),
                             self::getProductCustomizationsFields()
                         ])
                 ])
                 // Set total and tax after product setting
                 ->afterValidation(function (Forms\Get $get, Forms\Set $set) {
                     $data = Pages\CreateOrder::cleanData($get("products"));
+//                    dd($data);
                     $total = Pages\CreateOrder::calculateTotal($data);
 
                     $set("total", $total);
                     $set("tax", Pages\CreateOrder::calculateTax($total));
                 });
+    }
+
+    public static function getCleanOptionString(Model $model): string
+    {
+        return
+            view('filament.components.select-product-result')
+                ->with('name', $model?->name)
+                ->with('image_url', $model?->image_url)
+                ->render();
     }
 
     /**
@@ -331,14 +368,16 @@ class OrderResource extends Resource
                     ->label(__("order.fields.customer_name"))
                     ->columnSpan(12)
                     ->required(),
-                Select::make('payment_method')
+                Forms\Components\TextInput::make('payment_method')
                     ->label(__("order.fields.payment_method"))
                     ->columnSpan(12)
-                    ->native(false)
-                    ->options([
-                        "Tarjeta" => "Tarjeta",
-                        "Efectivo" => "Efectivo",
-                    ])
+//                    ->native(false)
+//                    ->options([
+//                        "Tarjeta" => "Tarjeta",
+//                        "Efectivo" => "Efectivo",
+//                    ])
+                    ->default("Efectivo")
+                    ->readOnly()
                     ->required()
                     ->reactive()
                     ->live(),

@@ -45,7 +45,7 @@ class MenuProduct extends Model
             ->map(function ($products) {
                 return $products->mapWithKeys(function ($product) {
                     return [
-                        $product->id => $product->name . ' (' . Money::format($product->base_price) . ')'
+                        $product->id => $product->name
                     ];
                 });
             })
