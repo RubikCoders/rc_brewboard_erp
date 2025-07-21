@@ -27,7 +27,7 @@ class OrderResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-square-2-stack';
 
-    protected static ?string $cluster = OrderCluster::class;
+//    protected static ?string $cluster = OrderCluster::class;
 
     public static function getRelations(): array
     {

@@ -3,7 +3,7 @@
     use App\Models\Order;
 @endphp
 
-<x-filament-widgets::widget>
+<x-filament-widgets::widget class="widget-container">
     <div class="container">
         @foreach($orders as $order)
             <div class="order-card"
@@ -121,6 +121,11 @@
     </div>
 
     <style>
+        .widget-container {
+            display:flex;
+            justify-content: center;
+        }
+
         .container {
             width: 100%;
             display: flex;
@@ -131,6 +136,9 @@
         .order-card {
             width: 100%;
             background-color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .order-title {
@@ -166,7 +174,8 @@
         }
 
         .time {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
+            font-weight: 600;
         }
 
         .times {
@@ -193,9 +202,16 @@
             }
         }
 
-        @media (min-width: 1024px) {
+
+        @media (min-width:  1024px) {
             .order-card {
-                width: 48.5%;
+                width: 48%;
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .order-card {
+                width: 32%;
             }
         }
     </style>

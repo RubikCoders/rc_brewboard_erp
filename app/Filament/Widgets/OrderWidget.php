@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Filament\Clusters\Order\Pages\BaristaView;
 use App\Filament\Clusters\Order\Resources\OrderResource;
 use App\Models\Order;
 use Filament\Widgets\Widget;
@@ -30,6 +31,8 @@ class OrderWidget extends Widget
     public function changeStatus(Order $order, int $status)
     {
         Order::find($order->id)->update(['status' => $status]);
+        return redirect(BaristaView::getUrl());
+
     }
 
     public function goToOrder($id)

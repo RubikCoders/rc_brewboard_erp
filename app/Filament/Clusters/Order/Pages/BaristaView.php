@@ -11,7 +11,7 @@ class BaristaView extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-clock';
     protected static string $view = 'filament.clusters.order.pages.barista-view-test';
-    protected static ?string $cluster = Order::class;
+//    protected static ?string $cluster = Order::class;
 
     public static function getNavigationLabel(): string
     {
