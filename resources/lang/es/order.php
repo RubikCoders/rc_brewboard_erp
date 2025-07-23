@@ -34,6 +34,7 @@ return [
             1 => "Entregada",
             2 => "Cancelada"
         ],
+        "cancel_reason" => "Razón de la cancelación",
         "created_at" => "Registrado el",
         "payment_methods" => [
             "card" => "Tarjeta",
