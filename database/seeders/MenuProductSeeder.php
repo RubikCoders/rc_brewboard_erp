@@ -19,7 +19,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1001,
             'category_id' => 1001,
-            'image_url' => asset('storage/products/latte.jpeg'),
+            'image_url' => 'storage/products/latte.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'latte.jpeg'),
             'name' => 'Latte',
             'description' => 'Café con leche al vapor.',
@@ -32,7 +32,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1002,
             'category_id' => 1001,
-            'image_url' => asset('storage/products/caramel_latte.jpeg'),
+            'image_url' => 'storage/products/caramel_latte.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'caramel_latte.jpeg'),
             'name' => 'Latte Caramelo',
             'description' => 'Latte con jarabe de caramelo.',
@@ -45,7 +45,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1003,
             'category_id' => 1001,
-            'image_url' => asset('storage/products/capuccino.jpeg'),
+            'image_url' => 'storage/products/capuccino.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'capuccino.jpeg'),
             'name' => 'Capuccino',
             'description' => 'Café con espuma de leche.',
@@ -58,7 +58,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1004,
             'category_id' => 1001,
-            'image_url' => asset('storage/products/mocha.jpeg'),
+            'image_url' => 'storage/products/mocha.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'mocha.jpeg'),
             'name' => 'Mocha / Mocha Blanco',
             'description' => 'Café con leche y chocolate.',
@@ -71,7 +71,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1005,
             'category_id' => 1001,
-            'image_url' => asset('storage/products/american.jpeg'),
+            'image_url' => 'storage/products/american.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'american.jpeg'),
             'name' => 'Americano',
             'description' => 'Café solo, estilo americano.',
@@ -84,7 +84,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1006,
             'category_id' => 1001,
-            'image_url' => asset('storage/products/espresso.jpeg'),
+            'image_url' => 'storage/products/espresso.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'espresso.jpeg'),
             'name' => 'Espresso',
             'description' => 'Café espresso concentrado.',
@@ -98,7 +98,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1007,
             'category_id' => 1001,
-            'image_url' => asset('storage/products/chocolate.jpeg'),
+            'image_url' => 'storage/products/chocolate.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'chocolate.jpeg'),
             'name' => 'Chocolate',
             'description' => 'Bebida caliente de chocolate.',
@@ -111,7 +111,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1008,
             'category_id' => 1001,
-            'image_url' => asset('storage/products/matcha.jpeg'),
+            'image_url' => 'storage/products/matcha.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'matcha.jpeg'),
             'name' => 'Matcha',
             'description' => 'Bebida caliente de té verde matcha.',
@@ -124,7 +124,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1009,
             'category_id' => 1001,
-            'image_url' => asset('storage/products/chai.jpeg'),
+            'image_url' => 'storage/products/chai.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'chai.jpeg'),
             'name' => 'Chai',
             'description' => 'Infusión especiada con leche.',
@@ -137,7 +137,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1010,
             'category_id' => 1001,
-            'image_url' => asset('storage/products/tea.jpeg'),
+            'image_url' => 'storage/products/tea.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'tea.jpeg'),
             'name' => 'Té',
             'description' => 'Variedad de tés calientes.',
@@ -150,7 +150,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1011,
             'category_id' => 1001,
-            'image_url' => asset('storage/products/herbal_tea.jpeg'),
+            'image_url' => 'storage/products/herbal_tea.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'herbal_tea.jpeg'),
             'name' => 'Tisanas',
             'description' => 'Infusión de frutas naturales.',
@@ -164,7 +164,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1012,
             'category_id' => 1002,
-            'image_url' => asset('storage/products/cold_latte.jpeg'),
+            'image_url' => 'storage/products/cold_latte.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'cold_latte.jpeg'),
             'name' => 'Latte frío',
             'description' => 'Versión fría del clásico latte.',
@@ -177,7 +177,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1013,
             'category_id' => 1002,
-            'image_url' => asset('storage/products/cold_capuccino.jpeg'),
+            'image_url' => 'storage/products/cold_capuccino.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'cold_capuccino.jpeg'),
             'name' => 'Capuccino frío',
             'description' => 'Capuccino servido con hielo.',
@@ -190,7 +190,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1014,
             'category_id' => 1002,
-            'image_url' => asset('storage/products/cold_brew.jpeg'),
+            'image_url' => 'storage/products/cold_brew.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'cold_brew.jpeg'),
             'name' => 'Cold Brew',
             'description' => 'Café infusionado en frío.',
@@ -203,7 +203,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1015,
             'category_id' => 1002,
-            'image_url' => asset('storage/products/cold_american.jpeg'),
+            'image_url' => 'storage/products/cold_american.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'cold_american.jpeg'),
             'name' => 'Americano frío',
             'description' => 'Americano servido con hielo.',
@@ -216,7 +216,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1016,
             'category_id' => 1002,
-            'image_url' => asset('storage/products/frappe.jpeg'),
+            'image_url' => 'storage/products/frappe.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'frappe.jpeg'),
             'name' => 'Frappe Café',
             'description' => 'Frappe a base de café con sabores.',
@@ -230,7 +230,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1017,
             'category_id' => 1002,
-            'image_url' => asset('storage/products/cold_chocolate.jpeg'),
+            'image_url' => 'storage/products/cold_chocolate.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'cold_chocolate.jpeg'),
             'name' => 'Chocolate frío',
             'description' => 'Chocolate frío o frappe.',
@@ -243,7 +243,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1018,
             'category_id' => 1002,
-            'image_url' => asset('storage/products/cold_matcha.jpeg'),
+            'image_url' => 'storage/products/cold_matcha.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'cold_matcha.jpeg'),
             'name' => 'Matcha frío',
             'description' => 'Té verde matcha frío o frappe.',
@@ -256,7 +256,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1019,
             'category_id' => 1002,
-            'image_url' => asset('storage/products/cold_chai.jpeg'),
+            'image_url' => 'storage/products/cold_chai.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'cold_chai.jpeg'),
             'name' => 'Chai frío',
             'description' => 'Chai frío especiado.',
@@ -269,7 +269,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1020,
             'category_id' => 1002,
-            'image_url' => asset('storage/products/cold_herbal_tea.jpeg'),
+            'image_url' => 'storage/products/cold_herbal_tea.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'cold_herbal_tea.jpeg'),
             'name' => 'Tisanas frías',
             'description' => 'Infusión de frutas servida fría.',
@@ -283,7 +283,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1021,
             'category_id' => 1003,
-            'image_url' => asset('storage/products/panini.jpeg'),
+            'image_url' => 'storage/products/panini.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'panini.jpeg'),
             'name' => 'Paninis',
             'description' => 'Paninis calientes con variedad de ingredientes.',
@@ -296,7 +296,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1022,
             'category_id' => 1003,
-            'image_url' => asset('storage/products/cake.jpeg'),
+            'image_url' => 'storage/products/cake.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'cake.jpeg'),
             'name' => 'Rebanada de pastel',
             'description' => 'Rebanada de pastel artesanal.',
@@ -309,7 +309,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1023,
             'category_id' => 1003,
-            'image_url' => asset('storage/products/cookies.jpeg'),
+            'image_url' => 'storage/products/cookies.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'cookies.jpeg'),
             'name' => 'Galletas artesanales',
             'description' => 'Galletas horneadas artesanalmente.',
@@ -322,7 +322,7 @@ class MenuProductSeeder extends Seeder
         MenuProduct::create([
             'id' => 1024,
             'category_id' => 1003,
-            'image_url' => asset('storage/products/brownie.jpeg'),
+            'image_url' => 'storage/products/brownie.jpeg',
             'image_path' => storage_path('app' . self::DS . 'public' . self::DS . 'products' . self::DS . 'brownie.jpeg'),
             'name' => 'Brownie',
             'description' => 'Brownie de chocolate con toppings.',

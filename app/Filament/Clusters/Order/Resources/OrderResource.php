@@ -66,6 +66,7 @@ class OrderResource extends Resource
     //endregion
 
     //region Table methods
+ 
     public static function table(Table $table): Table
     {
         return $table
