@@ -156,7 +156,7 @@ class ViewOrder extends ViewRecord
                         ->label(fn (): HtmlString => new HtmlString("<b>" . __("order.fields.notes") . "</b>"))
                         ->content($orderProduct->notes ?? '-'),
                     \Filament\Forms\Components\Actions::make([
-                        Action::make('status_ready')
+                        Action::make("status_ready_$orderProduct->id")
                             ->label(__("order.actions.status_ready"))
                             ->requiresConfirmation()
                             ->size('xl')
@@ -167,7 +167,7 @@ class ViewOrder extends ViewRecord
                                     'kitchen_status' => OrderProduct::KITCHEN_STATUS_READY
                                 ]);
                             }),
-                        Action::make('status_delivered')
+                        Action::make("status_delivered_$orderProduct->id")
                             ->label(__("order.actions.status_delivered"))
                             ->requiresConfirmation()
                             ->visible($orderProduct->kitchen_status == OrderProduct::KITCHEN_STATUS_READY && $this->record->status != Order::STATUS_CANCELLED)

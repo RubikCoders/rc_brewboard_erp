@@ -105,7 +105,11 @@
 
                 {{-- Actions --}}
                 <div class="order-body">
-                    <x-filament::button size="xl" type="button" class="action"
+                    @php
+                        $disabled = !Order::allProductsDelivered($order);
+                    @endphp
+
+                    <x-filament::button :disabled="$disabled"  size="xl" type="button" class="action"
                                         wire:click="changeStatus({{$order->id}}, {{Order::STATUS_FINISHED}})">
                         @if($order->status == Order::STATUS_WAITING)
                             @lang('baristaview.actions.status_ready')
