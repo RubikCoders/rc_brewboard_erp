@@ -9,6 +9,7 @@ use App\Models\CustomizationOption;
 use App\Models\Employee;
 use App\Models\MenuProduct;
 use App\Models\Order;
+use App\Models\ProductCustomization;
 use Filament\Forms;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
@@ -66,7 +67,7 @@ class OrderResource extends Resource
     //endregion
 
     //region Table methods
- 
+
     public static function table(Table $table): Table
     {
         return $table
@@ -164,6 +165,7 @@ class OrderResource extends Resource
         return [
             Wizard::make([
                 self::productStep(),
+                self::previewStep(),
                 self::paymentStep()
             ])
                 ->columnSpan("full")
@@ -192,6 +194,10 @@ class OrderResource extends Resource
                 ->description(__("order.select_products_description"))
                 ->columns(12)
                 ->schema([
+                    Forms\Components\TextInput::make('customer_name')
+                        ->label(__("order.fields.customer_name"))
+                        ->columnSpan(12)
+                        ->required(),
                     Repeater::make("")
                         ->statePath("products")
                         ->collapsible()
@@ -248,6 +254,11 @@ class OrderResource extends Resource
                 });
     }
 
+    /**
+     * Show product with their images in Select
+     * @param Model $model
+     * @return string
+     */
     public static function getCleanOptionString(Model $model): string
     {
         return
@@ -365,10 +376,10 @@ class OrderResource extends Resource
                     ->searchable()
                     ->visible(auth()->user()->hasRole('super_admin') || auth()->user()->hasRole('manager'))
                     ->required(),
-                Forms\Components\TextInput::make('customer_name')
-                    ->label(__("order.fields.customer_name"))
-                    ->columnSpan(12)
-                    ->required(),
+//                Forms\Components\TextInput::make('customer_name')
+//                    ->label(__("order.fields.customer_name"))
+//                    ->columnSpan(12)
+//                    ->required(),
                 Forms\Components\TextInput::make('payment_method')
                     ->label(__("order.fields.payment_method"))
                     ->columnSpan(12)
@@ -384,17 +395,124 @@ class OrderResource extends Resource
                     ->live(),
                 Forms\Components\TextInput::make('total')
                     ->label(__("order.fields.total"))
-                    ->columnSpan(6)
+                    ->columnSpan(12)
                     ->prefix("$")
                     ->readOnly(),
-                Forms\Components\TextInput::make('tax')
-                    ->label(__("order.fields.tax"))
-                    ->columnSpan(6)
-                    ->prefix("$")
-                    ->readOnly(),
+//                Forms\Components\TextInput::make('tax')
+//                    ->label(__("order.fields.tax"))
+//                    ->columnSpan(6)
+//                    ->prefix("$")
+//                    ->readOnly(),
             ]);
     }
 
+    private static function previewStep(): Wizard\Step
+    {
+        return Wizard\Step::make(__("order.preview"))
+            ->icon('heroicon-o-pencil-square')
+            ->description(__("order.preview_description"))
+            ->columns(12)
+            ->schema(self::generatePreviewFields());
+    }
+
+    private static function generatePreviewFields(): array
+    {
+        $fields = [];
+
+        // Customer Name
+        $fields[] = Forms\Components\Placeholder::make('customer_name')
+            ->columnSpan(12)
+            ->label(new HtmlString("<b>" . __("order.fields.customer_name") . "</b>"))
+            ->content(fn(Forms\Get $get) => $get('customer_name'));
+
+        $fields[] = Forms\Components\Placeholder::make('total')
+            ->columnSpan(12)
+            ->label(new HtmlString("<b>" . __("order.order_total") . "</b>"))
+            ->content(function (Forms\Get $get) {
+                $products = $get('products') ?? [];
+                $products = Pages\CreateOrder::cleanData($products);
+
+                return Money::format(Pages\CreateOrder::calculateTotal($products)) ?? "";
+            });
+
+        // Product title
+        $fields[] = Forms\Components\Placeholder::make("")
+            ->columnSpan(12)
+            ->content(fn() => new HtmlString("<b>" . __("order.products") . "</b>"));
+        // list
+        $fields[] = Forms\Components\Grid::make([
+            'default' => 12,
+        ])->schema(function (Forms\Get $get) {
+            $products = $get('products') ?? [];
+            $products = Pages\CreateOrder::cleanData($products);
+            $productFields = [];
+
+            foreach ($products as $productData) {
+                $product = MenuProduct::find($productData['product_id']);
+                $productFields[] =
+                    Forms\Components\Section::make($product->name . " - " . Money::format($product->base_price) ?? "")
+                        ->columnSpan([
+                            'sm' => 12,
+                            'lg' => 6,
+                            'xl' => 4
+                        ])
+                        ->collapsible()
+                        ->schema(function () use ($productData, $product) {
+                            $fields = [];
+                            $subtotal = $product->base_price;
+                            if (!key_exists('customizations', $productData)) return [];
+
+                            // List customizations
+                            foreach ($productData['customizations'] as $customizationId) {
+                                // If when the customization is non-required, so, it's an array
+                                if (is_array($customizationId)) {
+                                    foreach ($customizationId as $sub) {
+                                        $customization = CustomizationOption::find($sub);
+                                        $subtotal += $customization->extra_price;
+                                        $fields[] = Forms\Components\Placeholder::make("")
+                                            ->content(function () use ($customization) {
+                                                $name = $customization->customization->name;
+                                                $value = $customization->name;
+                                                $extraPrice = Money::format($customization->extra_price);
+                                                return new HtmlString(
+                                                    "<b>$name:</b> $value - $extraPrice"
+                                                );
+                                            });
+                                    }
+                                } else {
+                                    $customization = CustomizationOption::find($customizationId);
+                                    $subtotal += $customization->extra_price;
+                                    $fields[] = Forms\Components\Placeholder::make("")
+                                        ->content(function () use ($customization) {
+                                            $name = $customization->customization->name;
+                                            $value = $customization->name;
+                                            $extraPrice = Money::format($customization->extra_price);
+                                            return new HtmlString(
+                                                "<b>$name:</b> $value - $extraPrice"
+                                            );
+                                        });
+                                }
+                            }
+
+                            // Show subtotal
+                            // separator
+                            $fields[] = Forms\Components\Placeholder::make("")
+                                ->content(new HtmlString("<hr>"));
+                            $fields[] = Forms\Components\Placeholder::make("")
+                                ->content(function () use ($subtotal) {
+                                    return
+                                        new HtmlString("<b>" . __("order.subtotal") . ":</b> " . Money::format($subtotal));
+                                });
+
+                            return $fields;
+                        });
+            }
+
+            return $productFields;
+        });
+
+        return $fields;
+    }
     //endregion
 
 }
