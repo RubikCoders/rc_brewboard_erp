@@ -62,7 +62,7 @@ class EditMenuProduct extends EditRecord
             'product_id' => $this->getRecord()->id,
             'product_name' => $this->getRecord()->name,
             'customizations_count' => $this->getRecord()->customizations()->count(),
-            'user_id' => auth()->id,
+            'user_id' => auth()->id(),
         ]);
     }
 }

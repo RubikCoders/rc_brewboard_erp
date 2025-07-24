@@ -87,34 +87,45 @@ class ViewMenuProduct extends ViewRecord
                     Group::make([
                         InfolistSection::make('Imagen del Producto')
                             ->schema([
-                                ImageEntry::make('image_path')
-                                    ->hiddenLabel()
-                                    ->height(300)
-                                    ->width(300)
-                                    ->disk('public')
-                                    ->getStateUsing(function ($record): ?string {
-                                        if (!$record->image_path) {
-                                            return null;
-                                        }
+                            ImageEntry::make('image_path')
+                                ->hiddenLabel()
+                                ->height(300)
+                                ->width(300)
+                                ->getStateUsing(function ($record): ?string {
+                                    // Si tenemos image_url válida del seeder
+                                    if ($record->image_url && str_contains($record->image_url, '/storage/products/')) {
+                                        $filename = basename($record->image_url);
 
-                                        // Si la ruta ya es relativa (desde FileUpload)
+                                        // Verificar si el archivo existe físicamente
+                                        if (file_exists(storage_path('app/public/products/' . $filename))) {
+                                            return asset('storage/products/' . $filename);
+                                        }
+                                    }
+
+                                    // Procesar image_path 
+                                    if ($record->image_path) {
+                                        // Si es ruta relativa (FileUpload nuevo)
                                         if (!str_starts_with($record->image_path, '/')) {
-                                            return $record->image_path;
+                                            if (file_exists(storage_path('app/public/' . $record->image_path))) {
+                                                return asset('storage/' . $record->image_path);
+                                            }
+                                        } else {
+                                            // Si es ruta absoluta (seeder), extraer filename
+                                            $filename = basename($record->image_path);
+
+                                            if (file_exists(storage_path('app/public/products/' . $filename))) {
+                                                return asset('storage/products/' . $filename);
+                                            }
                                         }
-
-                                        // Si es ruta absoluta (desde seeder), extraer solo el nombre del archivo
-                                        $filename = basename($record->image_path);
-                                        $relativePath = 'products/' . $filename;
-
-                                        // Verificar si el archivo existe
-                                        if (file_exists(storage_path('app/public/' . $relativePath))) {
-                                            return $relativePath;
-                                        }
-
-                                        return null;
-                                    })
-                                    ->extraAttributes(['class' => 'rounded-lg'])
-                                    ->defaultImageUrl(asset('images/placeholder-product.png')),
+                                    }
+                                    
+                                    return null;
+                                })
+                                ->extraAttributes([
+                                    'class' => 'rounded-lg shadow-lg border border-gray-200 dark:border-gray-600',
+                                    'style' => 'object-fit: cover;'
+                                ])
+                                ->defaultImageUrl(asset('images/placeholder-product.jpg')),
                             ]),
 
                         InfolistSection::make('Información del Sistema')

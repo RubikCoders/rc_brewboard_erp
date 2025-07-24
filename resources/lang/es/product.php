@@ -30,6 +30,9 @@ return [
     "is_available" => "Disponible",
     "created_at" => "Registrado el",
     "updated_at" => "Actualizado el",
+    "option_name" => "Nombre de la Opción",
+    "option_extra_price" => "Precio Adicional",
+    "option_name_placeholder" => "Ej: Pequeño, Mediano, Grande",
 
     // Customizations
     "customization_name" => "Nombre de la Personalización",
