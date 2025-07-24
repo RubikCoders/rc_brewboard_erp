@@ -6,26 +6,14 @@ use App\Filament\Clusters\Menu;
 use App\Filament\Clusters\Menu\Resources\MenuProductResource\Pages;
 use App\Models\MenuProduct;
 use App\Models\MenuCategory;
+use App\Helpers\Money;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Columns\IconColumn;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\Section;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\ViewAction;
-use Filament\Tables\Actions\ActionGroup;
 use Filament\Pages\SubNavigationPosition;
-use App\Helpers\Money;
+use Illuminate\Database\Eloquent\Builder;
 
 class MenuProductResource extends Resource
 {
@@ -78,10 +66,10 @@ class MenuProductResource extends Resource
     public static function getFormFields(): array
     {
         return [
-            Section::make(__('product.sections.basic_info.title'))
+            Forms\Components\Section::make(__('product.sections.basic_info.title'))
                 ->description(__('product.sections.basic_info.description'))
                 ->schema([
-                    TextInput::make('name')
+                    Forms\Components\TextInput::make('name')
                         ->label(__('product.fields.name'))
                         ->placeholder(__('product.fields.name_placeholder'))
                         ->required()
@@ -89,7 +77,7 @@ class MenuProductResource extends Resource
                         ->live(onBlur: true)
                         ->columnSpan(2),
 
-                    Select::make('category_id')
+                    Forms\Components\Select::make('category_id')
                         ->label(__('product.fields.category_id'))
                         ->options(MenuCategory::all()->pluck('name', 'id'))
                         ->required()
@@ -100,35 +88,42 @@ class MenuProductResource extends Resource
                 ->columns(3)
                 ->collapsible(),
 
-            Section::make(__('product.sections.details.title'))
+            Forms\Components\Section::make(__('product.sections.details.title'))
                 ->description(__('product.sections.details.description'))
                 ->schema([
-                    Textarea::make('description')
+                    Forms\Components\Textarea::make('description')
                         ->label(__('product.fields.description'))
                         ->placeholder(__('product.fields.description_placeholder'))
                         ->rows(3)
                         ->columnSpanFull(),
 
-                    Textarea::make('ingredients')
+                    Forms\Components\Textarea::make('ingredients')
                         ->label(__('product.fields.ingredients'))
                         ->placeholder(__('product.fields.ingredients_placeholder'))
                         ->rows(2)
                         ->columnSpanFull(),
 
-                    FileUpload::make('image_path')
+                    Forms\Components\FileUpload::make('image_path')
                         ->label(__('product.fields.image_url'))
                         ->image()
+                        ->acceptedFileTypes(['image/jpeg', 'image/jpg', 'image/png', 'image/webp'])
+                        ->disk('public')
                         ->directory('products')
                         ->visibility('public')
                         ->imageEditor()
+                        ->imageResizeMode('cover')
+                        ->imageCropAspectRatio('16:9')
+                        ->imageResizeTargetWidth('1920')
+                        ->imageResizeTargetHeight('1080')
+                        ->maxSize(5120) // 5MB max
                         ->columnSpanFull(),
                 ])
                 ->collapsible(),
 
-            Section::make(__('product.sections.pricing.title'))
+            Forms\Components\Section::make(__('product.sections.pricing.title'))
                 ->description(__('product.sections.pricing.description'))
                 ->schema([
-                    TextInput::make('base_price')
+                    Forms\Components\TextInput::make('base_price')
                         ->label(__('product.fields.base_price'))
                         ->required()
                         ->numeric()
@@ -137,7 +132,7 @@ class MenuProductResource extends Resource
                         ->step(0.01)
                         ->columnSpan(1),
 
-                    TextInput::make('estimated_time_min')
+                    Forms\Components\TextInput::make('estimated_time_min')
                         ->label(__('product.fields.estimated_time_min'))
                         ->required()
                         ->numeric()
@@ -145,13 +140,50 @@ class MenuProductResource extends Resource
                         ->minValue(1)
                         ->columnSpan(1),
 
-                    Toggle::make('is_available')
+                    Forms\Components\Toggle::make('is_available')
                         ->label(__('product.fields.is_available'))
                         ->default(true)
                         ->columnSpan(1),
                 ])
                 ->columns(3)
                 ->collapsible(),
+
+            Forms\Components\Section::make(__('product.sections.customizations.title'))
+                ->description(__('product.sections.customizations.description'))
+                ->schema([
+                    Forms\Components\Repeater::make('customizations')
+                        ->relationship()
+                        ->schema([
+                            Forms\Components\TextInput::make('name')
+                                ->label(__('product.customizations.type_name'))
+                                ->placeholder(__('product.customizations.type_name_placeholder'))
+                                ->required()
+                                ->maxLength(255)
+                                ->live(onBlur: true)
+                                ->columnSpan(2),
+
+                            Forms\Components\Toggle::make('required')
+                                ->label(__('product.customizations.is_required'))
+                                ->helperText(__('product.customizations.is_required_help'))
+                                ->default(false)
+                                ->columnSpan(1),
+                        ])
+                        ->columns(3)
+                        ->itemLabel(fn(array $state): ?string => $state['name'] ?? 'Nuevo tipo')
+                        ->addActionLabel(__('product.customizations.add_type'))
+                        ->reorderableWithButtons()
+                        ->collapsible()
+                        ->cloneable()
+                        ->columnSpanFull()
+                        ->defaultItems(0)
+                        // ->emptyStateIcon('heroicon-o-shopping-bag')
+                        // ->emptyStateHeading(__('product.customizations.no_customizations'))
+                        // ->emptyStateDescription(__('product.customizations.customizations_help'))
+                        ,
+                ])
+                ->collapsible()
+                ->collapsed()
+                ->columnSpanFull(),
         ];
     }
     //endregion
@@ -161,24 +193,12 @@ class MenuProductResource extends Resource
     {
         return $table
             ->columns(self::getTableColumns())
-            ->filters([
-                Tables\Filters\SelectFilter::make('category_id')
-                    ->label(__('product.fields.category_id'))
-                    ->options(MenuCategory::all()->pluck('name', 'id'))
-                    ->multiple()
-                    ->preload(),
-
-                Tables\Filters\TernaryFilter::make('is_available')
-                    ->label(__('product.fields.is_available'))
-                    ->trueLabel('Solo disponibles')
-                    ->falseLabel('Solo no disponibles')
-                    ->native(false),
-            ])
+            ->filters(self::getTableFilters())
             ->actions([
-                ActionGroup::make([
-                    ViewAction::make(),
-                    EditAction::make(),
-                    DeleteAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
                 ])
             ])
             ->bulkActions([
@@ -198,45 +218,107 @@ class MenuProductResource extends Resource
     public static function getTableColumns(): array
     {
         return [
-            ImageColumn::make('image_path')
+            Tables\Columns\ImageColumn::make('image_path')
                 ->label('')
                 ->circular()
                 ->size(50)
-                ->checkFileExistence(false),
+                ->disk('public')
+                ->getStateUsing(function (MenuProduct $record): ?string {
+                    if (!$record->image_path) {
+                        return null;
+                    }
+                    
+                    if (!str_starts_with($record->image_path, '/')) {
+                        return $record->image_path;
+                    }
 
-            TextColumn::make('name')
+                    $filename = basename($record->image_path);
+                    $relativePath = 'products/' . $filename;
+
+                    if (file_exists(storage_path('app/public/' . $relativePath))) {
+                        return $relativePath;
+                    }
+
+                    return null;
+                })
+                ->defaultImageUrl(asset('images/b-coffee.jpg')),
+
+            Tables\Columns\TextColumn::make('name')
                 ->label(__('product.fields.name'))
                 ->searchable()
                 ->sortable()
                 ->weight('medium'),
 
-            TextColumn::make('category.name')
+            Tables\Columns\TextColumn::make('category.name')
                 ->label(__('product.fields.category_id'))
                 ->sortable()
                 ->badge()
                 ->color('primary'),
 
-            TextColumn::make('base_price')
+            Tables\Columns\TextColumn::make('base_price')
                 ->label(__('product.fields.base_price'))
                 ->sortable()
                 ->getStateUsing(fn(MenuProduct $record): string => Money::format($record->base_price)),
 
-            TextColumn::make('estimated_time_min')
+            Tables\Columns\TextColumn::make('estimated_time_min')
                 ->label(__('product.fields.estimated_time_min'))
                 ->sortable()
                 ->suffix(' min')
                 ->color('gray'),
 
-            IconColumn::make('is_available')
+            Tables\Columns\TextColumn::make('customizations_count')
+                ->label('Personalizaciones')
+                ->counts('customizations')
+                ->badge()
+                ->color(fn(int $state): string => match (true) {
+                    $state === 0 => 'gray',
+                    $state <= 2 => 'warning',
+                    default => 'success',
+                })
+                ->sortable(),
+
+            Tables\Columns\IconColumn::make('is_available')
                 ->label(__('product.fields.is_available'))
                 ->boolean()
                 ->sortable(),
 
-            TextColumn::make('created_at')
+            Tables\Columns\TextColumn::make('created_at')
                 ->label(__('product.fields.created_at'))
                 ->dateTime()
                 ->sortable()
                 ->toggleable(isToggledHiddenByDefault: true),
+        ];
+    }
+
+    /**
+     * Get table filters
+     * @return array
+     */
+    public static function getTableFilters(): array
+    {
+        return [
+            Tables\Filters\SelectFilter::make('category_id')
+                ->label(__('product.fields.category_id'))
+                ->options(MenuCategory::all()->pluck('name', 'id'))
+                ->multiple()
+                ->preload(),
+
+            Tables\Filters\TernaryFilter::make('is_available')
+                ->label(__('product.fields.is_available'))
+                ->trueLabel('Solo disponibles')
+                ->falseLabel('Solo no disponibles')
+                ->native(false),
+
+            Tables\Filters\TernaryFilter::make('has_customizations')
+                ->label('Tiene Personalizaciones')
+                ->placeholder('Todos los productos')
+                ->trueLabel('Con personalizaciones')
+                ->falseLabel('Sin personalizaciones')
+                ->queries(
+                    true: fn(Builder $query) => $query->has('customizations'),
+                    false: fn(Builder $query) => $query->doesntHave('customizations'),
+                )
+                ->native(false),
         ];
     }
     //endregion

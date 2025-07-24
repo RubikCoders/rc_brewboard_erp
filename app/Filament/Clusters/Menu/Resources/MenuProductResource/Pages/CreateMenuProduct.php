@@ -39,11 +39,12 @@ class CreateMenuProduct extends CreateRecord
         // Any additional logic after product creation
         // For example, log the creation, update cache, etc.
 
-        // Log product creation
+        // Log product creation with customizations count
         logger()->info('New menu product created', [
             'product_id' => $this->getRecord()->id,
             'product_name' => $this->getRecord()->name,
-            'user_id' => auth()->id,
+            'customizations_count' => $this->getRecord()->customizations()->count(),
+            'user_id' => auth()->id(),
         ]);
     }
 

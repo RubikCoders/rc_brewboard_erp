@@ -151,18 +151,40 @@ class ManageMenuProducts extends Page implements HasForms, HasTable
         $this->validate();
 
         try {
-            // Handle image upload if needed
             if (isset($data['image_path']) && $data['image_path']) {
-                $data['image_url'] = asset('storage/' . $data['image_path']);
+                // Si image_path es una ruta relativa (desde FileUpload), crear URL
+                if (!str_starts_with($data['image_path'], '/')) {
+                    $data['image_url'] = asset('storage/' . $data['image_path']);
+                }
             }
+
+            // Extract customizations data
+            $customizationsData = $data['customizations'] ?? [];
+            unset($data['customizations']);
 
             // Create the product
             $product = MenuProduct::create($data);
 
+            // Create customizations if any
+            if (!empty($customizationsData)) {
+                foreach ($customizationsData as $customizationData) {
+                    $product->customizations()->create([
+                        'name' => $customizationData['name'],
+                        'required' => $customizationData['required'] ?? false,
+                    ]);
+                }
+            }
+
             // Show success notification
+            $customizationsCount = count($customizationsData);
+            $message = 'El producto "' . $product->name . '" ha sido registrado exitosamente.';
+            if ($customizationsCount > 0) {
+                $message .= " Se crearon {$customizationsCount} tipos de personalización.";
+            }
+
             Notification::make()
                 ->title(__('product.notifications.created'))
-                ->body('El producto "' . $product->name . '" ha sido registrado exitosamente.')
+                ->body($message)
                 ->success()
                 ->duration(5000)
                 ->send();

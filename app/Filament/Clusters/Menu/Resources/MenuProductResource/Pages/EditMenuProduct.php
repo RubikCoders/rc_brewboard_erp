@@ -42,9 +42,11 @@ class EditMenuProduct extends EditRecord
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        // Handle image upload if needed
         if (isset($data['image_path']) && $data['image_path']) {
-            $data['image_url'] = asset('storage/' . $data['image_path']);
+            // Si image_path es una ruta relativa (desde FileUpload), crear URL
+            if (!str_starts_with($data['image_path'], '/')) {
+                $data['image_url'] = asset('storage/' . $data['image_path']);
+            }
         }
 
         return $data;
@@ -55,10 +57,11 @@ class EditMenuProduct extends EditRecord
         // Any additional logic after product update
         // For example, clear cache, update related records, etc.
 
-        // Log product update
+        // Log product update with customizations info
         logger()->info('Menu product updated', [
             'product_id' => $this->getRecord()->id,
             'product_name' => $this->getRecord()->name,
+            'customizations_count' => $this->getRecord()->customizations()->count(),
             'user_id' => auth()->id,
         ]);
     }

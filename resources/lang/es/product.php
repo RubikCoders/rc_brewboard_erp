@@ -59,9 +59,20 @@ return [
       "description" => "Configuración de precio y estado"
     ],
     "customizations" => [
-      "title" => "Personalizaciones del Producto",
-      "description" => "Configura las opciones de personalización disponibles para este producto"
+      "title" => "Tipos de Personalización",
+      "description" => "Define los tipos de personalización disponibles para este producto (ej: Tamaño, Tipo de leche, Extras)"
     ]
+  ],
+
+  "customizations" => [
+    "type_name" => "Nombre del Tipo",
+    "type_name_placeholder" => "Ej: Tamaño, Tipo de leche, Extras",
+    "is_required" => "¿Es Requerido?",
+    "is_required_help" => "Marca si el cliente debe seleccionar una opción de este tipo",
+    "add_type" => "Agregar Tipo de Personalización",
+    "remove_type" => "Eliminar",
+    "no_customizations" => "Sin personalizaciones configuradas",
+    "customizations_help" => "Aquí puedes definir los tipos de personalización que tendrá este producto. Por ejemplo: Tamaño (Pequeño, Mediano, Grande), Tipo de leche (Entera, Descremada, Almendra), etc.",
   ],
 
   "tabs" => [
@@ -79,8 +90,6 @@ return [
     "view" => "Ver",
     "add_customization" => "Agregar Personalización",
     "add_option" => "Agregar Opción",
-    "remove_customization" => "Eliminar Personalización",
-    "remove_option" => "Eliminar Opción",
   ],
 
   "notifications" => [

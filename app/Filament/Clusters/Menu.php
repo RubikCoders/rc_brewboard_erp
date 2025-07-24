@@ -8,9 +8,9 @@ use app\Models\MenuProduct;
 
 class Menu extends Cluster
 {
-    protected static ?string $navigationIcon = 'heroicon-o-bars-3';
+    protected static ?string $navigationIcon = 'icon-products';
 
-    protected static ?string $navigationLabel = 'Gestión del Menú';
+    protected static ?string $navigationLabel = 'Productos';
 
     protected static ?int $navigationSort = 1;
 
@@ -27,9 +27,4 @@ class Menu extends Cluster
     {
         return MenuProduct::count() > 0 ? 'success' : 'gray';
     }
-
-    // public static function getClusterBreadcrumb(): string
-    // {
-    //     return __('filament/clusters/menu.breadcrumb');
-    // }
 }
