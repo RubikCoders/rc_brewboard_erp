@@ -398,11 +398,9 @@ class OrderResource extends Resource
                     ->columnSpan(12)
                     ->prefix("$")
                     ->readOnly(),
-//                Forms\Components\TextInput::make('tax')
-//                    ->label(__("order.fields.tax"))
-//                    ->columnSpan(6)
-//                    ->prefix("$")
-//                    ->readOnly(),
+                Forms\Components\Hidden::make('tax')
+                    ->label(__("order.fields.tax"))
+                    ->columnSpan(6)
             ]);
     }
 
@@ -420,7 +418,7 @@ class OrderResource extends Resource
         $fields = [];
 
         // Customer Name
-        $fields[] = Forms\Components\Placeholder::make('customer_name')
+        $fields[] = Forms\Components\Placeholder::make('customer_name_placeholder')
             ->columnSpan(12)
             ->label(new HtmlString("<b>" . __("order.fields.customer_name") . "</b>"))
             ->content(fn(Forms\Get $get) => $get('customer_name'));

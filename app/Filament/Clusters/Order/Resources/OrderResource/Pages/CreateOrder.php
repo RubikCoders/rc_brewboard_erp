@@ -27,7 +27,6 @@ class CreateOrder extends CreateRecord
     public function create(bool $another = false): void
     {
         $data = self::cleanData($this->form->getState());
-        dd($data);
         $products = $data['products'];
 
         // Create Order
