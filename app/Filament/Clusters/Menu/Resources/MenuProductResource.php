@@ -326,7 +326,9 @@ class MenuProductResource extends Resource
                 Tables\Columns\TextColumn::make('base_price')
                     ->label(__('product.fields.base_price'))
                     ->money('MXN')
-                    ->sortable(),
+                    ->sortable()
+                    ->prefix('$'),
+                 
 
                 Tables\Columns\TextColumn::make('estimated_time_min')
                     ->label(__('product.fields.estimated_time_min'))
