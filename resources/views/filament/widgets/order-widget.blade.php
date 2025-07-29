@@ -175,10 +175,10 @@
             background-color: rgba(152, 188, 141, 0.28);
             border: 1px solid #5F7C56;
             border-radius: 10px;
-            margin-left: 10px;
-            padding: 5px;
             text-align: center;
             width: 100px;
+            padding-top: 2px;
+            padding-bottom: 2px;
         }
 
         .from-erp {
@@ -186,10 +186,10 @@
             background-color: rgba(213, 213, 213, 0.29);
             border: 1px solid gray;
             border-radius: 10px;
-            margin-left: 10px;
-            padding: 5px;
             text-align: center;
             width: 100px;
+            padding-top: 2px;
+            padding-bottom: 2px;
         }
 
         .order-separator {
