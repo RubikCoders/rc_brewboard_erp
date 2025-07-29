@@ -60,8 +60,18 @@
                 <a href={{\App\Filament\Clusters\Order\Resources\OrderResource::getUrl('view', [
     'record' => $order->id
 ])}}>
-                    <div class="order-title">
-                        #{{ $order->id }} - {{ $order->customer_name }}
+                    <div class="order-header">
+                        <div class="order-title">
+                            #{{ $order->id }} - {{ $order->customer_name }}
+                        </div>
+
+                        <div class="order-from">
+                            @if(in_array($order->from, ['erp', 'csp']))
+                                <div class="from-{{ $order->from }}">
+                                    @lang('order.' . $order->from)
+                                </div>
+                            @endif
+                        </div>
                     </div>
 
                     <hr class="order-separator">
@@ -148,20 +158,42 @@
             justify-content: space-between;
         }
 
-        .order-title {
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .order-title, .order-from {
             padding: 20px;
             font-weight: 600;
             display: flex;
             justify-content: space-between;
         }
 
-        .order-separator {
-            margin-bottom: 10px;
+        .from-csp {
+            color: #5F7C56;
+            background-color: rgba(152, 188, 141, 0.28);
+            border: 1px solid #5F7C56;
+            border-radius: 10px;
+            margin-left: 10px;
+            padding: 5px;
+            text-align: center;
+            width: 100px;
         }
 
-        .action {
-            font-size: 1rem;
-            font-weight: normal;
+        .from-erp {
+            color: gray;
+            background-color: rgba(213, 213, 213, 0.29);
+            border: 1px solid gray;
+            border-radius: 10px;
+            margin-left: 10px;
+            padding: 5px;
+            text-align: center;
+            width: 100px;
+        }
+
+        .order-separator {
+            margin-bottom: 10px;
         }
 
         .order-body {
