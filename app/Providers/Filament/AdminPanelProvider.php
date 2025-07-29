@@ -38,13 +38,13 @@ class AdminPanelProvider extends PanelProvider
             ->databaseNotifications()
             ->colors([
                 'primary' => Color::hex('#698a5f'),
-                'background' => Color::hex('#F5F5F5'),
-                'secondary' => Color::hex('#898ed3'),
-                'secondary-hover' => Color::hex('#5558A6'),
-                'success' => Color::hex('#3a9a50'),
-                'warning' => Color::hex('#FFAC02'),
-                'danger' => Color::hex('#CF4753'),
-                'info' => Color::hex('#527bea'),
+                'background' => Color::hex('#FFFDF6'),
+                'secondary' => Color::hex('#80735B'),
+                'secondary-hover' => Color::hex('#E4E6C3'),
+                'success' => Color::hex('#0BBA4E'),
+                'warning' => Color::hex('#F7CF67'),
+                'danger' => Color::hex('#D96153'),
+                'info' => Color::hex('#84BFC3'),
             ])
             ->spa()
 //            ->font('Poppins')
