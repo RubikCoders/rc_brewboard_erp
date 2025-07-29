@@ -26,7 +26,7 @@ class OrderCustomization extends Model
 
     public function customization()
     {
-        return $this->belongsTo(ProductCustomization::class, 'product_customization_id');
+        return $this->belongsTo(CustomizationOption::class, 'product_customization_id');
     }
     //endregion
 }

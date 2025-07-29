@@ -14,14 +14,15 @@ return new class extends Migration {
             $table->id()->startingValue(1001);
             $table->foreignId('employee_id')->nullable()->constrained('employees');
             $table->string('customer_name');
-            $table->integer('total'); // In cents
-            $table->integer('tax')->nullable(); // In cents
+            $table->decimal('total'); // In cents
+            $table->decimal('tax')->nullable(); // In cents
             $table->string('payment_method');
             $table->enum('from', ['erp', 'csp']);
             $table->tinyInteger('status');
             // 0 - pendiente
             // 1 - pagada
             // 2 - cancelada
+            $table->string('cancel_reason')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @method static create(array $array)
+ * @property \Illuminate\Database\Eloquent\Collection|mixed $orderProducts
  */
 class Order extends Model
 {
@@ -64,6 +65,24 @@ class Order extends Model
     public static function allProductsDelivered(self $order): bool
     {
         return $order->orderProducts()->where('kitchen_status', '!=', 2)->doesntExist();
+    }
+
+    /**
+     * Calculate estimated time, stop in 15 minutes
+     * @param Order $order
+     * @return int
+     */
+    public static function calculateEstimatedTime(self $order): int
+    {
+        $estimatedTime = 0;
+
+        foreach ($order->orderProducts as $orderProduct) {
+            $estimatedTime += $orderProduct->product->estimated_time_min;
+            if ($estimatedTime >= 15) return 15;
+        }
+
+
+        return $estimatedTime;
     }
 
     //endregion

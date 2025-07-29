@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -45,13 +46,22 @@ class MenuProduct extends Model
             ->map(function ($products) {
                 return $products->mapWithKeys(function ($product) {
                     return [
-                        $product->id => $product->name . ' (' . Money::format($product->base_price) . ')'
+                        $product->id => $product->name
                     ];
                 });
             })
             ->toArray();
     }
 
+    //endregion
+
+    //region Mutators
+    protected function imageUrl(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => asset($value),
+        );
+    }
     //endregion
 
     //region Relationships
