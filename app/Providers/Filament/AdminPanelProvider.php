@@ -47,8 +47,6 @@ class AdminPanelProvider extends PanelProvider
                 'info' => Color::hex('#527bea'),
             ])
             ->spa()
-//            ->font('Poppins')
-            ->font('Fustat')
 //            ->brandLogo(asset('brand/2.png'))
             ->darkMode(false)
             ->brandLogoHeight('5rem')
