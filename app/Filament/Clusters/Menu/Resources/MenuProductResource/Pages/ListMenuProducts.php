@@ -19,7 +19,7 @@ class ListMenuProducts extends ListRecords
             Actions\CreateAction::make()
                 ->icon('heroicon-o-plus'),
         ];
-    }
+    }    
 
     public function getTabs(): array
     {
