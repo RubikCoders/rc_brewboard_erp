@@ -59,7 +59,26 @@ class MenuProduct extends Model
     protected function imageUrl(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => asset($value),
+            get: function (?string $value): ?string {                
+                if ($value && str_contains($value, '/storage/products/')) {
+                    return $value;
+                }
+                
+                if (!$value && $this->image_path) {                    
+                    if (!str_starts_with($this->image_path, '/')) {
+                        return asset('storage/' . $this->image_path);
+                    }
+            
+                    $filename = basename($this->image_path);
+                    return asset('storage/products/' . $filename);
+                }
+
+                if ($value) {
+                    return asset($value);
+                }
+                
+                return null;
+            }
         );
     }
     //endregion

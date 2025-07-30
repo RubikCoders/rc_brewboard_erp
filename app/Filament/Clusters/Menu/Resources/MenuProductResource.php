@@ -46,11 +46,7 @@ class MenuProductResource extends Resource
     {
         return __("product.model");
     }
-
-    public static function getNavigationBadge(): ?string
-    {
-        return (string) static::getModel()::count();
-    }
+    
     //endregion
 
     //region Form methods
@@ -152,6 +148,7 @@ class MenuProductResource extends Resource
                 ->description(__('product.sections.customizations.description'))
                 ->schema([
                     Forms\Components\Repeater::make('customizations')
+                        ->hiddenLabel()
                         ->relationship()
                         ->schema([                            
                             Forms\Components\Grid::make(3)
@@ -172,12 +169,12 @@ class MenuProductResource extends Resource
                                         ->columnSpan(1)
                                         ->inline(false),
                                 ]),
-
-                            // NUEVA IMPLEMENTACIÓN: Sub-repeater para las opciones de cada tipo de personalización
+                            
                             Forms\Components\Section::make('Opciones de Personalización')
                                 ->description('Define las opciones específicas que los clientes pueden seleccionar para este tipo de personalización')
                                 ->schema([
                                     Forms\Components\Repeater::make('options')
+                                        ->hiddenLabel()
                                         ->relationship()
                                         ->schema([
                                             Forms\Components\Grid::make(2)
@@ -272,37 +269,37 @@ class MenuProductResource extends Resource
     {
         return $table
             ->columns([
-            Tables\Columns\ImageColumn::make('image_path')
-                ->label('Imagen')
-                ->circular()
-                ->size(40)
-                ->getStateUsing(function ($record): ?string {
-                    //Si tenemos image_url válida del seeder
-                    if ($record->image_url && str_contains($record->image_url, '/storage/products/')) {
-                        $filename = basename($record->image_url);
+                Tables\Columns\ImageColumn::make('image_path')
+                    ->label('Imagen')
+                    ->circular()
+                    ->size(40)
+                    ->getStateUsing(function ($record): ?string {
+                        //Si tenemos image_url válida del seeder
+                        if ($record->image_url && str_contains($record->image_url, '/storage/products/')) {
+                            $filename = basename($record->image_url);
 
-                        // Verificar si el archivo existe físicamente
-                        if (file_exists(storage_path('app/public/products/' . $filename))) {
-                            return asset('storage/products/' . $filename);
-                        }
-                    }
-
-                    //Procesar image_path 
-                    if ($record->image_path) {
-                        // Si es ruta relativa (FileUpload nuevo)
-                        if (!str_starts_with($record->image_path, '/')) {
-                            if (file_exists(storage_path('app/public/' . $record->image_path))) {
-                                return asset('storage/' . $record->image_path);
-                            }
-                        } else {
-                            // Si es ruta absoluta (seeder), extraer filename
-                            $filename = basename($record->image_path);
-
+                            // Verificar si el archivo existe físicamente
                             if (file_exists(storage_path('app/public/products/' . $filename))) {
                                 return asset('storage/products/' . $filename);
                             }
                         }
-                    }
+
+                        //Procesar image_path 
+                        if ($record->image_path) {
+                            // Si es ruta relativa (FileUpload nuevo)
+                            if (!str_starts_with($record->image_path, '/')) {
+                                if (file_exists(storage_path('app/public/' . $record->image_path))) {
+                                    return asset('storage/' . $record->image_path);
+                                }
+                            } else {
+                                // Si es ruta absoluta (seeder), extraer filename
+                                $filename = basename($record->image_path);
+
+                                if (file_exists(storage_path('app/public/products/' . $filename))) {
+                                    return asset('storage/products/' . $filename);
+                                }
+                            }
+                        }
 
                     //retornar null para mostrar defaultImageUrl
                     return null;
@@ -332,6 +329,7 @@ class MenuProductResource extends Resource
 
                 Tables\Columns\TextColumn::make('estimated_time_min')
                     ->label(__('product.fields.estimated_time_min'))
+                    ->numeric(0)
                     ->suffix(' min')
                     ->sortable(),
 
@@ -342,12 +340,6 @@ class MenuProductResource extends Resource
                     ->falseIcon('heroicon-o-x-circle')
                     ->trueColor('success')
                     ->falseColor('danger'),
-
-                Tables\Columns\TextColumn::make('customizations_count')
-                    ->label('Personalizaciones')
-                    ->counts('customizations')
-                    ->badge()
-                    ->color('warning'),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('product.fields.created_at'))
