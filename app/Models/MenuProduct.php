@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -45,13 +46,41 @@ class MenuProduct extends Model
             ->map(function ($products) {
                 return $products->mapWithKeys(function ($product) {
                     return [
-                        $product->id => $product->name . ' (' . Money::format($product->base_price) . ')'
+                        $product->id => $product->name
                     ];
                 });
             })
             ->toArray();
     }
 
+    //endregion
+
+    //region Mutators
+    protected function imageUrl(): Attribute
+    {
+        return Attribute::make(
+            get: function (?string $value): ?string {                
+                if ($value && str_contains($value, '/storage/products/')) {
+                    return $value;
+                }
+                
+                if (!$value && $this->image_path) {                    
+                    if (!str_starts_with($this->image_path, '/')) {
+                        return asset('storage/' . $this->image_path);
+                    }
+            
+                    $filename = basename($this->image_path);
+                    return asset('storage/products/' . $filename);
+                }
+
+                if ($value) {
+                    return asset($value);
+                }
+                
+                return null;
+            }
+        );
+    }
     //endregion
 
     //region Relationships

@@ -12,7 +12,6 @@ return [
   "description_and_details" => "Descripción y Detalles",
   "pricing_and_availability" => "Precio y Disponibilidad",
 
-  // Navigation
   "navigation" => [
     "cluster" => "Gestión del Menú",
     "products" => "Productos",
@@ -30,6 +29,9 @@ return [
     "is_available" => "Disponible",
     "created_at" => "Registrado el",
     "updated_at" => "Actualizado el",
+    "option_name" => "Nombre de la Opción",
+    "option_extra_price" => "Precio Adicional",
+    "option_name_placeholder" => "Ej: Pequeño, Mediano, Grande",
 
     // Customizations
     "customization_name" => "Nombre de la Personalización",
@@ -52,11 +54,11 @@ return [
     ],
     "details" => [
       "title" => "Descripción y Detalles",
-      "description" => "Descripción, ingredientes e imagen"
+      "description" => "Descripción completa, ingredientes e imagen del producto"
     ],
     "pricing" => [
       "title" => "Precio y Disponibilidad",
-      "description" => "Configuración de precio y estado"
+      "description" => "Configuración de precio base y estado de disponibilidad"
     ],
     "customizations" => [
       "title" => "Tipos de Personalización",
@@ -104,5 +106,61 @@ return [
     "base_price_required" => "El precio base es obligatorio",
     "base_price_positive" => "El precio base debe ser mayor a 0",
     "estimated_time_positive" => "El tiempo estimado debe ser mayor a 0",
-  ]
+  ],
+
+  "view" => [
+    "title" => "Detalles del Producto",
+    "subtitle" => "Información completa del producto del menú",
+
+    "sections" => [
+      "main_info" => [
+        "title" => "Información Principal",
+        "description" => "Datos esenciales del producto"
+      ],
+      "ingredients" => [
+        "title" => "Ingredientes y Detalles",
+        "description" => "Información detallada sobre los componentes del producto"
+      ],
+      "customizations" => [
+        "title" => "Tipos de Personalización",
+        "description" => "Opciones de personalización disponibles para este producto"
+      ],
+      "system_info" => [
+        "title" => "Información del Sistema",
+        "description" => "Datos técnicos y fechas de registro"
+      ]
+    ],
+
+    "labels" => [
+      "category" => "Categoría",
+      "status" => "Estado",
+      "base_price" => "Precio Base",
+      "preparation_time" => "Tiempo de Preparación",
+      "creation_date" => "Fecha de Creación",
+      "last_update" => "Última Actualización",
+      "customization_type" => "Tipo de Personalización",
+      "is_required" => "¿Es Requerido?",
+      "available_options" => "Opciones Disponibles",
+      "option_name" => "Opción",
+      "additional_price" => "Precio Adicional"
+    ],
+
+    "placeholders" => [
+      "no_description" => "Sin descripción disponible",
+      "no_ingredients" => "No se han especificado ingredientes",
+      "no_customizations" => "No se han configurado tipos de personalización para este producto",
+      "free_option" => "Sin costo adicional"
+    ],
+
+    "status" => [
+      "available" => "Disponible",
+      "unavailable" => "No Disponible"
+    ],
+
+    "units" => [
+      "minutes" => "minutos",
+      "options" => "opciones"
+    ]
+  ],
+  
 ];

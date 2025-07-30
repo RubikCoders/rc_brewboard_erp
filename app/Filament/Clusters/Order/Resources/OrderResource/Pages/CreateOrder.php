@@ -58,10 +58,19 @@ class CreateOrder extends CreateRecord
             $customizations = $productData['customizations'];
 
             foreach ($customizations as $customization) {
-                OrderCustomization::create([
-                    'order_product_id' => $orderProduct->id,
-                    'product_customization_id' => $customization
-                ]);
+                if (is_array($customization)) {
+                    foreach ($customization as $sub) {
+                        OrderCustomization::create([
+                            'order_product_id' => $orderProduct->id,
+                            'product_customization_id' => $sub
+                        ]);
+                    }
+                } else {
+                    OrderCustomization::create([
+                        'order_product_id' => $orderProduct->id,
+                        'product_customization_id' => $customization
+                    ]);
+                }
             }
         }
 
@@ -125,7 +134,13 @@ class CreateOrder extends CreateRecord
 
             // Get customizations and sum every extra price
             foreach ($product['customizations'] as $customization) {
-                $total += CustomizationOption::find($customization)->extra_price;
+                if (is_array($customization)) {
+                    foreach ($customization as $sub) {
+                        $total += CustomizationOption::find($sub)->extra_price ?? 0;
+                    }
+                } else {
+                    $total += CustomizationOption::find($customization)->extra_price ?? 0;
+                }
             }
         }
 
