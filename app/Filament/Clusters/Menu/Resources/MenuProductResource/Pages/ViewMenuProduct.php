@@ -15,6 +15,7 @@ use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\Enums\FontFamily;
+use Illuminate\Support\HtmlString;
 use App\Helpers\Money;
 
 class ViewMenuProduct extends ViewRecord
@@ -189,46 +190,128 @@ class ViewMenuProduct extends ViewRecord
                     ])
                     ->columnSpanFull(),
 
-                InfolistSection::make('Ingredientes y Detalles')
+                InfolistSection::make(function ($record): string {
+                    $ingredientsCount = $record->ingredients ? count(array_filter(array_map('trim', explode(',', $record->ingredients)))) : 0;
+                    return "Ingredientes y Detalles ({$ingredientsCount})";
+                })
                     ->description('Todos los ingredientes que componen este delicioso producto')
                     ->schema([
                         TextEntry::make('ingredients')
                             ->hiddenLabel()
                             ->placeholder('No se han especificado ingredientes para este producto')
-                            ->formatStateUsing(function (?string $state): string {
+                            ->formatStateUsing(function (?string $state): HtmlString {
                                 if (!$state) {
-                                    return 'No se han especificado ingredientes para este producto';
+                                    return new HtmlString('
+                                            <div class="flex items-center justify-center p-8 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg">
+                                                <div class="text-center">
+                                                    <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                                    </svg>
+                                                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">No se han especificado ingredientes para este producto</p>
+                                                </div>
+                                            </div>
+                                        ');
                                 }
 
-                                // Dividir ingredientes por comas y limpiar espacios
-                                $ingredients = array_map('trim', explode(',', $state));
+                                $ingredients = array_filter(array_map('trim', explode(',', $state)));
 
-                                // Crear HTML personalizado para ingredientes más grandes
-                                $html = '<div class="ingredients-grid">';
+                                $html = '
+                                        <style>
+                                            .ingredients-grid {
+                                                display: grid;
+                                                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                                                gap: 0.875rem;
+                                            }
+                                            
+                                            .ingredient-tag {
+                                                background: linear-gradient(135deg, #f8fafc 0%, #f8fafc 50%, #E4E6C3 100%);                                                
+                                                border-radius: 8px;
+                                                padding: 0.75rem 0.75rem 0.75rem 2rem;
+                                                display: flex;
+                                                align-items: center;
+                                                gap: 0.5rem;
+                                                transition: transform 0.2s ease, box-shadow 0.2s ease;
+                                                word-break: break-word;
+                                                min-height: 48px;
+                                            }
+                                            
+                                            .ingredient-tag::before {
+                                                content: "";
+                                                position: absolute;
+                                                top: 0;
+                                                left: 0;
+                                                right: 0;
+                                                height: 2px;
+                                                background: rgba(var(--primary-500), 1);
+                                                border-radius: 8px 8px 0 0;
+                                                position: relative;
+                                                margin: -0.75rem -0.75rem 0 -0.75rem;
+                                            }
+                                            
+                                            .ingredient-tag:hover {
+                                                transform: translateY(-1px);
+                                                box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.1);
+                                            }
+                                            
+                                            .ingredient-icon {
+                                                width: 18px;
+                                                height: 18px;
+                                                color: rgba(var(--primary-600), 1);
+                                                flex-shrink: 0;
+                                            }
+                                            
+                                            .ingredient-text {
+                                                font-weight: 500;
+                                                color: #374151;
+                                                font-size: 0.875rem;
+                                                line-height: 1.4;
+                                                text-transform: capitalize;
+                                                flex: 1;
+                                            }
+                                            
+                                            .dark .ingredient-tag {
+                                                padding-left: 16px;
+                                                background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+                                                border-color: #374151;
+                                            }
+                                            
+                                            .dark .ingredient-text {
+                                                color: #d1d5db;
+                                            }
+                                            
+                                            .dark .ingredient-icon {
+                                                color: rgba(var(--primary-400), 1);
+                                            }
+                                            
+                                            .dark .ingredient-tag:hover {
+                                                box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.3);
+                                            }
+                                        </style>
+                                        
+                                        <div class="ingredients-grid">
+                                    ';
+
                                 foreach ($ingredients as $ingredient) {
                                     if (!empty($ingredient)) {
-                                        $html .= '<div class="ingredient-tag">';
-                                        $html .= '<svg class="ingredient-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">';
-                                        $html .= '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
-                                        $html .= '</svg>';
-                                        $html .= '<span class="ingredient-text">' . htmlspecialchars($ingredient) . '</span>';
-                                        $html .= '</div>';
+                                        $html .= '
+                                                <div class="ingredient-tag">
+                                                    <svg class="ingredient-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                                                    </svg>
+                                                    <span class="ingredient-text">' . htmlspecialchars($ingredient) . '</span>
+                                                </div>
+                                            ';
                                     }
                                 }
-                                $html .= '</div>';
 
-                                return $html;
+                                $html .= '</div>';
+                                return new HtmlString($html);
                             })
-                            ->html() // Importante: permite HTML
-                            ->extraAttributes([
-                                'class' => 'ingredients-container-enhanced'
-                            ])
                             ->columnSpanFull(),
                     ])
                     ->extraAttributes([
-                        'class' => 'ingredients-section-enhanced'
+                        'class' => 'p-6 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm'
                     ])
-                    ->collapsible()
                     ->columnSpanFull(),
 
                 InfolistSection::make('Tipos de Personalización')

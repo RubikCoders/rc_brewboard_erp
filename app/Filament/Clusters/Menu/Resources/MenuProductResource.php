@@ -31,6 +31,8 @@ class MenuProductResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    protected static bool $shouldShowBreadcrumbs = false;
+
     //region Label methods
     public static function getNavigationLabel(): string
     {
