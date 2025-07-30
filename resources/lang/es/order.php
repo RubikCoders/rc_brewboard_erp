@@ -66,6 +66,7 @@ return [
         "status_delivered" => "Marcar como entregado",
         "order_delivered" => "Marcar como entregada",
         "order_canceled" => "Cancelar orden",
+        "ticket" => "Recibo"
     ],
 
     "notification" => [
