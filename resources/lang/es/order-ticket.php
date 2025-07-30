@@ -2,9 +2,9 @@
 
 return [
     'title' => "Ticket de compra #:number",
-    'total' => "Total: :total",
-    'subtotal' => "Subtotal: :subtotal",
-    'tax' => "IVA: :tax",
+    'total' => "Total:",
+    'subtotal' => "Subtotal:",
+    'tax' => "IVA:",
     'products' => 'Productos:',
     "date" => "Fecha:",
     "time" => "Hora:",

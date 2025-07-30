@@ -59,19 +59,23 @@
 
     <hr>
 
-    <div class="total">
-        <span>
-            @lang('order-ticket.subtotal', [ 'subtotal' => $order->total - $order->tax ])
-        </span><br>
-        <span>
-            @lang('order-ticket.tax', ['tax' => $order->tax])
-        </span>
-        <br><br>
-        <span>
-            @lang('order-ticket.total', [ 'total' => $order->total ])
-        </span>
-    </div>
-
+    <table width="100%" style="border-collapse: collapse; margin-bottom: 2px; font-size: 12px;" class="total">
+        <tr>
+            <td></td>
+            <td style="width: 60%; padding: 0;">@lang('order-ticket.subtotal')</td>
+            <td style="text-align: right; padding: 0;">{{ \App\Helpers\Money::format($order->total - $order->tax) }}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td style="width: 60%; padding: 0;">@lang('order-ticket.tax')</td>
+            <td style="text-align: right; padding: 0;">{{ \App\Helpers\Money::format($order->tax) }}</td>
+        </tr>
+        <tr class="title">
+            <td></td>
+            <td class="title" style="width: 60%; padding: 0;"><strong class="title">@lang('order-ticket.total')</strong></td>
+            <td style="text-align: right; padding: 0;"><strong class="title">{{ \App\Helpers\Money::format($order->total) }}</strong></td>
+        </tr>
+    </table>
     <br>
 
     <div class="center">¡Gracias por su compra!</div>
