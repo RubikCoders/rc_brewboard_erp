@@ -98,12 +98,6 @@ class Order extends Model
         return $this->hasMany(OrderProduct::class);
     }
 
-    public function products()
-    {
-        return $this->belongsToMany(MenuProduct::class, 'order_products')
-            ->using(OrderProduct::class)
-            ->withPivot(['quantity', 'is_delivered', 'total_price', 'notes', 'kitchen_status']);
-    }
 
     public function reviews()
     {
