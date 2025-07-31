@@ -91,7 +91,6 @@ class CreateOrder extends CreateRecord
         return __("order.notification.create");
     }
 
-
     /**
      * Clean data form, created because to create dynamic product customization inputs Filament need render all customizations in the repeater, just to save the value in $this->data
      * @param array $data
@@ -131,6 +130,7 @@ class CreateOrder extends CreateRecord
         foreach ($data as $product) {
             $total += MenuProduct::find($product['product_id'])->base_price;
 
+            if(!array_key_exists('customizations', $product)) return 0;
 
             // Get customizations and sum every extra price
             foreach ($product['customizations'] as $customization) {

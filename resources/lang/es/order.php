@@ -8,14 +8,17 @@ return [
     "date" => "Fecha",
     "time" => "Hora",
     "select_products" => "Seleccionar Productos",
-    "payment" => "Resumen de Pago",
+    "payment" => "Datos de Pago",
     "payment_description" => "Prepara el cobro de la orden",
+    "preview" => "Resumen",
+    "preview_description" => "Finaliza el pedido",
     "products" => "Productos",
     "required_customizations" => "Personalizaciones Requeridas",
     "optional_customizations" => "Personalizaciones Opcionales",
     "select_products_description" => "Selecciona los productos que solicita el cliente",
     "summary" => "Resumen",
     "subtotal" => "Subtotal",
+    "order_total" => "Total de la Orden",
     "customer" => "Cliente",
     "payment_label" => "Pago",
     "taken_in" => "Tomada en",
@@ -34,6 +37,7 @@ return [
             1 => "Entregada",
             2 => "Cancelada"
         ],
+        "cancel_reason" => "Razón de la cancelación",
         "created_at" => "Registrado el",
         "payment_methods" => [
             "card" => "Tarjeta",
@@ -62,6 +66,7 @@ return [
         "status_delivered" => "Marcar como entregado",
         "order_delivered" => "Marcar como entregada",
         "order_canceled" => "Cancelar orden",
+        "ticket" => "Recibo"
     ],
 
     "notification" => [
