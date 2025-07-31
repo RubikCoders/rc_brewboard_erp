@@ -3,6 +3,7 @@
 namespace App\Filament\Clusters\Order\Resources\OrderResource\Pages;
 
 use App\Filament\Clusters\Order\Resources\OrderResource;
+use App\Helpers\Formatter;
 use App\Helpers\Money;
 use App\Models\Order;
 use App\Models\OrderProduct;
@@ -84,6 +85,10 @@ class ViewOrder extends ViewRecord
                 ->columns(12)
                 ->collapsible()
                 ->schema([
+                    Placeholder::make('created_at')
+                        ->label(__("order.fields.created_at"))
+                        ->columnSpanFull()
+                        ->content(Formatter::dateTime($this->record->created_at)),
                     Placeholder::make('id')
                         ->label(__("order.fields.id"))
                         ->columnSpan(3)
@@ -108,7 +113,12 @@ class ViewOrder extends ViewRecord
                                 Order::STATUS_FINISHED => "<span style='color: #5F7C56; background-color: rgba(152,188,141,0.28); border: 1px solid #5F7C56; border-radius: 10px; padding: 5px'>" . __("order.fields.status.1") . "</span>",
                                 Order::STATUS_CANCELLED => "<span style='color: #d34f4f; background-color: rgba(255,176,176,0.4); border: 1px solid #d34f4f; border-radius: 10px; padding: 5px'>" . __("order.fields.status.2") . "</span>",
                             });
-                        })
+                        }),
+                    Placeholder::make('cancel_reason')
+                        ->hidden(!$this->record->cancel_reason)
+                        ->columnSpanFull()
+                        ->label(__("order.fields.cancel_reason"))
+                        ->content($this->record->cancel_reason),
                 ])
         ];
     }
@@ -153,10 +163,10 @@ class ViewOrder extends ViewRecord
 //                        ->content($orderProduct->product->description),
                     ...$customizationsFields,
                     Placeholder::make('notes')
-                        ->label(fn (): HtmlString => new HtmlString("<b>" . __("order.fields.notes") . "</b>"))
+                        ->label(fn(): HtmlString => new HtmlString("<b>" . __("order.fields.notes") . "</b>"))
                         ->content($orderProduct->notes ?? '-'),
                     \Filament\Forms\Components\Actions::make([
-                        Action::make('status_ready')
+                        Action::make("status_ready_$orderProduct->id")
                             ->label(__("order.actions.status_ready"))
                             ->requiresConfirmation()
                             ->size('xl')
@@ -167,7 +177,7 @@ class ViewOrder extends ViewRecord
                                     'kitchen_status' => OrderProduct::KITCHEN_STATUS_READY
                                 ]);
                             }),
-                        Action::make('status_delivered')
+                        Action::make("status_delivered_$orderProduct->id")
                             ->label(__("order.actions.status_delivered"))
                             ->requiresConfirmation()
                             ->visible($orderProduct->kitchen_status == OrderProduct::KITCHEN_STATUS_READY && $this->record->status != Order::STATUS_CANCELLED)
