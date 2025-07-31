@@ -6,7 +6,6 @@ use App\Filament\Clusters\Menu;
 use App\Filament\Clusters\Menu\Resources\MenuProductResource\Pages;
 use App\Models\MenuProduct;
 use App\Models\MenuCategory;
-use App\Helpers\Money;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -21,22 +20,11 @@ class MenuProductResource extends Resource
 
     protected static ?string $cluster = Menu::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
-
-    protected static ?string $navigationLabel = 'Productos';
-
-    protected static ?int $navigationSort = 1;
-
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
-
-    protected static ?string $recordTitleAttribute = 'name';
-
-    protected static bool $shouldShowBreadcrumbs = false;
-
-    //region Label methods
+    
     public static function getNavigationLabel(): string
     {
-        return __("product.navigation.products");
+        return __("────୨ৎ────");
     }
 
     public static function getModelLabel(): string
@@ -271,43 +259,12 @@ class MenuProductResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('image_path')
-                    ->label('Imagen')
-                    ->circular()
-                    ->size(40)
-                    ->getStateUsing(function ($record): ?string {
-                        //Si tenemos image_url válida del seeder
-                        if ($record->image_url && str_contains($record->image_url, '/storage/products/')) {
-                            $filename = basename($record->image_url);
-
-                            // Verificar si el archivo existe físicamente
-                            if (file_exists(storage_path('app/public/products/' . $filename))) {
-                                return asset('storage/products/' . $filename);
-                            }
-                        }
-
-                        //Procesar image_path 
-                        if ($record->image_path) {
-                            // Si es ruta relativa (FileUpload nuevo)
-                            if (!str_starts_with($record->image_path, '/')) {
-                                if (file_exists(storage_path('app/public/' . $record->image_path))) {
-                                    return asset('storage/' . $record->image_path);
-                                }
-                            } else {
-                                // Si es ruta absoluta (seeder), extraer filename
-                                $filename = basename($record->image_path);
-
-                                if (file_exists(storage_path('app/public/products/' . $filename))) {
-                                    return asset('storage/products/' . $filename);
-                                }
-                            }
-                        }
-
-                    //retornar null para mostrar defaultImageUrl
-                    return null;
-                })
-                ->defaultImageUrl(asset('images/placeholder-product.jpg'))
-                ->extraAttributes(['class' => 'rounded-lg']),
+            Tables\Columns\ImageColumn::make('image_path')
+                ->label('Imagen')
+                ->circular()
+                ->size(50)
+                ->getStateUsing(fn($record) => $record->getImageOrDefault())
+                ->defaultImageUrl(asset('images/placeholder-product.jpg')),
 
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('product.fields.name'))
@@ -351,6 +308,7 @@ class MenuProductResource extends Resource
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('category')
+                    ->label(__('product.fields.category_id'))
                     ->relationship('category', 'name')
                     ->preload()
                     ->multiple(),
@@ -418,7 +376,7 @@ class MenuProductResource extends Resource
             'create' => Pages\CreateMenuProduct::route('/create'),
             'view' => Pages\ViewMenuProduct::route('/{record}'),
             'edit' => Pages\EditMenuProduct::route('/{record}/edit'),
-            'manage' => Pages\ManageMenuProducts::route('/manage'),
+            // 'manage' => Pages\ManageMenuProducts::route('/manage'),
         ];
     }
 }
