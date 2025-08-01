@@ -44,8 +44,7 @@ class ViewMenuProduct extends ViewRecord
                             'default' => 1,
                             'lg' => 3,
                         ])
-                            ->schema([
-                                // COLUMNA 1: Imagen del producto (más amplia)
+                            ->schema([                                
                                 Group::make([                                    
                                     ImageEntry::make('image_path')
                                         ->hiddenLabel()
@@ -56,25 +55,20 @@ class ViewMenuProduct extends ViewRecord
                                             'style' => 'object-fit: cover; aspect-ratio: 4/3;'
                                         ])
                                         ->getStateUsing(function ($record): ?string {
-                                            // Si tenemos image_url válida del seeder
                                             if ($record->image_url && str_contains($record->image_url, '/storage/products/')) {
                                                 $filename = basename($record->image_url);
 
-                                                // Verificar si el archivo existe físicamente
                                                 if (file_exists(storage_path('app/public/products/' . $filename))) {
                                                     return asset('storage/products/' . $filename);
                                                 }
                                             }
 
-                                            // Procesar image_path 
                                             if ($record->image_path) {
-                                                // Si es ruta relativa (FileUpload nuevo)
                                                 if (!str_starts_with($record->image_path, '/')) {
                                                     if (file_exists(storage_path('app/public/' . $record->image_path))) {
                                                         return asset('storage/' . $record->image_path);
                                                     }
                                                 } else {
-                                                    // Si es ruta absoluta (seeder), extraer filename
                                                     $filename = basename($record->image_path);
 
                                                     if (file_exists(storage_path('app/public/products/' . $filename))) {

@@ -263,7 +263,31 @@ class MenuProductResource extends Resource
                 ->label('Imagen')
                 ->circular()
                 ->size(50)
-                ->getStateUsing(fn($record) => $record->getImageOrDefault())
+                ->getStateUsing(function ($record): ?string {                    
+                    if ($record->image_url && str_contains($record->image_url, '/storage/products/')) {
+                        $filename = basename($record->image_url);
+                        
+                        if (file_exists(storage_path('app/public/products/' . $filename))) {
+                            return asset('storage/products/' . $filename);
+                        }
+                    }
+                    
+                    if ($record->image_path) {                        
+                        if (!str_starts_with($record->image_path, '/')) {
+                            if (file_exists(storage_path('app/public/' . $record->image_path))) {
+                                return asset('storage/' . $record->image_path);
+                            }
+                        } else {
+                            $filename = basename($record->image_path);
+
+                            if (file_exists(storage_path('app/public/products/' . $filename))) {
+                                return asset('storage/products/' . $filename);
+                            }
+                        }
+                    }
+
+                    return null;
+                })
                 ->defaultImageUrl(asset('images/placeholder-product.jpg')),
 
                 Tables\Columns\TextColumn::make('name')
