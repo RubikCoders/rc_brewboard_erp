@@ -23,7 +23,6 @@ return new class extends Migration {
             // 1 - pagada
             // 2 - cancelada
             $table->string('cancel_reason')->nullable();
-            $table->softDeletes();
             $table->timestamps();
         });
     }
