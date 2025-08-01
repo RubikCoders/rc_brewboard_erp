@@ -22,6 +22,9 @@ return [
     "customer" => "Cliente",
     "payment_label" => "Pago",
     "taken_in" => "Tomada en",
+    "section_payment_description" => "Detalles del pago de la orden, solo disponible para Administradores",
+    "section_order_description" => "Detalles de la orden",
+    "view_order" => "Ver Orden #:number",
 
     "fields" => [
         "id" => "N°",

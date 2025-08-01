@@ -19,12 +19,18 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\HtmlString;
 
 class ViewOrder extends ViewRecord
 {
     protected static string $resource = OrderResource::class;
+
+    public function getTitle(): string | Htmlable
+    {
+       return __("order.view_order", ['number' => $this->record->id]);
+    }
 
     public function form(Form $form): Form
     {
@@ -63,6 +69,7 @@ class ViewOrder extends ViewRecord
     {
         return [
             Section::make(__("order.payment_label"))
+                ->description(__("order.section_payment_description"))
                 ->collapsible()
                 ->collapsed()
                 ->columns(12)
@@ -86,6 +93,7 @@ class ViewOrder extends ViewRecord
                         ->content(Money::format($this->record->tax)),
                 ]),
             Section::make(__("order.order"))
+                ->description(__("order.section_order_description"))
                 ->columns(12)
                 ->collapsible()
                 ->schema([
@@ -158,7 +166,7 @@ class ViewOrder extends ViewRecord
                     });
             }
 
-            $fields[] = Section::make(new HtmlString($title . $status))
+            $fields[] = Section::make(new HtmlString("<span class='text-lg'> $title </span>" . $status))
                 ->columnSpan(1)
                 ->collapsible()
                 ->schema([
