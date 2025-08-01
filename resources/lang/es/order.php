@@ -30,6 +30,7 @@ return [
         "total" => "Total",
         "tax" => "Impuesto",
         "payment_method" => "Método de pago",
+        "admin_password" => "Contraseña del administrador",
         "from" => "De",
         "status" => [
             "label" => "Estado",
@@ -66,6 +67,7 @@ return [
         "status_delivered" => "Marcar como entregado",
         "order_delivered" => "Marcar como entregada",
         "order_canceled" => "Cancelar orden",
+        "restore_order" => "Anular cancelación",
         "ticket" => "Recibo"
     ],
 
@@ -75,5 +77,6 @@ return [
             "title" => "Orden sin entregar",
             "body" => "Debes marcar todos los productos como \"Entregados\""
         ],
+        "wrong_password" => "Contraseña incorrecta, no es posible anular la cancelación"
     ]
 ];

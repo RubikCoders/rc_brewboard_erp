@@ -7,16 +7,19 @@ use App\Helpers\Formatter;
 use App\Helpers\Money;
 use App\Models\Order;
 use App\Models\OrderProduct;
+use App\Models\User;
 use Filament\Actions;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\HtmlString;
 
 class ViewOrder extends ViewRecord
@@ -48,6 +51,7 @@ class ViewOrder extends ViewRecord
         return [
             self::deliverOrder(),
             self::cancelOrder(),
+            self::restoreOrder()
         ];
     }
 
@@ -227,9 +231,48 @@ class ViewOrder extends ViewRecord
             ->size('xl')
             ->color('danger')
             ->visible($this->record->status == Order::STATUS_WAITING)
-            ->action(function () {
+            ->form([
+                Textarea::make("cancel_reason")
+                    ->label(__("order.fields.cancel_reason"))
+                    ->required()
+            ])
+            ->action(function (array $data) {
                 $this->record->update([
-                    'status' => Order::STATUS_CANCELLED
+                    'status' => Order::STATUS_CANCELLED,
+                    'cancel_reason' => $data['cancel_reason']
+                ]);
+            });
+    }
+
+    private function restoreOrder(): Actions\Action
+    {
+        return Actions\Action::make('order_restore')
+            ->label(__("order.actions.restore_order"))
+            ->visible($this->record->status == Order::STATUS_CANCELLED)
+            ->color('gray')
+            ->requiresConfirmation()
+            ->form([
+                TextInput::make('admin_password')
+                    ->label(__("order.fields.admin_password"))
+                    ->password()
+                    ->revealable()
+                    ->required(),
+            ])
+            ->action(function (array $data) {
+                $admin = User::role('super_admin')->first();
+
+                if (!Hash::check($data['admin_password'], $admin->password)) {
+                    Notification::make("wrong_password")
+                        ->danger()
+                        ->title(__("order.notification.wrong_password"))
+                        ->send();
+
+                    return;
+                };
+
+                $this->record->update([
+                    'status' => Order::STATUS_WAITING,
+                    'cancel_reason' => null,
                 ]);
             });
     }
