@@ -71,6 +71,13 @@ return [
         "ticket" => "Recibo"
     ],
 
+    "tabs" => [
+        "all" => "Todos",
+        "pending" => "Pendientes",
+        "ready" => "Listas",
+        "cancelled" => "Cancelados",
+    ],
+
     "notification" => [
         "create" => "Orden registrada correctamente",
         "no_products_delivered" => [
