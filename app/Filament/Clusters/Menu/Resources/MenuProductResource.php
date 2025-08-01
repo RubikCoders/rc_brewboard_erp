@@ -7,7 +7,9 @@ use App\Filament\Clusters\Menu\Resources\MenuProductResource\Pages;
 use App\Models\MenuProduct;
 use App\Models\MenuCategory;
 use Filament\Forms;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -21,10 +23,14 @@ class MenuProductResource extends Resource
     protected static ?string $cluster = Menu::class;
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+
+    protected static ?string $navigationIcon = 'heroicon-o-cube';
+
+    protected static ?int $navigationSort = 1;
     
     public static function getNavigationLabel(): string
     {
-        return __("────୨ৎ────");
+        return ("Productos");
     }
 
     public static function getModelLabel(): string
@@ -297,11 +303,33 @@ class MenuProductResource extends Resource
                     ->weight('medium')
                     ->wrap(),
 
+                // Tables\Columns\TextColumn::make('category.name')
+                //     ->label(__('product.fields.category_id'))
+                //     ->badge()
+                //     ->color('info')
+                //     ->sortable(),
                 Tables\Columns\TextColumn::make('category.name')
                     ->label(__('product.fields.category_id'))
                     ->badge()
-                    ->color('info')
-                    ->sortable(),
+                    ->color(fn(string $state): string => match ($state) {
+                        'Bebidas Calientes' => 'danger',
+                        'Bebidas Frías' => 'info',
+                        'Postres' => 'warning',
+                        'Snacks' => 'success',
+                        default => 'gray',
+                    })
+                    ->icon('heroicon-o-tag')
+                    ->sortable()
+                    ->searchable()
+                    // ->url(
+                    //     fn(MenuProduct $record): string =>
+                    //     MenuCategoryResource::getUrl('edit', ['record' => $record->category_id])
+                    // )
+                    // ->tooltip(
+                    //     fn(MenuProduct $record): string =>
+                    //     "Editar categoría '{$record->category->name}'"
+                    // )
+                    ,
 
                 Tables\Columns\TextColumn::make('base_price')
                     ->label(__('product.fields.base_price'))
@@ -331,11 +359,25 @@ class MenuProductResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('category')
+                Tables\Filters\SelectFilter::make('category_id')
                     ->label(__('product.fields.category_id'))
                     ->relationship('category', 'name')
+                    ->searchable()
                     ->preload()
-                    ->multiple(),
+                    ->multiple()
+                    ->indicator('Categoría')
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when(
+                            filled($data['values']),
+                            fn(Builder $query): Builder => $query->whereIn('category_id', $data['values'])
+                        );
+                    })
+                    // Muestra el total de productos perteneciente a la categoria
+                    // ->getOptionLabelFromRecordUsing(
+                    //     fn(MenuCategory $record): string =>
+                    //     "{$record->name} ({$record->products_count} productos)"
+                    // )
+                    ,
 
                 Tables\Filters\TernaryFilter::make('is_available')
                     ->label(__('product.fields.is_available'))
@@ -371,9 +413,41 @@ class MenuProductResource extends Resource
                     }),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make()
+                    ->tooltip('Ver detalles del producto'),
+
+                Tables\Actions\EditAction::make()
+                    ->hiddenLabel()
+                    ->tooltip('Editar producto'),
+
+                Tables\Actions\Action::make('change_category')
+                    ->hiddenLabel()
+                    ->icon('heroicon-o-tag')
+                    ->color('warning')
+                    ->form([
+                        Forms\Components\Select::make('category_id')
+                            ->label('Nueva categoría')
+                            ->options(MenuCategory::pluck('name', 'id'))
+                            ->required()
+                            ->searchable(),
+                    ])
+                    ->action(function (MenuProduct $record, array $data): void {
+                        $oldCategory = $record->category->name;
+                        $newCategory = MenuCategory::find($data['category_id']);
+
+                        $record->update(['category_id' => $data['category_id']]);
+
+                        Notification::make()
+                            ->title('Categoría actualizada')
+                            ->body("Producto movido de '{$oldCategory}' a '{$newCategory->name}'")
+                            ->success()
+                            ->send();
+                    })
+                    ->tooltip('Cambiar la categoría de este producto'),
+
                 Tables\Actions\DeleteAction::make()
+                    ->hiddenLabel()
+                    ->tooltip('Eliminar producto')
                     ->requiresConfirmation(),
             ])
             ->bulkActions([
