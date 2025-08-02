@@ -17,9 +17,10 @@ class ProductCustomizationController extends Controller
      */
     public function indexByProduct($productId): JsonResponse
     {
-        $productCustomizations = ProductCustomization::where("product_id", $productId)
+        $productCustomizations = ProductCustomization::with('options')
+            ->where("product_id", $productId)
             ->orderBy("created_at", "desc")
-            ->paginate(10);
+            ->get();
 
         return response()->json($productCustomizations)->setStatusCode(200);
     }
