@@ -27,6 +27,11 @@ class Employee extends Model
         'entry_date',
     ];
 
+    protected $casts = [
+        'birthdate' => 'date',
+        'entry_date' => 'date',
+    ];
+
     //region Relationships
     public function user()
     {
@@ -43,4 +48,19 @@ class Employee extends Model
         return $this->hasMany(Order::class);
     }
     //endregion
+
+    public function getFullNameAttribute(): string
+    {
+        return "{$this->name} {$this->last_name}";
+    }
+
+    public function getAgeAttribute(): int
+    {
+        return $this->birthdate?->age ?? 0;
+    }
+
+    public function getYearsOfServiceAttribute(): int
+    {
+        return $this->entry_date?->diffInYears(now()) ?? 0;
+    }
 }
