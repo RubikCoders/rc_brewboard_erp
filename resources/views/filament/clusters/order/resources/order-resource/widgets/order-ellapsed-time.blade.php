@@ -55,7 +55,7 @@
                         }
                     "
         >
-            <div class="order-body">
+            <div style="padding: 20px;">
                 <div>
                     <p class="font-semibold">
                         @lang('baristaview.elapsed_time')<br>

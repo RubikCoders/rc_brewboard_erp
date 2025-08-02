@@ -6,7 +6,7 @@
     <div class="container">
         <div class="order-card"
         >
-            <div class="order-body">
+            <div style="padding: 20px;">
                 <div>
                     {{-- Tiempo estimado --}}
                     <p class="font-semibold">

@@ -62,7 +62,6 @@ class ViewOrder extends ViewRecord
             OrderResource\Widgets\OrderEllapsedTime::make([
                 "order" => $this->record,
             ]),
-            
         ];
     }
 
@@ -299,5 +298,5 @@ class ViewOrder extends ViewRecord
             });
     }
 
-   
+
 }
