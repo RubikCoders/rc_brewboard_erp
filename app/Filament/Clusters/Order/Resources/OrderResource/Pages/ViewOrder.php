@@ -52,6 +52,18 @@ class ViewOrder extends ViewRecord
             ]);
     }
 
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            OrderResource\Widgets\OrderEstimatedTime::make([
+                "order" => $this->record,
+            ]),
+            OrderResource\Widgets\OrderEllapsedTime::make([
+                "order" => $this->record,
+            ])
+        ];
+    }
+
     protected function getHeaderActions(): array
     {
         return [
