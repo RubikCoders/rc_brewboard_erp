@@ -16,13 +16,14 @@ class BaristaOriginWidget extends BaseWidget
     protected function getStats(): array
     {
         return [
-            
+
             Stat::make('Órdenes Kiosko', Order::where('from', Order::FROM_CSP)
                 ->where('status', Order::STATUS_WAITING)
                 ->count())
                 ->description('Por cliente')
                 ->descriptionIcon('heroicon-o-device-phone-mobile')
                 ->color('secondary')
+                ->chart([10,10])
                 ->url(ListOrders::getUrl() . '?tableFilters[status][value]=' . Order::STATUS_WAITING)
                 ->extraAttributes([
                     'class' => 'cursor-pointer [&_.fi-stat-value]:text-3xl [&_.fi-stat-value]:font-bold [&_.fi-stat-value]:text-center',
@@ -34,6 +35,7 @@ class BaristaOriginWidget extends BaseWidget
                 ->description('Por barista')
                 ->descriptionIcon('heroicon-o-user')
                 ->color('warning')
+                ->chart([10,10])
                 ->url(ListOrders::getUrl() . '?tableFilters[status][value]=' . Order::STATUS_WAITING)
                 ->extraAttributes([
                     'class' => 'cursor-pointer [&_.fi-stat-value]:text-3xl [&_.fi-stat-value]:font-bold [&_.fi-stat-value]:text-center',
@@ -45,6 +47,7 @@ class BaristaOriginWidget extends BaseWidget
                 ->description('Mayor a 20 min')
                 ->descriptionIcon('heroicon-o-exclamation-triangle')
                 ->color('danger')
+                ->chart([10,10])
                 ->url(ListOrders::getUrl() . '?tableFilters[status][value]=' . Order::STATUS_WAITING)
                 ->extraAttributes([
                     'class' => 'cursor-pointer [&_.fi-stat-value]:text-4xl [&_.fi-stat-value]:font-bold [&_.fi-stat-value]:text-center',

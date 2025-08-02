@@ -14,9 +14,10 @@ class OrderListWidget extends BaseWidget
     {
         return [
             Stat::make('Órdenes por Procesar', ModelsOrder::where('status', ModelsOrder::STATUS_WAITING)->count())
-                ->description('Por atender')
+                ->description('A la espera')
                 ->descriptionIcon('heroicon-o-clock')
                 ->color('primary')
+                ->chart([10,10])
                 ->url(BaristaView::getUrl() . '?tableFilters[status][value]=' . ModelsOrder::STATUS_WAITING)
                 ->extraAttributes([
                     'class' => 'cursor-pointer [&_.fi-stat-value]:text-4xl [&_.fi-stat-value]:font-bold [&_.fi-stat-value]:text-center',
@@ -26,6 +27,7 @@ class OrderListWidget extends BaseWidget
                 ->description('Completadas')
                 ->descriptionIcon('heroicon-o-check-circle')
                 ->color('success')
+                ->chart([10,10])
                 ->url(ListOrders::getUrl() . '?tableFilters[status][value]=' . ModelsOrder::STATUS_FINISHED)
                 ->extraAttributes([
                     'class' => 'cursor-pointer [&_.fi-stat-value]:text-4xl [&_.fi-stat-value]:font-bold [&_.fi-stat-value]:text-center',
@@ -35,6 +37,7 @@ class OrderListWidget extends BaseWidget
                 ->description('Canceladas')
                 ->descriptionIcon('heroicon-o-archive-box-x-mark')
                 ->color('danger')
+                ->chart([10,10])
                 ->url(ListOrders::getUrl() . '?tableFilters[status][value]=' . ModelsOrder::STATUS_CANCELLED)
                 ->extraAttributes([
                     'class' => 'cursor-pointer [&_.fi-stat-value]:text-4xl [&_.fi-stat-value]:font-bold [&_.fi-stat-value]:text-center',
