@@ -11,7 +11,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 class OriginOrders extends BaseWidget
 {
     protected static ?int $sort = 2;
-    protected ?string $heading = 'ORIGEN DE LA ORDEN';
+    protected ?string $heading = 'Origen de la Orden';
     protected ?string $description = 'Ingresadas por clientes y baristas';
 
     protected function getStats(): array
