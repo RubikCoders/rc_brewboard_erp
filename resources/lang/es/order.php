@@ -22,6 +22,9 @@ return [
     "customer" => "Cliente",
     "payment_label" => "Pago",
     "taken_in" => "Tomada en",
+    "section_payment_description" => "Detalles del pago de la orden, solo disponible para Administradores",
+    "section_order_description" => "Detalles de la orden",
+    "view_order" => "Ver Orden #:number",
 
     "fields" => [
         "id" => "N°",
@@ -30,6 +33,7 @@ return [
         "total" => "Total",
         "tax" => "Impuesto",
         "payment_method" => "Método de pago",
+        "admin_password" => "Contraseña del administrador",
         "from" => "De",
         "status" => [
             "label" => "Estado",
@@ -66,6 +70,15 @@ return [
         "status_delivered" => "Marcar como entregado",
         "order_delivered" => "Marcar como entregada",
         "order_canceled" => "Cancelar orden",
+        "restore_order" => "Anular cancelación",
+        "ticket" => "Recibo"
+    ],
+
+    "tabs" => [
+        "all" => "Todos",
+        "pending" => "Pendientes",
+        "ready" => "Listas",
+        "cancelled" => "Cancelados",
     ],
 
     "notification" => [
@@ -74,5 +87,6 @@ return [
             "title" => "Orden sin entregar",
             "body" => "Debes marcar todos los productos como \"Entregados\""
         ],
+        "wrong_password" => "Contraseña incorrecta, no es posible anular la cancelación"
     ]
 ];

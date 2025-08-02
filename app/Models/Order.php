@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Helpers\Money;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @method static create(array $array)
@@ -14,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Order extends Model
 {
     /** @use HasFactory<\Database\Factories\OrderFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     public const FROM_CSP = 'csp';
     public const FROM_ERP = 'erp';
@@ -29,6 +28,7 @@ class Order extends Model
         'total',
         'tax',
         'payment_method',
+        'cancel_reason',
         'from',
         'status',
     ];
@@ -98,12 +98,6 @@ class Order extends Model
         return $this->hasMany(OrderProduct::class);
     }
 
-    public function products()
-    {
-        return $this->belongsToMany(MenuProduct::class, 'order_products')
-            ->using(OrderProduct::class)
-            ->withPivot(['quantity', 'is_delivered', 'total_price', 'notes', 'kitchen_status']);
-    }
 
     public function reviews()
     {

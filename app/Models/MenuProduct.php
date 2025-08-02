@@ -54,15 +54,96 @@ class MenuProduct extends Model
     }
 
     //endregion
-
-    //region Mutators
-    protected function imageUrl(): Attribute
+    public function getImageUrlAttribute(): ?string
     {
-        return Attribute::make(
-            get: fn (string $value) => asset($value),
-        );
+        // Array de extensiones de imagen soportadas
+        $supportedExtensions = ['png', 'jpg', 'jpeg', 'webp', 'gif'];
+
+        if ($this->attributes['image_url'] && str_contains($this->attributes['image_url'], '/storage/products/')) {
+            $filename = basename($this->attributes['image_url']);
+            $nameWithoutExt = pathinfo($filename, PATHINFO_FILENAME);
+
+            // Buscar archivo con cualquier extensión soportada
+            foreach ($supportedExtensions as $ext) {
+                $testFilename = $nameWithoutExt . '.' . $ext;
+                $fullPath = storage_path('app/public/products/' . $testFilename);
+
+                if (file_exists($fullPath)) {
+                    return asset('storage/products/' . $testFilename);
+                }
+            }
+        }
+
+        if ($this->image_path) {
+            // Si es ruta relativa (FileUpload nuevo)
+            if (!str_starts_with($this->image_path, '/')) {
+                $fullPath = storage_path('app/public/' . $this->image_path);
+
+                if (file_exists($fullPath)) {
+                    return asset('storage/' . $this->image_path);
+                }
+            } else {
+                // Si es ruta absoluta (seeder), extraer filename y buscar con diferentes extensiones
+                $originalFilename = basename($this->image_path);
+                $nameWithoutExt = pathinfo($originalFilename, PATHINFO_FILENAME);
+
+                // Buscar archivo con cualquier extensión soportada
+                foreach ($supportedExtensions as $ext) {
+                    $testFilename = $nameWithoutExt . '.' . $ext;
+                    $fullPath = storage_path('app/public/products/' . $testFilename);
+
+                    if (file_exists($fullPath)) {
+                        return asset('storage/products/' . $testFilename);
+                    }
+                }
+            }
+        }
+
+        if ($this->name) {
+            $productSlug = \Illuminate\Support\Str::slug($this->name);
+
+            foreach ($supportedExtensions as $ext) {
+                $testFilename = $productSlug . '.' . $ext;
+                $fullPath = storage_path('app/public/products/' . $testFilename);
+
+                if (file_exists($fullPath)) {
+                    return asset('storage/products/' . $testFilename);
+                }
+            }
+        }
+
+        if ($this->id) {
+            foreach ($supportedExtensions as $ext) {
+                $testFilename = 'product_' . $this->id . '.' . $ext;
+                $fullPath = storage_path('app/public/products/' . $testFilename);
+
+                if (file_exists($fullPath)) {
+                    return asset('storage/products/' . $testFilename);
+                }
+            }
+        }
+        
+        return null;
+    }
+
+    public function hasValidImage(): bool
+    {
+        return !is_null($this->getImageUrlAttribute());
+    }
+
+    public function getImageOrDefault(?string $defaultUrl = null): string
+    {
+        $imageUrl = $this->getImageUrlAttribute();
+
+        if ($imageUrl) {
+            return $imageUrl;
+        }
+
+        return $defaultUrl ?? asset('images/placeholder-product.jpg');
     }
     //endregion
+
+
 
     //region Relationships
     public function category()

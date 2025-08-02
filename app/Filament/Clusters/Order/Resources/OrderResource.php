@@ -15,7 +15,9 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -29,6 +31,7 @@ class OrderResource extends Resource
     protected static ?string $model = Order::class;
     protected static ?int $navigationSort = 1;
     protected static ?string $navigationIcon = 'heroicon-o-square-2-stack';
+
 
     protected static ?string $cluster = OrderCluster::class;
 
@@ -80,7 +83,8 @@ class OrderResource extends Resource
                 //
             ])
             ->actions([
-                ViewAction::make('view')
+                ViewAction::make('view'),
+                self::viewOrderTicketAction(),
             ])
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([
@@ -143,6 +147,14 @@ class OrderResource extends Resource
                 ->sortable(),
 
         ];
+    }
+
+    private static function viewOrderTicketAction(): Action {
+        return Action::make('view_ticket')
+            ->label(__("order.actions.ticket"))
+            ->icon('heroicon-o-document-currency-dollar')
+            ->url(fn (Order $order) => route('order.ticket', $order))
+            ->openUrlInNewTab(true);
     }
     //endregion
 
