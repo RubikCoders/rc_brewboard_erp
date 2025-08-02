@@ -12,7 +12,7 @@ class StatusOrders extends BaseWidget
 {
     protected static ?int $sort = 1;
 
-    protected ?string $heading = 'INFORMACIÓN DE LAS ÓRDENES DEL DÍA';
+    protected ?string $heading = 'Información de las Órdenes del día';
     protected ?string $description = 'Visualiza las órdenes pendientes, entregadas y canceladas del día de hoy';
 
     protected function getStats(): array
