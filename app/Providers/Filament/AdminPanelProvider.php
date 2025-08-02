@@ -77,6 +77,19 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->navigationGroups([
+                \Filament\Navigation\NavigationGroup::make()
+                    ->label('Empleados')
+                    ->icon('heroicon-o-identification')
+                    ->collapsed()
+                    ->collapsible(),
+                \Filament\Navigation\NavigationGroup::make()
+                    ->label('Filament Shield')
+                    ->icon('heroicon-o-shield-check')
+                    ->collapsed()
+                    ->collapsible(),
+            ])
+            ->viteTheme('resources/css/filament/admin/theme.css'); // Tema personalizado
     }
 }

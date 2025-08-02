@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Filament\Resources\EmployeeResource\Pages;
+
+use App\Filament\Resources\EmployeeResource;
+use Filament\Actions;
+use Filament\Resources\Pages\EditRecord;
+
+class EditEmployee extends EditRecord
+{
+    protected static string $resource = EmployeeResource::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Actions\ViewAction::make(),
+            Actions\DeleteAction::make(),
+            Actions\ForceDeleteAction::make(),
+            Actions\RestoreAction::make(),
+        ];
+    }
+
+    public function getTitle(): string
+    {
+        $record = $this->getRecord();
+        return "Editar: {$record->name} {$record->last_name}";
+    }
+}
