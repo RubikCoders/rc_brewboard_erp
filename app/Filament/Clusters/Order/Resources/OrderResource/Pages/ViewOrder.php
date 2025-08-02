@@ -3,6 +3,7 @@
 namespace App\Filament\Clusters\Order\Resources\OrderResource\Pages;
 
 use App\Filament\Clusters\Order\Resources\OrderResource;
+use App\Filament\Clusters\Order\Resources\OrderResource\Widgets\BaristaOriginWidget;
 use App\Helpers\Formatter;
 use App\Helpers\Money;
 use App\Models\Order;
@@ -232,5 +233,12 @@ class ViewOrder extends ViewRecord
                     'status' => Order::STATUS_CANCELLED
                 ]);
             });
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            BaristaOriginWidget::make(),
+        ];
     }
 }

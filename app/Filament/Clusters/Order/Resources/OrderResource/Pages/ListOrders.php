@@ -3,8 +3,10 @@
 namespace App\Filament\Clusters\Order\Resources\OrderResource\Pages;
 
 use App\Filament\Clusters\Order\Resources\OrderResource;
+use App\Filament\Clusters\Order\Resources\OrderResource\Widgets\OrderListWidget;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+
 
 class ListOrders extends ListRecords
 {
@@ -14,6 +16,13 @@ class ListOrders extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
+        ];
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            OrderListWidget::make(),
         ];
     }
 }
