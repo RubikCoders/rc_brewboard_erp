@@ -3,12 +3,9 @@
 namespace App\Filament\Clusters\Order\Resources\OrderResource\Pages;
 
 use App\Filament\Clusters\Order\Resources\OrderResource;
-<<<<<<< HEAD
 use App\Filament\Clusters\Order\Resources\OrderResource\Widgets\OrderListWidget;
-=======
 use App\Models\MenuProduct;
 use App\Models\Order;
->>>>>>> dev
 use Filament\Actions;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
@@ -19,6 +16,13 @@ class ListOrders extends ListRecords
 {
     protected static string $resource = OrderResource::class;
 
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            OrderListWidget::make(),
+        ];
+    }
+
     protected function getHeaderActions(): array
     {
         return [
@@ -26,14 +30,6 @@ class ListOrders extends ListRecords
         ];
     }
 
-<<<<<<< HEAD
-    protected function getHeaderWidgets(): array
-    {
-        return [
-            OrderListWidget::make(),
-        ];
-    }
-=======
     public function getTabs(): array
     {
         return [
@@ -60,6 +56,4 @@ class ListOrders extends ListRecords
                 ->badgeColor('danger'),
         ];
     }
-
->>>>>>> dev
 }
