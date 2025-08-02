@@ -28,9 +28,9 @@ class ViewOrder extends ViewRecord
 {
     protected static string $resource = OrderResource::class;
 
-    public function getTitle(): string | Htmlable
+    public function getTitle(): string|Htmlable
     {
-       return __("order.view_order", ['number' => $this->record->id]);
+        return __("order.view_order", ['number' => $this->record->id]);
     }
 
     public function form(Form $form): Form
@@ -51,6 +51,18 @@ class ViewOrder extends ViewRecord
                     'xl' => 3,
                 ])->schema(self::productsInputs())
             ]);
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            OrderResource\Widgets\OrderEstimatedTime::make([
+                "order" => $this->record,
+            ]),
+            OrderResource\Widgets\OrderEllapsedTime::make([
+                "order" => $this->record,
+            ])
+        ];
     }
 
     protected function getHeaderActions(): array
@@ -167,7 +179,7 @@ class ViewOrder extends ViewRecord
                     });
             }
 
-            $fields[] = Section::make(new HtmlString("<span class='text-lg'> $title </span>" . $status))
+            $fields[] = Section::make(new HtmlString("<span class='text-lg'>$title</span>" . $status))
                 ->columnSpan(1)
                 ->collapsible()
                 ->schema([
