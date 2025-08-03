@@ -3,7 +3,6 @@
 namespace App\Filament\Clusters\Order\Resources\OrderResource\Pages;
 
 use App\Filament\Clusters\Order\Resources\OrderResource;
-use App\Filament\Clusters\Order\Resources\OrderResource\Widgets\BaristaOriginWidget;
 use App\Helpers\Formatter;
 use App\Helpers\Money;
 use App\Models\Order;
@@ -11,7 +10,6 @@ use App\Models\OrderProduct;
 use App\Models\User;
 use Filament\Actions;
 use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
@@ -90,8 +88,9 @@ class ViewOrder extends ViewRecord
                     Placeholder::make('employee')
                         ->label(__("order.fields.employee_id"))
                         ->columnSpan(3)
+                        ->hidden(!$this->record->employee)
                         ->visible(auth()->user()->hasRole('super_admin'))
-                        ->content($this->record->employee->name . ' ' . $this->record->employee->last_name),
+                        ->content($this->record->employee ?$this->record->employee->name . ' ' . $this->record->employee->last_name : ""),
                     Placeholder::make('payment_method')
                         ->label(__("order.fields.payment_method"))
                         ->columnSpan(3)
