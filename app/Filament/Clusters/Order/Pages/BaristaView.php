@@ -3,6 +3,7 @@
 namespace App\Filament\Clusters\Order\Pages;
 
 use App\Filament\Clusters\Order;
+use App\Filament\Clusters\Order\Resources\OrderResource\Widgets\BaristaOriginWidget;
 use App\Filament\Widgets\OrderWidget;
 use Filament\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
@@ -27,7 +28,10 @@ class BaristaView extends Page
     protected function getHeaderWidgets(): array
     {
         return [
-            OrderWidget::make()
+            BaristaOriginWidget::make(),
+            OrderWidget::make(),
+            
         ];
     }
+
 }

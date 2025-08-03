@@ -79,14 +79,14 @@
                     <div class="order-body">
                         {{-- Products --}}
                         <div>
-                            <span class="font-semibold">
+                            <span class="font-semibold text-sm">
                                 @lang("baristaview.products")
                             </span>
 
                             <div class="product-list">
                                 <ul>
                                     @foreach($order->orderProducts->unique('product_id') as $orderProduct)
-                                        <li class="product-list-item">- {{ $orderProduct->product->name }}</li>
+                                        <li class="product-list-item text-sm">- {{ $orderProduct->product->name }}</li>
                                     @endforeach
                                 </ul>
                             </div>
