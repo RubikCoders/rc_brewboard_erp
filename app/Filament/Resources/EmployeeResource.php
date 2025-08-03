@@ -163,12 +163,12 @@ class EmployeeResource extends Resource
             )
             ->columns([
                 Tables\Columns\TextColumn::make('full_name')
-                    ->label('Nombre Completo')
+                    ->label('Nombre')
                     ->width(200)
                     ->getStateUsing(fn(Employee $record): string => "{$record->name} {$record->last_name}")
                     ->searchable(['name', 'last_name'])
                     ->sortable(['name', 'last_name'])
-                    ->limit(30)
+                    ->limit(25)
                     ->tooltip(function (Employee $record): ?string {
                         $fullName = "{$record->name} {$record->last_name}";
                         return strlen($fullName) > 30 ? $fullName : null;
@@ -471,11 +471,11 @@ class EmployeeResource extends Resource
             ])
             ->defaultSort('created_at', 'desc')
             ->striped()
-            ->paginated([10, 25, 50, 100])
-            ->defaultPaginationPageOption(25)
+            ->paginated([5, 10, 25, 50, 100])
+            ->defaultPaginationPageOption(5)
             ->persistSortInSession()
             ->persistSearchInSession()
-            ->deferLoading();
+            ->extremePaginationLinks();
     }
 
     public static function getRelations(): array

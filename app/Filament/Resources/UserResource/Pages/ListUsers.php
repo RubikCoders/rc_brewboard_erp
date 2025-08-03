@@ -32,7 +32,7 @@ class ListUsers extends ListRecords
     }
 
     public function getTabs(): array
-    {
+    {        
         $totalUsers = $this->getModel()::count();
         $usersWithEmployee = $this->getModel()::whereHas('employee')->count();
         $independentUsers = $totalUsers - $usersWithEmployee;

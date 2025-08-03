@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Cache;
 class ListEmployees extends ListRecords
 {
     protected static string $resource = EmployeeResource::class;
-    protected static string $view = 'filament.pages.list-employees';
+    
+    // protected static string $view = 'filament.pages.list-employees';
 
     protected function getHeaderActions(): array
     {
@@ -24,38 +25,32 @@ class ListEmployees extends ListRecords
     }
 
     public function getTabs(): array
-    {
-        $counts = Cache::remember('employee_tabs_counts', 300, function () {
-            $model = $this->getModel();
-
-            return [
-                'total' => $model::count(),
-                'with_user' => $model::whereNotNull('user_id')->count(),
-                'without_user' => $model::whereNull('user_id')->count(),
-                'recent' => $model::where('created_at', '>=', now()->subDays(30))->count(),
-            ];
-        });
+    {        
+        $totalEmployees = $this->getModel()::count();
+        $employeesWithUser = $this->getModel()::whereNotNull('user_id')->count();
+        $employeesWithoutUser = $totalEmployees - $employeesWithUser;
+        $recentEmployees = $this->getModel()::where('created_at', '>=', now()->subDays(30))->count();
 
         return [
             'all' => Tab::make('Todos')
-                ->badge($counts['total'])
+                ->badge($totalEmployees)
                 ->badgeColor('primary')
                 ->icon('heroicon-m-users'),
 
             'with_user' => Tab::make('Con Usuario')
-                ->badge($counts['with_user'])
+                ->badge($employeesWithUser)
                 ->badgeColor('success')
                 ->modifyQueryUsing(fn(Builder $query) => $query->whereNotNull('user_id'))
                 ->icon('heroicon-m-check-circle'),
 
             'without_user' => Tab::make('Sin Usuario')
-                ->badge($counts['without_user'])
+                ->badge($employeesWithoutUser)
                 ->badgeColor('warning')
                 ->modifyQueryUsing(fn(Builder $query) => $query->whereNull('user_id'))
                 ->icon('heroicon-m-exclamation-triangle'),
 
             'recent' => Tab::make('Recientes')
-                ->badge($counts['recent'])
+                ->badge($recentEmployees)
                 ->badgeColor('info')
                 ->modifyQueryUsing(fn(Builder $query) => $query->where('created_at', '>=', now()->subDays(30)))
                 ->icon('heroicon-m-clock'),

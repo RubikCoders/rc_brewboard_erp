@@ -11,7 +11,7 @@
         <div class="flex items-center space-x-1">
             <x-heroicon-o-user class="w-4 h-4 text-gray-400" />
             <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-                Independiente
+                Indep.
             </span>
         </div>
     @endif

@@ -153,12 +153,14 @@ class UserResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nombre')
+                    ->width(200)
                     ->searchable()
                     ->sortable()
                     ->limit(25) // Limitar caracteres para evitar overflow
                     ->tooltip(function (User $record): ?string {
                         return strlen($record->name) > 25 ? $record->name : null;
-                    }),
+                    })
+                    ->weight('medium'),
 
                 Tables\Columns\TextColumn::make('email')
                     ->label('Email')
@@ -171,12 +173,6 @@ class UserResource extends Resource
                         return strlen($record->email) > 30 ? $record->email : null;
                     }),
 
-                // Tables\Columns\ViewColumn::make('employee_status')
-                //     ->label('Empleado')
-                //     ->view('filament.tables.columns.employee-status')
-                //     ->width('80px'),
-
-                // Alternativa:
                 Tables\Columns\IconColumn::make('employee_status')
                     ->label('Puesto')
                     ->getStateUsing(fn (User $record): bool => (bool) $record->employee)                    
@@ -186,7 +182,7 @@ class UserResource extends Resource
 
                 Tables\Columns\TextColumn::make('roles.name')
                     ->label('Roles')
-                    ->default('Ninguno')                    
+                    ->default('Ninguno')
                     ->badge()
                     ->color('info')                    
                     ->separator(', ')
@@ -194,21 +190,6 @@ class UserResource extends Resource
                     ->expandableLimitedList()
                     ->tooltip('Roles del panel administrativo')
                     ->width('120px'),
-
-                Tables\Columns\IconColumn::make('email_verified_at')
-                    ->label('✓')
-                    ->boolean()
-                    ->trueIcon('heroicon-s-check-badge')
-                    ->falseIcon('heroicon-o-x-circle')
-                    ->trueColor('success')
-                    ->falseColor('danger')
-                    ->tooltip(function (User $record): string {
-                        return $record->email_verified_at
-                            ? "✅ Verificado: {$record->email_verified_at->format('d/m/Y')}"
-                            : '❌ Email no verificado';
-                    })
-                    ->width('50px')
-                    ->alignment('center'),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Registro')
@@ -363,7 +344,14 @@ class UserResource extends Resource
                         }),
                 ]),
             ])
-            ->defaultSort('created_at', 'desc');
+            ->defaultSort('created_at', 'desc')
+            ->paginated([5, 10, 25, 50])
+            ->defaultPaginationPageOption(5)
+            ->striped()
+            ->persistSortInSession()
+            ->persistSearchInSession()            
+            ->extremePaginationLinks();
+
     }
 
     public static function getRelations(): array
