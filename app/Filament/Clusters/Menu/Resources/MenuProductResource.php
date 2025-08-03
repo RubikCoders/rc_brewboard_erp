@@ -456,7 +456,9 @@ class MenuProductResource extends Resource
                         ->requiresConfirmation(),
                 ]),
             ])
-            ->defaultSort('created_at', 'desc');
+            ->defaultSort('created_at', 'desc')
+            ->paginated([4, 8, 16, 24])
+            ->defaultPaginationPageOption(4);
     }
     //endregion
 

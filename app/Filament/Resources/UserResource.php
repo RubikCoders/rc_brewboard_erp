@@ -20,13 +20,24 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationGroup = 'Empleados';
+    protected static ?string $navigationGroup = 'Personal';
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
     protected static ?string $navigationLabel = 'Usuarios';
     protected static ?int $navigationSort = 2;
 
     protected static ?string $modelLabel = 'Usuario';
     protected static ?string $pluralModelLabel = 'Usuarios';
+
+    // public static function getNavigationBadge(): ?string
+    // {
+    //     return static::getModel()::count();
+    // }
+
+    // public static function getNavigationBadgeColor(): ?string
+    // {
+    //     $count = static::getModel()::count();
+    //     return $count > 5 ? 'success' : 'warning';
+    // }
 
     public static function form(Form $form): Form
     {
@@ -164,10 +175,11 @@ class UserResource extends Resource
 
                 Tables\Columns\TextColumn::make('email')
                     ->label('Email')
+                    ->width(120)
                     ->searchable()
                     ->sortable()
                     ->copyable()
-                    ->copyMessage('📧 Copiado')
+                    ->copyMessage('Copiado')
                     ->limit(30)
                     ->tooltip(function (User $record): ?string {
                         return strlen($record->email) > 30 ? $record->email : null;
@@ -369,16 +381,5 @@ class UserResource extends Resource
             'view' => Pages\ViewUser::route('/{record}'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
-    }
-
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::count();
-    }
-
-    public static function getNavigationBadgeColor(): ?string
-    {
-        $count = static::getModel()::count();
-        return $count > 5 ? 'success' : 'warning';
-    }
+    }    
 }

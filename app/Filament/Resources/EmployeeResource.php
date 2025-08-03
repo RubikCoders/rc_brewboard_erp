@@ -20,7 +20,7 @@ class EmployeeResource extends Resource
 {
     protected static ?string $model = Employee::class;
     
-    protected static ?string $navigationGroup = 'Empleados';
+    protected static ?string $navigationGroup = 'Personal';
     protected static ?string $navigationIcon = 'heroicon-o-identification';
     protected static ?string $navigationLabel = 'Empleados';
     protected static ?int $navigationSort = 1;
@@ -28,6 +28,18 @@ class EmployeeResource extends Resource
     
     protected static ?string $modelLabel = 'Empleado';
     protected static ?string $pluralModelLabel = 'Empleados';
+
+
+    // public static function getNavigationBadge(): ?string
+    // {
+    //     return static::getModel()::count();
+    // }
+
+    // public static function getNavigationBadgeColor(): ?string
+    // {
+    //     $count = static::getModel()::count();
+    //     return $count > 10 ? 'success' : 'warning';
+    // }
 
     public static function form(Form $form): Form
     {
@@ -501,16 +513,5 @@ class EmployeeResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
-    }
-
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::count();
-    }
-
-    public static function getNavigationBadgeColor(): ?string
-    {
-        $count = static::getModel()::count();
-        return $count > 10 ? 'success' : 'warning';
     }
 }

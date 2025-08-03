@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Cache;
 class ListEmployees extends ListRecords
 {
     protected static string $resource = EmployeeResource::class;
-    
-    // protected static string $view = 'filament.pages.list-employees';
+
+    protected static string $view = 'filament.pages.list-employees';
 
     protected function getHeaderActions(): array
     {
@@ -55,15 +55,6 @@ class ListEmployees extends ListRecords
                 ->modifyQueryUsing(fn(Builder $query) => $query->where('created_at', '>=', now()->subDays(30)))
                 ->icon('heroicon-m-clock'),
         ];
-    }
-
-    public function updated($name, $value): void
-    {
-        parent::updated($name, $value);
-
-        if ($name === 'activeTab') {
-            Cache::forget('employee_tabs_counts');
-        }
     }
 
     public function refreshCounts(): void

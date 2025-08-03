@@ -80,7 +80,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 \Filament\Navigation\NavigationGroup::make()
-                    ->label('Empleados')
+                    ->label('Personal')
                     ->icon('heroicon-o-identification')
                     ->collapsed()
                     ->collapsible(),

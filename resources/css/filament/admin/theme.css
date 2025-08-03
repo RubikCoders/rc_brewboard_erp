@@ -1,3 +1,8 @@
+/* ===========================================
+   ESTILOS PERSONALIZADOS SOLO PARA USUARIOS Y EMPLEADOS
+   =========================================== */
+
+/* Contenedor de tabs - alineación uniforme solo para users/employees */
 [data-page="user-resource"] .fi-tabs,
 [data-page="employee-resource"] .fi-tabs,
 .user-resource-tabs .fi-tabs,
@@ -126,4 +131,55 @@
         margin-right: 1rem;
         font-size: 0.875rem;
     }
+}
+
+/* ===========================================
+   DARK MODE (si lo activan en el futuro)
+   =========================================== */
+
+:is(:where(.dark) [data-page="user-resource"]) .fi-tabs-nav,
+:is(:where(.dark) [data-page="employee-resource"]) .fi-tabs-nav,
+:is(:where(.dark) .user-resource-tabs) .fi-tabs-nav,
+:is(:where(.dark) .employee-resource-tabs) .fi-tabs-nav {
+    border-bottom-color: rgb(55 65 81);
+}
+
+:is(:where(.dark) [data-page="user-resource"]) .fi-tabs-item:hover:not([aria-selected="true"]),
+:is(:where(.dark) [data-page="employee-resource"]) .fi-tabs-item:hover:not([aria-selected="true"]),
+:is(:where(.dark) .user-resource-tabs) .fi-tabs-item:hover:not([aria-selected="true"]),
+:is(:where(.dark) .employee-resource-tabs) .fi-tabs-item:hover:not([aria-selected="true"]) {
+    background-color: rgb(31 41 55);
+    border-bottom-color: rgb(75 85 99);
+}
+
+/* ===========================================
+   ESTILOS ESPECIALES PARA TABLA DE USUARIOS
+   =========================================== */
+
+/* Columna de estado de empleado - más visual */
+[data-page="user-resource"] .employee-status-column {
+    font-weight: 500;
+}
+
+/* Columna de email - mejor legibilidad */
+[data-page="user-resource"] .fi-ta-text-item[data-field="email"] {
+    font-family: monospace;
+    font-size: 0.875rem;
+}
+
+/* ===========================================
+   ESTILOS ESPECIALES PARA TABLA DE EMPLEADOS
+   =========================================== */
+
+/* Columna de NSS - estilo monospace */
+[data-page="employee-resource"] .fi-ta-text-item[data-field="nss"] {
+    font-family: monospace;
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+}
+
+/* Columna de puesto - destacar */
+[data-page="employee-resource"] .fi-ta-text-item[data-field="role.name"] {
+    font-weight: 500;
+    color: rgb(var(--primary-600));
 }

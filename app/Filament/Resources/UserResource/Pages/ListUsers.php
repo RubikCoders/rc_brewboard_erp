@@ -45,7 +45,7 @@ class ListUsers extends ListRecords
                 ->badgeColor('primary')
                 ->icon('heroicon-m-users'),
 
-            'with_employee' => Tab::make('Con Empleado')
+            'with_employee' => Tab::make('Empleados')
                 ->badge($usersWithEmployee)
                 ->badgeColor('success')
                 ->modifyQueryUsing(fn(Builder $query) => $query->whereHas('employee'))

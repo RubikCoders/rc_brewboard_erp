@@ -19,7 +19,7 @@ class ListMenuProducts extends ListRecords
     {
         return [
             Actions\Action::make('download_pdf')
-                ->label('Descargar PDF')
+                ->label('Reporte')                
                 ->icon('heroicon-o-document-arrow-down')
                 ->color('success')
                 ->action(function () {
