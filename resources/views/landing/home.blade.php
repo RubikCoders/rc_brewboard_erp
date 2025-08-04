@@ -22,21 +22,21 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <!-- Hero Content -->
             <div class="text-center lg:text-left">
-                <div class="mb-6">
-                    <span class="inline-block bg-primary/10 text-primary py-2 rounded-full text-sm font-semibold mb-4">
-                        ✨ Desarrollado especialmente para Pistacho
+                <div class="mb-12">
+                    <span class="inline-block bg-primary/10 text-primary rounded-full text-sm font-light">
+                        Desarrollado especialmente para...
                     </span>
-                    <div class="flex items-center relative">
-                        <h1 class="flex flex-col text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight font-fustat">                        
-                            Nuestra cafeteria,
-                            <span class="text-primary">Pistacho</span>
+                    <div class="flex items-center h-auto relative">
+                        <h1 class="flex flex-col text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight font-fustat">
+                            Nuestra cafetería,
+                            <span class="text-primary">Pistacho.</span>
                         </h1>
-                        {{-- <img class="h-56 absolute" src="{{ asset('images/corp-logo.png') }}"/> --}}
+                        <img class="h-24 absolute -right-[110px] -bottom-[300px] z-10" src="{{ asset('images/corp-logo.png') }}"/>
                     </div>
                 </div>
                 
                 <p class="text-xl text-gray-600 mb-8 leading-relaxed">
-                    Aumenta tus <strong class="text-primary">ganancias hasta 40%</strong> con <span class="font-black text-[#6f4e37]">BrewBoard</span>. 
+                    Aumentarás tus <strong class="text-primary">ganancias hasta 40%</strong> con <span class="font-black text-[#132d44]">BrewBoard</span>. 
                     Gestiona pedidos, inventario y personal desde una sola plataforma.
                 </p>
                 
@@ -168,7 +168,7 @@
                 <p class="text-gray-600 mb-4">Sistema completo de ordenes con personalización de productos, gestión de colas y seguimiento en tiempo real.</p>
                 <ul class="text-sm text-gray-500 space-y-1">
                     <li>✓ Personalización de bebidas</li>
-                    <li>✓ Estados de cocina en tiempo real</li>
+                    <li>✓ Estados de barra en tiempo real</li>
                     <li>✓ Múltiples métodos de pago</li>
                 </ul>
             </div>
@@ -181,7 +181,7 @@
                     </svg>
                 </div>
                 <h3 class="text-xl font-bold text-gray-900 mb-3">Control de Inventario</h3>
-                <p class="text-gray-600 mb-4">Manejo inteligente de ingredientes perecederos con alertas automáticas y predicción de demanda.</p>
+                <p class="text-gray-600 mb-4">Manejo inteligente de ingredientes perecederos con alertas automáticas.</p>
                 <ul class="text-sm text-gray-500 space-y-1">
                     <li>✓ Gestión de stock</li>
                     <li>✓ Reportes</li>
@@ -213,31 +213,15 @@
                     </svg>
                 </div>
                 <h3 class="text-xl font-bold text-gray-900 mb-3">Reportes Inteligentes</h3>
-                <p class="text-gray-600 mb-4">Analytics avanzados con insights accionables sobre ventas, costos y tendencias del negocio.</p>
+                <p class="text-gray-600 mb-4">Panel administrativo accionable sobre ventas, costos y tendencias del negocio.</p>
                 <ul class="text-sm text-gray-500 space-y-1">
                     <li>✓ Dashboard de desempeño</li>
-                    <li>✓ Análisis de rentabilidad</li>
+                    <li>✓ Análisis de ingresos</li>
                     <li>✓ Exportación de PDF</li>
                 </ul>
             </div>
 
             <!-- Feature 5 -->
-            {{-- <div class="bg-(--color-primary-50) rounded-xl p-8 shadow-sm hover:shadow-lg transition-shadow duration-300 border border-gray-100">
-                <div class="w-12 h-12 bg-primary/10 text-primary rounded-lg flex items-center justify-center mb-6">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">Acceso Móvil</h3>
-                <p class="text-gray-600 mb-4">Controla tu cafetería desde cualquier lugar con nuestra app móvil optimizada.</p>
-                <ul class="text-sm text-gray-500 space-y-1">
-                    <li>✓ Dashboard móvil</li>
-                    <li>✓ Notificaciones push</li>
-                    <li>✓ Acceso offline</li>
-                </ul>
-            </div> --}}
-
-            <!-- Feature 6 -->
             <div class="bg-(--color-primary-50) rounded-xl p-8 shadow-sm hover:shadow-lg transition-shadow duration-300 border border-gray-100">
                 <div class="w-12 h-12 bg-primary/10 text-primary rounded-lg flex items-center justify-center mb-6">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -248,12 +232,12 @@
                 <p class="text-gray-600 mb-4">Equipo especializado en cafeterías disponible cuando lo necesites.</p>
                 <ul class="text-sm text-gray-500 space-y-1">                    
                     <li>✓ Soporte técnico especializado</li>
-                    <li>✓ Training personalizado</li>
+                    <li>✓ Entrenamiento personalizado</li>
                 </ul>
             </div>
 
             <div>
-                <img class="h-96" src="{{ asset('images/app-logo.png') }}"/>
+                <img class="h-96" src="{{ asset('images/app-logo.svg') }}"/>
             </div>
         </div>
     </div>

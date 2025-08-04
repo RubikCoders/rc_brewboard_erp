@@ -176,15 +176,10 @@
                 <!-- Logo -->
                 <a href="{{ route('landing.home') }}">
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                            </svg>
-                            {{-- <img src="{{ asset('images/corp-logo.png') }}" class="h-10 w-10"/> --}}
-                        </div>
+                        <img class="h-12" src="{{ asset('images/hojitas.svg') }}"/>                        
                         <div>
-                            <h1 class="text-xl font-bold text-gray-900 font-fustat">BrewBoard</h1>
-                            <p class="text-xs text-gray-500">by Rubik Code</p>
+                            <h1 class="text-xl font-bold text-[#132d44] font-fustat">BrewBoard</h1>
+                            <p class="text-xs text-gray-500">por Rubik Code</p>
                         </div>
                     </div>
                 </a>
@@ -236,13 +231,13 @@
                 <!-- Company Info -->
                 <div class="col-span-1 md:col-span-2">
                     <div class="mb-4 relative">
-                        <img class="h-20" src="{{ asset('images/app-logo.png') }}"/>
-                        <p class="text-sm text-gray-400 absolute bottom-[1px] left-1">por Rubik Code</p>
+                        <img class="h-20" src="{{ asset('images/app-logo.svg') }}"/>
+                        <p class="text-sm text-gray-400 pl-2">por Rubik Code</p>
                     </div>
-                    <p class="text-gray-300 mb-4 max-w-md">
+                    <p class="text-gray-300 pl-2 mb-4 max-w-md">
                         Sistema especializado para cafeterías que optimiza operaciones, aumenta ganancias y mejora la experiencia del cliente.
                     </p>
-                    <p class="text-sm text-gray-400">
+                    <p class="text-sm pl-2 text-gray-400">
                         Desarrollado con ❤️ por <span class="text-primary font-semibold">Rubik Code</span>
                     </p>
                 </div>
