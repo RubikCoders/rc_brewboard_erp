@@ -1,6 +1,6 @@
 @extends('layouts.landing')
 
-@section('title', 'ERP Pistacho - Transforma tu Cafetería en 30 Días | Rubik Code')
+@section('title', 'BrewBoard - Transforma tu Cafetería en 30 Días | Rubik Code')
 @section('description', 'Aumenta tus ganancias hasta 40% con el ERP especializado para cafeterías. Gestiona pedidos, inventario y personal desde una plataforma. Demo gratuita disponible.')
 
 @section('content')

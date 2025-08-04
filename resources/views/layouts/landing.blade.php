@@ -6,19 +6,19 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- SEO Meta Tags -->
-    <title>@yield('title', 'ERP Pistacho - Sistema de Gestión para Cafeterías | Rubik Code')</title>
+    <title>@yield('title', 'BrewBoard - Sistema de Gestión para Cafeterías | Rubik Code')</title>
     <meta name="description" content="@yield('description', 'Transforma tu cafetería con nuestro ERP especializado. Gestiona pedidos, inventario y personal desde una sola plataforma. Aumenta tus ganancias hasta 40% el primer mes.')">
-    <meta name="keywords" content="ERP cafetería, sistema punto de venta, gestión restaurante, POS café, software cafetería, Pistacho, Rubik Code">
+    <meta name="keywords" content="BrewBoard, sistema punto de venta, gestión restaurante, POS café, software cafetería, Pistacho, Rubik Code">
     
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="@yield('og_title', 'ERP Pistacho - Sistema de Gestión para Cafeterías')">
+    <meta property="og:title" content="@yield('og_title', 'BrewBoard - Sistema de Gestión para Cafeterías')">
     <meta property="og:description" content="@yield('og_description', 'Transforma tu cafetería con nuestro ERP especializado. Gestiona pedidos, inventario y personal desde una plataforma.')">
-    <meta property="og:image" content="{{ asset('images/og-image.jpg') }}">
+    <meta property="og:image" content="{{ asset('images/app-logo.png') }}">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/corp-logo.png') }}">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -54,7 +54,7 @@
             background-color: var(--color-primary);
             color: white;
             font-weight: 600;
-            padding: 0.75rem 2rem;
+            padding: 0.5rem 2rem;
             border-radius: 0.5rem;
             transition: all 0.2s ease-in-out;
             display: inline-flex;
@@ -73,7 +73,7 @@
             background-color: var(--color-orange);
             color: white;
             font-weight: 600;
-            padding: 0.75rem 2rem;
+            padding: 0.5rem 2rem;
             border-radius: 0.5rem;
             transition: all 0.2s ease-in-out;
             display: inline-flex;
@@ -86,6 +86,56 @@
             background-color: #e55a2b;
             transform: translateY(-1px);
             box-shadow: 0 10px 25px -5px rgba(255, 107, 53, 0.25);
+        }
+
+        .btn-admin-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-admin {
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            column-gap: 8px;
+            background-color: transparent;            
+            padding: 0.5rem 1.5rem;
+            border: 1.5px solid var(--color-primary);
+            border-radius: 0.5rem;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .btn-admin span {
+            color: var(--color-primary);
+            font-size: 14px;
+            font-weight: 200;
+            position: relative;
+            z-index: 2;
+        }
+
+        .btn-admin::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition: all 0.6s ease;
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        .btn-admin:hover {
+            border-radius: 10px;
+            transform: rotate(4deg);            
+        }
+
+        .btn-admin:hover::before {
+            opacity: 0.5;
+            transform: scale(2);
         }
         
         .text-primary { color: var(--color-primary); }
@@ -116,24 +166,41 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center py-4">
                 <!-- Logo -->
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                        </svg>
+                <a href="{{ route('landing.home') }}">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                            {{-- <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg> --}}
+                            <img src="{{ asset('images/corp-logo.png') }}" class="h-10 w-10"/>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-900 font-fustat">BrewBoard</h1>
+                            <p class="text-xs text-gray-500">by Rubik Code</p>
+                        </div>
                     </div>
-                    <div>
-                        <h1 class="text-xl font-bold text-gray-900 font-fustat">Pistacho ERP</h1>
-                        <p class="text-xs text-gray-500">by Rubik Code</p>
-                    </div>
-                </div>
+                </a>
                 
                 <!-- Navigation Links -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="{{ route('landing.home') }}" class="text-gray-700 hover:text-primary transition-colors font-medium">Inicio</a>
-                    <a href="{{ route('landing.home') }}#caracteristicas" class="text-gray-700 hover:text-primary transition-colors font-medium">Características</a>
-                    <a href="{{ route('landing.home') }}#beneficios" class="text-gray-700 hover:text-primary transition-colors font-medium">Beneficios</a>
-                    <a href="{{ route('landing.contact') }}" class="btn-primary">Solicitar Demo</a>
+                <div class="hidden md:flex items-center space-x-8">                    
+                    <a href="{{ route('landing.home') }}#caracteristicas" class="text-sm text-gray-700 hover:text-primary transition-colors font-light hover:underline">Características</a>
+                    <a href="{{ route('landing.home') }}#beneficios" class="text-sm text-gray-700 hover:text-primary transition-colors font-light hover:underline">Beneficios</a>
+                    <div class="btn-admin-container">
+                        <a href="/admin" class="btn-admin">
+                            <svg class="w-4 h-4" fill="none" stroke=" #698a5f" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                            </svg>
+                            <span>
+                                Iniciar Sesión
+                            </span>
+                        </a>
+                    </div>
+                    <a href="{{ route('landing.contact') }}" class="btn-primary">
+                        <div class="w-4">
+                            <svg viewBox="0 0 48 48" enable-background="new 0 0 48 48" id="Layer_5" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <polygon fill="#f0f4ed" points="15.706,15.353 15.706,11.251 0.021,23.45 15.706,35.649 15.706,31.548 5.294,23.45 "></polygon> <path d="M47.979,29.074c0-6.212-5.038-11.25-11.251-11.25h-0.001H25.479v-6.573L9.794,23.45l15.686,12.199v-6.575 h14.232c3.106,0,5.625,2.52,5.625,5.625c0,0.725-0.148,1.413-0.399,2.05C46.819,34.739,47.979,32.045,47.979,29.074z" fill="#f0f4ed"></path> </g> </g></svg>
+                        </div>
+                        Solicitar Demo
+                    </a>                    
                 </div>
                 
                 <!-- Mobile Menu Button -->
