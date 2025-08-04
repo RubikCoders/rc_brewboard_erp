@@ -13,7 +13,7 @@
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="@yield('og_title', 'BrewBoard - Sistema de Gestión para Cafeterías')">
     <meta property="og:description" content="@yield('og_description', 'Transforma tu cafetería con nuestro ERP especializado. Gestiona pedidos, inventario y personal desde una plataforma.')">
-    <meta property="og:image" content="{{ asset('images/app-logo.png') }}">
+    <meta property="og:image" content="{{ asset('images/corp-logo.png') }}">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website">
     
@@ -105,6 +105,7 @@
             padding: 0.5rem 1.5rem;
             border: 1.5px solid var(--color-primary);
             border-radius: 0.5rem;
+            color: var(--color-primary);
             transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
@@ -114,6 +115,7 @@
             font-weight: 200;
             position: relative;
             z-index: 2;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
         .btn-admin::before {
@@ -130,12 +132,18 @@
 
         .btn-admin:hover {
             border-radius: 10px;
-            transform: rotate(4deg);            
+            transform: rotate(4deg);
+            color: var(--color-primary-50);
+            background-color: var(--color-primary);        
         }
 
         .btn-admin:hover::before {
             opacity: 0.5;
             transform: scale(2);
+        }
+
+        .btn-admin:hover span {
+            color: var(--color-primary-50);
         }
         
         .text-primary { color: var(--color-primary); }
@@ -169,10 +177,10 @@
                 <a href="{{ route('landing.home') }}">
                     <div class="flex items-center space-x-3">
                         <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                            {{-- <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                            </svg> --}}
-                            <img src="{{ asset('images/corp-logo.png') }}" class="h-10 w-10"/>
+                            </svg>
+                            {{-- <img src="{{ asset('images/corp-logo.png') }}" class="h-10 w-10"/> --}}
                         </div>
                         <div>
                             <h1 class="text-xl font-bold text-gray-900 font-fustat">BrewBoard</h1>
@@ -183,11 +191,10 @@
                 
                 <!-- Navigation Links -->
                 <div class="hidden md:flex items-center space-x-8">                    
-                    <a href="{{ route('landing.home') }}#caracteristicas" class="text-sm text-gray-700 hover:text-primary transition-colors font-light hover:underline">Características</a>
-                    <a href="{{ route('landing.home') }}#beneficios" class="text-sm text-gray-700 hover:text-primary transition-colors font-light hover:underline">Beneficios</a>
+                    <a href="{{ route('landing.home') }}#caracteristicas" class="text-sm text-gray-700 hover:text-primary transition-colors font-light hover:underline">Características</a>                    
                     <div class="btn-admin-container">
                         <a href="/admin" class="btn-admin">
-                            <svg class="w-4 h-4" fill="none" stroke=" #698a5f" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4" fill="none" stroke=" currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
                             </svg>
                             <span>
@@ -195,12 +202,6 @@
                             </span>
                         </a>
                     </div>
-                    <a href="{{ route('landing.contact') }}" class="btn-primary">
-                        <div class="w-4">
-                            <svg viewBox="0 0 48 48" enable-background="new 0 0 48 48" id="Layer_5" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <polygon fill="#f0f4ed" points="15.706,15.353 15.706,11.251 0.021,23.45 15.706,35.649 15.706,31.548 5.294,23.45 "></polygon> <path d="M47.979,29.074c0-6.212-5.038-11.25-11.251-11.25h-0.001H25.479v-6.573L9.794,23.45l15.686,12.199v-6.575 h14.232c3.106,0,5.625,2.52,5.625,5.625c0,0.725-0.148,1.413-0.399,2.05C46.819,34.739,47.979,32.045,47.979,29.074z" fill="#f0f4ed"></path> </g> </g></svg>
-                        </div>
-                        Solicitar Demo
-                    </a>                    
                 </div>
                 
                 <!-- Mobile Menu Button -->
@@ -217,9 +218,7 @@
             <div id="mobile-menu" class="hidden md:hidden pb-4">
                 <div class="flex flex-col space-y-4">
                     <a href="{{ route('landing.home') }}" class="text-gray-700 hover:text-primary transition-colors font-medium">Inicio</a>
-                    <a href="{{ route('landing.home') }}#caracteristicas" class="text-gray-700 hover:text-primary transition-colors font-medium">Características</a>
-                    <a href="{{ route('landing.home') }}#beneficios" class="text-gray-700 hover:text-primary transition-colors font-medium">Beneficios</a>
-                    <a href="{{ route('landing.contact') }}" class="btn-primary w-fit">Solicitar Demo</a>
+                    <a href="{{ route('landing.home') }}#caracteristicas" class="text-gray-700 hover:text-primary transition-colors font-medium">Características</a>                                        
                 </div>
             </div>
         </div>
@@ -236,16 +235,9 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <!-- Company Info -->
                 <div class="col-span-1 md:col-span-2">
-                    <div class="flex items-center space-x-3 mb-6">
-                        <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold font-fustat">Pistacho ERP</h3>
-                            <p class="text-sm text-gray-400">by Rubik Code</p>
-                        </div>
+                    <div class="mb-4 relative">
+                        <img class="h-20" src="{{ asset('images/app-logo.png') }}"/>
+                        <p class="text-sm text-gray-400 absolute bottom-[1px] left-1">por Rubik Code</p>
                     </div>
                     <p class="text-gray-300 mb-4 max-w-md">
                         Sistema especializado para cafeterías que optimiza operaciones, aumenta ganancias y mejora la experiencia del cliente.
@@ -260,9 +252,7 @@
                     <h4 class="text-lg font-semibold mb-4">Enlaces</h4>
                     <ul class="space-y-2">
                         <li><a href="{{ route('landing.home') }}" class="text-gray-300 hover:text-primary transition-colors">Inicio</a></li>
-                        <li><a href="{{ route('landing.home') }}#caracteristicas" class="text-gray-300 hover:text-primary transition-colors">Características</a></li>
-                        <li><a href="{{ route('landing.home') }}#beneficios" class="text-gray-300 hover:text-primary transition-colors">Beneficios</a></li>
-                        <li><a href="{{ route('landing.contact') }}" class="text-gray-300 hover:text-primary transition-colors">Contacto</a></li>
+                        <li><a href="{{ route('landing.home') }}#caracteristicas" class="text-gray-300 hover:text-primary transition-colors">Características</a></li>                        
                     </ul>
                 </div>
                 

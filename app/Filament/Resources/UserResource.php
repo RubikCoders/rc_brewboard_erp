@@ -163,8 +163,7 @@ class UserResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Nombre')
-                    ->width(200)
+                    ->label('Nombre')                    
                     ->searchable()
                     ->sortable()
                     ->limit(25) // Limitar caracteres para evitar overflow
@@ -174,8 +173,7 @@ class UserResource extends Resource
                     ->weight('medium'),
 
                 Tables\Columns\TextColumn::make('email')
-                    ->label('Email')
-                    ->width(120)
+                    ->label('Email')                    
                     ->searchable()
                     ->sortable()
                     ->copyable()
@@ -188,8 +186,7 @@ class UserResource extends Resource
                 Tables\Columns\IconColumn::make('employee_status')
                     ->label('Puesto')
                     ->getStateUsing(fn (User $record): bool => (bool) $record->employee)                    
-                    ->view('filament.tables.columns.employee-status')                    
-                    ->width('150px')
+                    ->view('filament.tables.columns.employee-status')                                        
                     ->alignment('left'),
 
                 Tables\Columns\TextColumn::make('roles.name')
@@ -200,16 +197,14 @@ class UserResource extends Resource
                     ->separator(', ')
                     ->limitList(1) // Solo mostrar 1 rol, resto en expandible
                     ->expandableLimitedList()
-                    ->tooltip('Roles del panel administrativo')
-                    ->width('120px'),
+                    ->tooltip('Roles del panel administrativo'),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Registro')
                     ->date('d/m/Y')
                     ->sortable()
                     ->toggleable()
-                    ->tooltip(fn(User $record) => $record->created_at->format('d/m/Y H:i:s'))
-                    ->width('100px'),
+                    ->tooltip(fn(User $record) => $record->created_at->format('d/m/Y H:i:s')),
 
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label('Actualizado')
@@ -244,15 +239,15 @@ class UserResource extends Resource
                         false: fn(Builder $query) => $query->whereNull('email_verified_at'),
                     ),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make()
-                    ->label('')
-                    ->tooltip('Editar usuario')
+            ->actions([              
+                Tables\Actions\ViewAction::make()
+                    ->label('Ver')
+                    ->tooltip('Ver detalles')
                     ->size('sm'),
 
-                Tables\Actions\ViewAction::make()
-                    ->label('')
-                    ->tooltip('Ver detalles')
+                Tables\Actions\EditAction::make()
+                    ->label('Editar')
+                    ->tooltip('Editar usuario')
                     ->size('sm'),
 
                 Tables\Actions\ActionGroup::make([

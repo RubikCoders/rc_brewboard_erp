@@ -13,8 +13,7 @@ Route::get('/ticket-order/{order}', [OrderController::class, 'viewOrderTicket'])
 
 Route::middleware(['web', \App\Http\Middleware\LandingPageMiddleware::class])->group(function () {
     Route::get('/', [LandingController::class, 'home'])->name('landing.home');
-    Route::get('/contacto', [LandingController::class, 'contact'])->name('landing.contact');
-    Route::post('/contacto', [ContactController::class, 'store'])->name('contact.store');
+    Route::get('/contacto', [LandingController::class, 'contact'])->name('landing.contact');    
 });
 
 //Route::get('/test', function () {

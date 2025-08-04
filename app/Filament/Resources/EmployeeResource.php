@@ -29,18 +29,6 @@ class EmployeeResource extends Resource
     protected static ?string $modelLabel = 'Empleado';
     protected static ?string $pluralModelLabel = 'Empleados';
 
-
-    // public static function getNavigationBadge(): ?string
-    // {
-    //     return static::getModel()::count();
-    // }
-
-    // public static function getNavigationBadgeColor(): ?string
-    // {
-    //     $count = static::getModel()::count();
-    //     return $count > 10 ? 'success' : 'warning';
-    // }
-
     public static function form(Form $form): Form
     {
         return $form
@@ -176,7 +164,6 @@ class EmployeeResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('full_name')
                     ->label('Nombre')
-                    ->width(200)
                     ->getStateUsing(fn(Employee $record): string => "{$record->name} {$record->last_name}")
                     ->searchable(['name', 'last_name'])
                     ->sortable(['name', 'last_name'])
@@ -194,22 +181,19 @@ class EmployeeResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->limit(15)
-                    ->tooltip(fn(Employee $record) => $record->role->description ?? $record->role->name)
-                    ->width('120px'),
+                    ->tooltip(fn(Employee $record) => $record->role->description ?? $record->role->name),
 
                 Tables\Columns\ViewColumn::make('user_status')
                     ->label('Usuario')
-                    ->view('filament.tables.columns.user-status')
-                    ->width('90px'),
+                    ->view('filament.tables.columns.user-status'),
 
                 Tables\Columns\TextColumn::make('phone')
                     ->label('Teléfono')
                     ->icon('heroicon-m-phone')
                     ->copyable()
-                    ->copyMessage('📞 Copiado')
+                    ->copyMessage('Copiado')
                     ->toggleable()
-                    ->limit(12)
-                    ->width('120px'),
+                    ->limit(12),
 
                 Tables\Columns\TextColumn::make('entry_date')
                     ->label('Trabaja desde')
@@ -221,8 +205,7 @@ class EmployeeResource extends Resource
                             return "Ingresó: {$record->entry_date->format('d/m/Y')}";
                         }
                         return 'Sin fecha';
-                    })
-                    ->width('100px'),
+                    }),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Registrado')
@@ -234,25 +217,23 @@ class EmployeeResource extends Resource
                             return "Registrado: {$record->created_at->format('d/m/Y H:i:s')}";
                         }
                         return null;
-                    })
-                    ->width('100px'),
+                    }),
 
-                Tables\Columns\TextColumn::make('age')
-                    ->label('Edad')
-                    ->getStateUsing(function (Employee $record): ?string {
-                        if ($record->birthdate) {
-                            return $record->birthdate->age . ' años';
-                        }
-                        return 'N/A';
-                    })
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->tooltip(function (Employee $record): ?string {
-                        if ($record->birthdate) {
-                            return "Nacimiento: {$record->birthdate->format('d/m/Y')}";
-                        }
-                        return 'Fecha de nacimiento no registrada';
-                    })
-                    ->width('80px'),
+                // Tables\Columns\TextColumn::make('age')
+                //     ->label('Edad')
+                //     ->getStateUsing(function (Employee $record): ?string {
+                //         if ($record->birthdate) {
+                //             return $record->birthdate->age . ' años';
+                //         }
+                //         return 'N/A';
+                //     })
+                //     ->toggleable(isToggledHiddenByDefault: true)
+                //     ->tooltip(function (Employee $record): ?string {
+                //         if ($record->birthdate) {
+                //             return "Nacimiento: {$record->birthdate->format('d/m/Y')}";
+                //         }
+                //         return 'Fecha de nacimiento no registrada';
+                //     })
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('role_id')
@@ -293,15 +274,15 @@ class EmployeeResource extends Resource
 
                 Tables\Filters\TrashedFilter::make(),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make()
-                    ->label('')
-                    ->tooltip('Editar empleado')
+            ->actions([               
+                Tables\Actions\ViewAction::make()
+                    ->label('Ver')
+                    ->tooltip('Ver detalles')
                     ->size('sm'),
 
-                Tables\Actions\ViewAction::make()
-                    ->label('')
-                    ->tooltip('Ver detalles')
+                Tables\Actions\EditAction::make()
+                    ->label('Editar')
+                    ->tooltip('Editar empleado')
                     ->size('sm'),
 
                 Tables\Actions\ActionGroup::make([
@@ -484,7 +465,7 @@ class EmployeeResource extends Resource
             ->defaultSort('created_at', 'desc')
             ->striped()
             ->paginated([5, 10, 25, 50, 100])
-            ->defaultPaginationPageOption(5)
+            ->defaultPaginationPageOption(10)
             ->persistSortInSession()
             ->persistSearchInSession()
             ->extremePaginationLinks();

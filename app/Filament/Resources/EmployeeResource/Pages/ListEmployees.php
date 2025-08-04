@@ -13,8 +13,6 @@ class ListEmployees extends ListRecords
 {
     protected static string $resource = EmployeeResource::class;
 
-    protected static string $view = 'filament.pages.list-employees';
-
     protected function getHeaderActions(): array
     {
         return [
