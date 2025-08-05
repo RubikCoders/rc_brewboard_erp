@@ -63,6 +63,7 @@ return [
         'private_reviews' => [
             'driver' => 'local',
             'root' => storage_path('app/private/reviews'),
+            'visibility' => 'private',
         ],
     ],
 

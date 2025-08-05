@@ -43,11 +43,11 @@ class AdminPanelProvider extends PanelProvider
                 'secondary-hover' => Color::hex('#E4E6C3'),
                 'success' => Color::hex('#0BBA4E'),
                 'warning' => Color::hex('#F7CF67'),
-                'danger' => Color::hex('#D96153'),
+                'danger' => Color::hex('#d68787'),
                 'info' => Color::hex('#84BFC3'),
             ])
             ->spa()
-//            ->brandLogo(asset('brand/2.png'))
+            //            ->brandLogo(asset('brand/2.png'))
             ->darkMode(false)
             ->brandLogoHeight('5rem')
             ->sidebarCollapsibleOnDesktop()
@@ -55,7 +55,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
-//                Pages\Dashboard::class,
+                //                Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([

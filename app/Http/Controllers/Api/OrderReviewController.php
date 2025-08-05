@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\StoreOrderReview;
 use App\Models\OrderReview;
+use Faker\Core\File;
 
 class OrderReviewController extends Controller
 {
@@ -34,6 +35,5 @@ class OrderReviewController extends Controller
 
         return response()->json($order)->setStatusCode(201);
     }
-
 
 }
