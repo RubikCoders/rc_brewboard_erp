@@ -356,7 +356,7 @@ class UserResource extends Resource
             ->defaultPaginationPageOption(5)
             ->striped()
             ->persistSortInSession()
-            ->persistSearchInSession()            
+            ->persistSearchInSession()
             ->extremePaginationLinks();
 
     }
