@@ -13,6 +13,6 @@ class OrderReviewSeeder extends Seeder
      */
     public function run(): void
     {
-        OrderReview::factory()->count(40)->create();
+        OrderReview::factory()->count(100)->create();
     }
 }

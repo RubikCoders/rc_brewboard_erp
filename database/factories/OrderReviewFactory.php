@@ -53,9 +53,12 @@ class OrderReviewFactory extends Factory
 
         return [
             'order_id' => $this->faker->numberBetween(1001, 1280),
-            'rating' => $this->faker->numberBetween(0, 10),
+            'rating' => $this->faker->biasedNumberBetween(0, 10, function ($x) {
+                return pow($x, 3);
+            }),
             'comment' => $this->faker->randomElement($comments),
-            'image_path' => $this->faker->randomElement($images)
+            'image_path' => $this->faker->randomElement($images),
+            'created_at' => $this->faker->dateTimeBetween('-30 days', 'now'),
         ];
     }
 }
