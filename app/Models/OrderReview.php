@@ -15,6 +15,7 @@ class OrderReview extends Model
         'order_id',
         'rating',
         'comment',
+        'image_path'
     ];
 
     //region Relationships

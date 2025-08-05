@@ -22,8 +22,9 @@ class StoreOrderReview extends FormRequest
     public function rules(): array
     {
         return [
-            'order_id' => 'required',
+            'order_id' => 'nullable',
             'rating' => 'required|min:0|max:10',
+            'image' => "nullable|image",
             'comment' => 'nullable'
         ];
     }

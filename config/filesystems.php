@@ -60,6 +60,10 @@ return [
             'report' => false,
         ],
 
+        'private_reviews' => [
+            'driver' => 'local',
+            'root' => storage_path('app/private/reviews'),
+        ],
     ],
 
     /*

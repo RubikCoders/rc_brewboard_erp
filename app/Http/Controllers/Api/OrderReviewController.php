@@ -15,11 +15,25 @@ class OrderReviewController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @author Angel Mendoza
      */
-    public function store(StoreOrderReview $request){
+    public function store(StoreOrderReview $request)
+    {
         $validated = $request->validated();
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+
+            $filename = time() . '_' . $image->getClientOriginalName();
+
+            $path = $image->storeAs('', $filename, 'private_reviews');
+
+            $validated['image_path'] = $path;
+
+        }
+
         $order = OrderReview::create($validated);
 
         return response()->json($order)->setStatusCode(201);
     }
+
 
 }
