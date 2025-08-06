@@ -19,13 +19,13 @@ use Illuminate\Support\Facades\Hash;
 class EmployeeResource extends Resource
 {
     protected static ?string $model = Employee::class;
-    
+
     protected static ?string $navigationGroup = 'Personal';
     protected static ?string $navigationIcon = 'heroicon-o-identification';
     protected static ?string $navigationLabel = 'Empleados';
     protected static ?int $navigationSort = 1;
 
-    
+
     protected static ?string $modelLabel = 'Empleado';
     protected static ?string $pluralModelLabel = 'Empleados';
 
@@ -33,7 +33,7 @@ class EmployeeResource extends Resource
     {
         return $form
             ->schema([
-                
+
                 Forms\Components\Section::make('Información Personal')
                     ->description('Datos básicos del empleado')
                     ->schema([
@@ -56,6 +56,7 @@ class EmployeeResource extends Resource
                                     ->required()
                                     ->default(now())
                                     ->maxDate(now())
+                                    ->native(false)
                                     ->displayFormat('d/m/Y')
                                     ->format('Y-m-d')
                                     ->helperText('Fecha en que el empleado ingresó a la empresa'),
@@ -63,7 +64,7 @@ class EmployeeResource extends Resource
                                 Forms\Components\DatePicker::make('birthdate')
                                     ->label('Fecha de Nacimiento')
                                     ->required()
-                                    ->maxDate(now()->subYears(16))
+                                    ->native(false)
                                     ->displayFormat('d/m/Y')
                                     ->format('Y-m-d')
                                     ->helperText('Fecha de nacimiento del empleado'),
@@ -71,7 +72,7 @@ class EmployeeResource extends Resource
                     ])
                     ->collapsible(),
 
-                
+
                 Forms\Components\Section::make('Información de Contacto')
                     ->description('Datos de contacto y emergencia')
                     ->schema([
@@ -97,7 +98,7 @@ class EmployeeResource extends Resource
                     ])
                     ->collapsible(),
 
-                
+
                 Forms\Components\Section::make('Información Laboral')
                     ->description('Datos relacionados con el trabajo')
                     ->schema([
@@ -127,7 +128,7 @@ class EmployeeResource extends Resource
                     ])
                     ->collapsible(),
 
-                
+
                 Forms\Components\Section::make('Acceso al Sistema')
                     ->description('Información de usuario para acceso al panel')
                     ->schema([
@@ -149,7 +150,7 @@ class EmployeeResource extends Resource
                             ->placeholder('Selecciona un usuario existente (opcional)')
                             ->helperText('Deja vacío si crearás un nuevo usuario después'),
                     ])
-                    ->visible(fn(?Employee $record) => $record !== null) 
+                    ->visible(fn(?Employee $record) => $record !== null)
                     ->collapsible(),
             ]);
     }
@@ -274,7 +275,7 @@ class EmployeeResource extends Resource
 
                 Tables\Filters\TrashedFilter::make(),
             ])
-            ->actions([               
+            ->actions([
                 Tables\Actions\ViewAction::make()
                     ->label('Ver')
                     ->tooltip('Ver detalles')

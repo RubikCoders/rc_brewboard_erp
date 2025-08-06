@@ -31,16 +31,13 @@ class OrderResource extends Resource
     protected static ?string $model = Order::class;
     protected static ?int $navigationSort = 1;
     protected static ?string $navigationIcon = 'heroicon-o-square-2-stack';
-
     protected static ?string $cluster = OrderCluster::class;
-
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-
     public static function getPages(): array
     {
         return [
@@ -50,8 +47,6 @@ class OrderResource extends Resource
             'view' => Pages\ViewOrder::route('/{record}'),
         ];
     }
-
-
 
     //region Label methods
     public static function getNavigationLabel(): string
@@ -68,7 +63,6 @@ class OrderResource extends Resource
     {
         return __("order.model");
     }
-
     //endregion
 
     //region Table methods
