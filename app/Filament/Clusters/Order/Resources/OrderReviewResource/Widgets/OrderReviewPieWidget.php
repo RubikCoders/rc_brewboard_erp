@@ -13,9 +13,15 @@ class OrderReviewPieWidget extends ChartWidget
     {
         $total = OrderReview::count();
 
-        $positive = OrderReview::where('rating', '>', OrderReview::RATING_MEDIUM_MAX)->count() / $total * 100;
-        $neutral = OrderReview::whereBetween('rating', [OrderReview::RATING_BAD_MAX + 1, OrderReview::RATING_MEDIUM_MAX])->count() / $total * 100;
-        $negative = OrderReview::where('rating', '<=', OrderReview::RATING_BAD_MAX)->count() / $total * 100;
+        $total = OrderReview::count();
+
+        if ($total > 0) {
+            $positive = OrderReview::where('rating', '>', OrderReview::RATING_MEDIUM_MAX)->count() / $total * 100;
+            $neutral = OrderReview::whereBetween('rating', [OrderReview::RATING_BAD_MAX + 1, OrderReview::RATING_MEDIUM_MAX])->count() / $total * 100;
+            $negative = OrderReview::where('rating', '<=', OrderReview::RATING_BAD_MAX)->count() / $total * 100;
+        } else {
+            $positive = $neutral = $negative = 0;
+        }
 
 
         return [
