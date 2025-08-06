@@ -17,7 +17,6 @@ class Dashboard extends \Filament\Pages\Dashboard
             OriginOrders::make(),
             SalesTotals::make(),
             PopularItems::make(),
-
         ];
     }
 }

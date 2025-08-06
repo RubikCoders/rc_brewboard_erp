@@ -4,7 +4,7 @@
 
 ## BrewBoard Café
 
-Sistema ERP desarrollado para una cafetería. La aplicación busca optimizar el proceso de toma y manejo de ordenes. La
+Sistema ERP desarrollado para una cafetería. La aplicación busca optimizar el proceso de toma y manejo de órdenes. La
 aplicación cuenta con una API para comunicarse con el CSP (aplicación móvil).
 
 ---

@@ -19,7 +19,7 @@ class StatusOrders extends BaseWidget
     {
         return [
             Stat::make('Órdenes Pendientes', ModelsOrder::where('status', ModelsOrder::STATUS_WAITING)->count())
-                ->description('ÓRDENES POR PROCESAR')
+                ->description('Órdenes por procesar')
                 ->descriptionIcon('heroicon-o-clock')
                 ->color('primary')
                 ->url(BaristaView::getUrl() . '?tableFilters[status][value]=' . ModelsOrder::STATUS_WAITING)
@@ -28,7 +28,7 @@ class StatusOrders extends BaseWidget
                 ]),
 
             Stat::make('Órdenes Entregadas', ModelsOrder::where('status', ModelsOrder::STATUS_FINISHED)->count())
-                ->description('ÓRDENES ENTREGADAS')
+                ->description('Órdenes entregadas')
                 ->descriptionIcon('heroicon-o-check-circle')
                 ->color('success')
                 ->url(ListOrders::getUrl() . '?tableFilters[status][value]=' . ModelsOrder::STATUS_FINISHED)
@@ -37,7 +37,7 @@ class StatusOrders extends BaseWidget
                 ]),
 
             Stat::make('Órdenes Canceladas', ModelsOrder::where('status', ModelsOrder::STATUS_CANCELLED)->count())
-                ->description('ÓRDENES CANCELADAS')
+                ->description('Órdenes canceladas')
                 ->descriptionIcon('heroicon-o-archive-box-x-mark')
                 ->color('danger')
                 ->url(ListOrders::getUrl() . '?tableFilters[status][value]=' . ModelsOrder::STATUS_CANCELLED)

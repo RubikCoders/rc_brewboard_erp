@@ -1,7 +1,7 @@
 <?php
 
 return [
-    "model" => "Ordenes",
+    "model" => "Órdenes",
     "order" => "Orden",
     "erp" => "Caja",
     "csp" => "Kiosko",

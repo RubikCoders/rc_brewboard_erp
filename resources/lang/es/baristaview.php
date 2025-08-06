@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => "Ordenes Pendientes",
+    'title' => "Órdenes Pendientes",
 
     "products" => "Productos",
     "elapsed_time" => "Tiempo transcurrido",
