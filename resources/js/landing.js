@@ -19,12 +19,12 @@ function initializeNavigation() {
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
     const navbar = document.querySelector('nav');
-    
+
     // Mobile menu toggle
     if (mobileMenuButton && mobileMenu) {
         mobileMenuButton.addEventListener('click', function() {
             const isOpen = !mobileMenu.classList.contains('hidden');
-            
+
             if (isOpen) {
                 // Close menu
                 mobileMenu.classList.add('hidden');
@@ -47,7 +47,7 @@ function initializeNavigation() {
                 `;
             }
         });
-        
+
         // Close mobile menu when clicking on links
         const mobileLinks = mobileMenu.querySelectorAll('a');
         mobileLinks.forEach(link => {
@@ -62,13 +62,13 @@ function initializeNavigation() {
             });
         });
     }
-    
+
     // Navbar scroll behavior
     let lastScrollY = window.scrollY;
-    
+
     function handleNavbarScroll() {
         const currentScrollY = window.scrollY;
-        
+
         if (navbar) {
             if (currentScrollY > 100) {
                 navbar.classList.add('bg-white/95', 'backdrop-blur-sm', 'shadow-sm');
@@ -76,10 +76,10 @@ function initializeNavigation() {
                 navbar.classList.remove('bg-white/95', 'backdrop-blur-sm', 'shadow-sm');
             }
         }
-        
+
         lastScrollY = currentScrollY;
     }
-    
+
     // Throttled scroll listener for better performance
     let ticking = false;
     window.addEventListener('scroll', function() {
@@ -91,23 +91,23 @@ function initializeNavigation() {
             ticking = true;
         }
     });
-    
+
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
-            
+
             if (target) {
                 const headerOffset = 80; // Account for fixed header
                 const elementPosition = target.getBoundingClientRect().top;
                 const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                
+
                 window.scrollTo({
                     top: offsetPosition,
                     behavior: 'smooth'
                 });
-                
+
                 // Update URL without jumping
                 history.pushState(null, null, this.getAttribute('href'));
             }
@@ -122,16 +122,16 @@ function initializeNavigation() {
 function initializeScrollAnimations() {
     // Check if animations are reduced
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    
+
     if (prefersReducedMotion) {
         return; // Skip animations if user prefers reduced motion
     }
-    
+
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
     };
-    
+
     const observer = new IntersectionObserver(function(entries) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -140,7 +140,7 @@ function initializeScrollAnimations() {
             }
         });
     }, observerOptions);
-    
+
     // Observe elements for animation
     const animateElements = document.querySelectorAll('.card-hover, .feature-card, .testimonial-card');
     animateElements.forEach(el => {
@@ -148,19 +148,19 @@ function initializeScrollAnimations() {
         el.style.transform = 'translateY(30px)';
         observer.observe(el);
     });
-    
+
     // Parallax effect for hero background elements (subtle)
     const parallaxElements = document.querySelectorAll('[data-parallax]');
     if (parallaxElements.length > 0) {
         function updateParallax() {
             const scrolled = window.pageYOffset;
             const rate = scrolled * -0.5;
-            
+
             parallaxElements.forEach(el => {
                 el.style.transform = `translateY(${rate}px)`;
             });
         }
-        
+
         let ticking = false;
         window.addEventListener('scroll', function() {
             if (!ticking) {
@@ -180,73 +180,73 @@ function initializeScrollAnimations() {
  */
 function initializeFormEnhancements() {
     const contactForm = document.querySelector('form[action*="contact"]');
-    
+
     if (!contactForm) return;
-    
+
     const submitButton = contactForm.querySelector('button[type="submit"]');
     const inputs = contactForm.querySelectorAll('input, textarea, select');
-    
+
     // Real-time validation
     inputs.forEach(input => {
         input.addEventListener('blur', function() {
             validateField(this);
         });
-        
+
         input.addEventListener('input', function() {
             if (this.classList.contains('form-error')) {
                 validateField(this);
             }
         });
     });
-    
+
     // Form submission with loading state
     contactForm.addEventListener('submit', function(e) {
         let isValid = true;
-        
+
         // Validate all fields
         inputs.forEach(input => {
             if (!validateField(input)) {
                 isValid = false;
             }
         });
-        
+
         if (!isValid) {
             e.preventDefault();
             showNotification('Por favor corrige los errores en el formulario', 'error');
             return;
         }
-        
+
         // Show loading state
         if (submitButton) {
             submitButton.classList.add('btn-loading');
             submitButton.disabled = true;
-            
+
             // Reset loading state after 10 seconds (fallback)
             setTimeout(() => {
                 submitButton.classList.remove('btn-loading');
                 submitButton.disabled = false;
             }, 10000);
         }
-        
+
         // Track form submission
         trackEvent('form_submit', 'contact', 'demo_request');
     });
-    
+
     // Character counter for textarea
     const messageTextarea = contactForm.querySelector('textarea[name="message"]');
     if (messageTextarea) {
         const minLength = 10;
         const maxLength = 1000;
-        
+
         // Create counter element
         const counter = document.createElement('div');
         counter.className = 'text-sm text-gray-500 mt-1 text-right';
         messageTextarea.parentNode.appendChild(counter);
-        
+
         function updateCounter() {
             const length = messageTextarea.value.length;
             counter.textContent = `${length}/${maxLength} caracteres`;
-            
+
             if (length < minLength) {
                 counter.className = 'text-sm text-red-500 mt-1 text-right';
             } else if (length > maxLength * 0.9) {
@@ -255,7 +255,7 @@ function initializeFormEnhancements() {
                 counter.className = 'text-sm text-gray-500 mt-1 text-right';
             }
         }
-        
+
         messageTextarea.addEventListener('input', updateCounter);
         updateCounter(); // Initialize
     }
@@ -270,14 +270,14 @@ function validateField(field) {
     const fieldName = field.name;
     let isValid = true;
     let errorMessage = '';
-    
+
     // Remove existing error styling
     field.classList.remove('form-error');
     const existingError = field.parentNode.querySelector('.field-error');
     if (existingError) {
         existingError.remove();
     }
-    
+
     // Required field validation
     if (field.hasAttribute('required') && !value) {
         isValid = false;
@@ -292,14 +292,14 @@ function validateField(field) {
                     errorMessage = 'Ingresa un email válido';
                 }
                 break;
-                
+
             case 'phone':
                 if (value && value.length < 10) {
                     isValid = false;
                     errorMessage = 'Ingresa un teléfono válido';
                 }
                 break;
-                
+
             case 'message':
                 if (value && value.length < 10) {
                     isValid = false;
@@ -309,7 +309,7 @@ function validateField(field) {
                     errorMessage = 'El mensaje no puede exceder 1000 caracteres';
                 }
                 break;
-                
+
             case 'preferred_contact':
                 if (field.type === 'radio') {
                     const radioGroup = document.querySelectorAll(`input[name="${fieldName}"]`);
@@ -322,17 +322,17 @@ function validateField(field) {
                 break;
         }
     }
-    
+
     // Show error if invalid
     if (!isValid) {
         field.classList.add('form-error');
-        
+
         const errorDiv = document.createElement('div');
         errorDiv.className = 'field-error text-red-500 text-sm mt-1';
         errorDiv.textContent = errorMessage;
         field.parentNode.appendChild(errorDiv);
     }
-    
+
     return isValid;
 }
 
@@ -342,9 +342,9 @@ function validateField(field) {
  */
 function initializeStatCounters() {
     const statElements = document.querySelectorAll('.stat-number');
-    
+
     if (statElements.length === 0) return;
-    
+
     const observer = new IntersectionObserver(function(entries) {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -353,7 +353,7 @@ function initializeStatCounters() {
             }
         });
     }, { threshold: 0.5 });
-    
+
     statElements.forEach(el => observer.observe(el));
 }
 
@@ -366,7 +366,7 @@ function animateCounter(element) {
     const duration = 2000; // 2 seconds
     const increment = target / (duration / 16); // 60fps
     let current = 0;
-    
+
     const timer = setInterval(() => {
         current += increment;
         if (current >= target) {
@@ -407,7 +407,7 @@ function initializeLazyLoading() {
                 }
             });
         });
-        
+
         document.querySelectorAll('img[data-src]').forEach(img => {
             imageObserver.observe(img);
         });
@@ -422,15 +422,15 @@ function initializeAnalytics() {
     // Track scroll depth
     let maxScroll = 0;
     const scrollMilestones = [25, 50, 75, 100];
-    
+
     function trackScrollDepth() {
         const scrollPercent = Math.round(
             (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100
         );
-        
+
         if (scrollPercent > maxScroll) {
             maxScroll = scrollPercent;
-            
+
             scrollMilestones.forEach(milestone => {
                 if (scrollPercent >= milestone && !window[`scroll_${milestone}_tracked`]) {
                     trackEvent('scroll_depth', 'engagement', `${milestone}%`);
@@ -439,13 +439,13 @@ function initializeAnalytics() {
             });
         }
     }
-    
+
     let scrollTimeout;
     window.addEventListener('scroll', function() {
         clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(trackScrollDepth, 100);
     });
-    
+
     // Track CTA clicks
     document.querySelectorAll('.btn-primary, .btn-secondary').forEach(button => {
         button.addEventListener('click', function(e) {
@@ -454,7 +454,7 @@ function initializeAnalytics() {
             trackEvent('cta_click', buttonType, buttonText);
         });
     });
-    
+
     // Track time on page
     const startTime = Date.now();
     window.addEventListener('beforeunload', function() {
@@ -470,9 +470,9 @@ function initializeAnalytics() {
 function trackEvent(action, category, label) {
     // This would integrate with your analytics service
     // Google Analytics, Mixpanel, etc.
-    
+
     console.log('Event tracked:', { action, category, label });
-    
+
     // Example Google Analytics integration:
     if (typeof gtag !== 'undefined') {
         gtag('event', action, {
@@ -480,7 +480,7 @@ function trackEvent(action, category, label) {
             event_label: label
         });
     }
-    
+
     // Example for other analytics services
     if (typeof analytics !== 'undefined') {
         analytics.track(action, {
@@ -497,11 +497,11 @@ function trackEvent(action, category, label) {
 function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
     notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transform translate-x-full transition-transform duration-300 ${
-        type === 'error' ? 'bg-red-500 text-white' : 
-        type === 'success' ? 'bg-green-500 text-white' : 
+        type === 'error' ? 'bg-red-500 text-white' :
+        type === 'success' ? 'bg-green-500 text-white' :
         'bg-blue-500 text-white'
     }`;
-    
+
     notification.innerHTML = `
         <div class="flex items-center space-x-2">
             <span>${message}</span>
@@ -512,14 +512,14 @@ function showNotification(message, type = 'info') {
             </button>
         </div>
     `;
-    
+
     document.body.appendChild(notification);
-    
+
     // Animate in
     setTimeout(() => {
         notification.classList.remove('translate-x-full');
     }, 100);
-    
+
     // Auto remove after 5 seconds
     setTimeout(() => {
         notification.classList.add('translate-x-full');

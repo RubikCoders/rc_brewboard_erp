@@ -114,5 +114,15 @@ class OrderReview extends Model
         return $counts;
     }
 
+    public static function getRatingSummaryChart(): array
+    {
+        $reviews = self::query();
+
+        return [
+            'Positivas' => (clone $reviews)->where('rating', '>', self::RATING_MEDIUM_MAX)->count(),
+            'Neutrales' => (clone $reviews)->whereBetween('rating', [self::RATING_BAD_MAX + 1, self::RATING_MEDIUM_MAX])->count(),
+            'Negativas' => (clone $reviews)->where('rating', '<=', self::RATING_BAD_MAX)->count(),
+        ];
+    }
     //endregion
 }

@@ -29,6 +29,7 @@ class OrderFactory extends Factory
             'payment_folio' => $paymentFolio,
             'from' => $this->faker->randomElement(['erp', 'csp']),
             'status' => $status,
+            'created_at' => $this->faker->dateTimeBetween('-12 months', 'now'),
         ];
 
         if ($status === 2) {
