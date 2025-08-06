@@ -29,18 +29,7 @@ class ListMenuProducts extends ListRecords
 
             Actions\CreateAction::make()
                 ->icon('heroicon-o-plus')
-                ->label('Nuevo Producto'),
-
-            Actions\Action::make('check_availability')
-                ->hiddenLabel()
-                ->tooltip('Verificar Disponibilidad')
-                ->icon('heroicon-o-shield-check')
-                ->color('info')
-                ->action(function () {
-                    // Esto dispararía una verificación completa del sistema
-                    $this->checkSystemAvailability();
-                })
-                ->tooltip('Verificar disponibilidad de todos los productos'),
+                ->label('Nuevo Producto'),            
         ];
     }
 

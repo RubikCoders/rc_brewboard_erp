@@ -68,6 +68,7 @@ class InventoryResource extends Resource
                                         CustomizationOption::class => __('inventory.options.customization_option'),
                                     ])
                                     ->required()
+                                    ->native(false)
                                     ->reactive()
                                     ->afterStateUpdated(fn(callable $set) => $set('stockable_id', null))
                                     ->columnSpan(1),
@@ -91,6 +92,7 @@ class InventoryResource extends Resource
                                     })
                                     ->searchable()
                                     ->required()
+                                    ->native(false)
                                     ->reactive()
                                     ->columnSpan(1),
                             ])
@@ -104,7 +106,7 @@ class InventoryResource extends Resource
                             ->schema([
                                 Forms\Components\TextInput::make('stock')
                                     ->label(__('inventory.fields.stock'))
-                                    ->required()
+                                    ->required()                                    
                                     ->numeric()
                                     ->minValue(0)
                                     ->step(1)
@@ -242,57 +244,8 @@ class InventoryResource extends Resource
                     ->query(fn(Builder $query) => $query->excessStock()),
             ])
             ->actions([
-                Tables\Actions\Action::make('quick_adjust')
-                    ->label(__('inventory.actions.quick_adjust'))
-                    ->icon('heroicon-o-arrows-right-left')
-                    ->color('warning')
-                    ->form([
-                        Forms\Components\Grid::make(2)
-                            ->schema([
-                                Forms\Components\Select::make('action_type')
-                                    ->label(__('inventory.fields.action_type'))
-                                    ->options([
-                                        'add' => __('inventory.actions.add_stock'),
-                                        'remove' => __('inventory.actions.remove_stock'),
-                                        'set' => __('inventory.actions.set_stock'),
-                                    ])
-                                    ->required()
-                                    ->reactive()
-                                    ->columnSpan(1),
-
-                                Forms\Components\TextInput::make('quantity')
-                                    ->label(__('inventory.fields.quantity'))
-                                    ->required()
-                                    ->numeric()
-                                    ->minValue(0)
-                                    ->step(1)
-                                    ->columnSpan(1),
-                            ]),
-
-                        Forms\Components\Textarea::make('reason')
-                            ->label(__('inventory.fields.reason'))
-                            ->placeholder(__('inventory.placeholders.reason'))
-                            ->maxLength(255)
-                            ->columnSpanFull(),
-                    ])
-                    ->action(function (Inventory $record, array $data) {
-                        $quantity = (int) $data['quantity'];
-                        $reason = $data['reason'] ?? null;
-
-                        match ($data['action_type']) {
-                            'add' => $record->add($quantity),
-                            'remove' => $record->consume($quantity),
-                            'set' => $record->adjustTo($quantity, $reason),
-                        };
-                    })
-                    ->successNotification(
-                        \Filament\Notifications\Notification::make()
-                            ->success()
-                            ->title(__('inventory.notifications.adjusted'))
-                    ),
-
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make(),                
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

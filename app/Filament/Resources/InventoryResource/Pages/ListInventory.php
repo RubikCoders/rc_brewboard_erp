@@ -36,29 +36,14 @@ class ListInventory extends ListRecords
                 ->label(__('inventory.actions.create')),
             
             Actions\Action::make('check_all_inventory')
-                ->label(__('inventory.actions.check_all'))
+                ->hiddenLabel()
+                ->tooltip(__('inventory.actions.check_all'))
                 ->icon('heroicon-o-clipboard-document-check')
                 ->color('info')
                 ->action(function () {
                     $this->checkInventoryStatus();
                 })
-                ->tooltip(__('inventory.tooltips.check_all')),
-
-            // Acción para importar datos (a consideracion)
-            // Actions\Action::make('import_inventory')
-            //     ->label(__('inventory.actions.import'))
-            //     ->icon('heroicon-o-arrow-up-tray')
-            //     ->color('warning')
-            //     ->form([
-            //         \Filament\Forms\Components\FileUpload::make('file')
-            //             ->label(__('inventory.fields.import_file'))
-            //             ->acceptedFileTypes(['text/csv', 'application/vnd.ms-excel'])
-            //             ->required(),
-            //     ])
-            //     ->action(function (array $data) {
-            //         // Lógica de importación aquí
-            //         $this->notify('success', __('inventory.notifications.imported'));
-            //     }),            
+                ->tooltip(__('inventory.tooltips.check_all')),          
         ];
     }
 
