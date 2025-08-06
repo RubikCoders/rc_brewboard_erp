@@ -35,6 +35,7 @@ return [
         "payment_method" => "Método de pago",
         "admin_password" => "Contraseña del administrador",
         "from" => "De",
+        "payment_folio" => "Folio de pago",
         "status" => [
             "label" => "Estado",
             0 => "Pendiente",
@@ -72,6 +73,11 @@ return [
         "order_canceled" => "Cancelar orden",
         "restore_order" => "Anular cancelación",
         "ticket" => "Recibo"
+    ],
+
+    "filters" => [
+        "payment_card" => "Pago con tarjeta",
+        "payment_cash" => "Pago en efectivo"
     ],
 
     "tabs" => [

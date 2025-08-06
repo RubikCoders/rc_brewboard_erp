@@ -90,11 +90,20 @@ class ViewOrder extends ViewRecord
                         ->columnSpan(3)
                         ->hidden(!$this->record->employee)
                         ->visible(auth()->user()->hasRole('super_admin'))
-                        ->content($this->record->employee ?$this->record->employee->name . ' ' . $this->record->employee->last_name : ""),
+                        ->content($this->record->employee ? $this->record->employee->name . ' ' . $this->record->employee->last_name : ""),
                     Placeholder::make('payment_method')
                         ->label(__("order.fields.payment_method"))
                         ->columnSpan(3)
-                        ->content($this->record->payment_method),
+//                        ->content(ucfirst($this->record->payment_method)),
+                        ->content(fn (): string => match(strtolower($this->record->payment_method)) {
+                            Order::PAYMENT_METHOD_CARD => 'Tarjeta de Débito/Crédito',
+                            Order::PAYMENT_METHOD_CASH => ucfirst(Order::PAYMENT_METHOD_CASH)
+                        }),
+                    Placeholder::make('payment_folio')
+                        ->label(__("order.fields.payment_folio"))
+                        ->columnSpan(3)
+                        ->hidden(fn (): bool => !$this->record->payment_folio)
+                        ->content("#" . $this->record->payment_folio ?? ""),
                     Placeholder::make('tax')
                         ->label(__("order.fields.total"))
                         ->columnSpan(3)

@@ -31,7 +31,7 @@ class CreateOrder extends CreateRecord
 
         // Create Order
         $order = Order::create([
-            'employee_id' => $data['employee_id'],
+            'employee_id' => $data['employee_id'] ?? null,
             'customer_name' => $data['customer_name'],
             'total' => $data['total'],
             'tax' => $data['tax'],

@@ -13,5 +13,6 @@ return [
     "city" => "C.P 44100 Guadalajara, Jal.",
     "rfc" => "RFC: PIC240729ABC",
     "id" => "Folio:",
-    "footer" => "pistacho-cafe.com | Wi-Fi: ClientePistacho"
+    "footer" => "pistacho-cafe.com | Wi-Fi: ClientePistacho",
+    "payment_method" => "Método de pago:"
 ];

@@ -67,6 +67,11 @@
     <table width="100%" style="border-collapse: collapse; margin-bottom: 2px; font-size: 12px;" class="total">
         <tr>
             <td></td>
+            <td class="title" style="width: 60%; padding: 0; font-weight: normal">@lang('order-ticket.payment_method')</td>
+            <td class="title" style="text-align: right; padding: 0; font-weight: normal">{{ ucfirst($order->payment_method) }}</td>
+        </tr>
+        <tr>
+            <td></td>
             <td class="title" style="width: 60%; padding: 0;">@lang('order-ticket.subtotal')</td>
             <td class="title" style="text-align: right; padding: 0;">{{ \App\Helpers\Money::format($order->total - $order->tax) }}</td>
         </tr>

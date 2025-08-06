@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->decimal('total'); // In cents
             $table->decimal('tax')->nullable(); // In cents
             $table->string('payment_method');
+            $table->string("payment_folio")->nullable();
             $table->enum('from', ['erp', 'csp']);
             $table->tinyInteger('status');
             // 0 - pendiente

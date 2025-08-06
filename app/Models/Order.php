@@ -18,6 +18,9 @@ class Order extends Model
     public const FROM_CSP = 'csp';
     public const FROM_ERP = 'erp';
 
+    public const PAYMENT_METHOD_CARD = 'tarjeta';
+    public const PAYMENT_METHOD_CASH = 'efectivo';
+
     public const STATUS_WAITING = 0;
     public const STATUS_FINISHED = 1;
     public const STATUS_CANCELLED = 2;
@@ -28,6 +31,7 @@ class Order extends Model
         'total',
         'tax',
         'payment_method',
+        'payment_folio',
         'cancel_reason',
         'from',
         'status',
