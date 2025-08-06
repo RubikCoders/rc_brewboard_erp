@@ -222,7 +222,8 @@ class InventoryResource extends Resource
                         Ingredient::class => __('inventory.options.ingredient'),
                         MenuProduct::class => __('inventory.options.menu_product'),
                         CustomizationOption::class => __('inventory.options.customization_option'),
-                    ]),
+                    ])
+                    ->native(false),
 
                 Tables\Filters\Filter::make('low_stock')
                     ->label(__('inventory.filters.low_stock'))

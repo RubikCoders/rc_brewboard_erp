@@ -16,7 +16,7 @@ class ViewInventory extends ViewRecord
             // Acción para ajuste rápido desde vista
             Actions\Action::make('quick_adjust')
                 ->label(__('inventory.actions.quick_adjust'))
-                ->icon('heroicon-o-plus-minus')
+                ->icon('heroicon-o-arrows-right-left')
                 ->color('warning')
                 ->form([
                     \Filament\Forms\Components\Grid::make(2)

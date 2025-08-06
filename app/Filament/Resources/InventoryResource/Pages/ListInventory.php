@@ -21,8 +21,7 @@ class ListInventory extends ListRecords
     protected function getHeaderActions(): array
     {
         return [            
-
-            // Acción para reporte de inventario
+            
             Actions\Action::make('inventory_report')
                 ->label(__('inventory.actions.report'))
                 ->icon('heroicon-o-document-chart-bar')
@@ -35,8 +34,7 @@ class ListInventory extends ListRecords
             Actions\CreateAction::make()
                 ->icon('heroicon-o-plus')
                 ->label(__('inventory.actions.create')),
-
-            // Acción para verificar todo el inventario
+            
             Actions\Action::make('check_all_inventory')
                 ->label(__('inventory.actions.check_all'))
                 ->icon('heroicon-o-clipboard-document-check')
@@ -70,24 +68,6 @@ class ListInventory extends ListRecords
             'all' => Tab::make(__('inventory.tabs.all'))
                 ->badge(Inventory::count())
                 ->icon('heroicon-o-cube'),
-
-            'ingredients' => Tab::make(__('inventory.tabs.ingredients'))
-                ->modifyQueryUsing(fn(Builder $query) => $query->byStockableType(Ingredient::class))
-                ->badge(Inventory::byStockableType(Ingredient::class)->count())
-                ->badgeColor('primary')
-                ->icon('heroicon-o-beaker'),
-
-            'products' => Tab::make(__('inventory.tabs.products'))
-                ->modifyQueryUsing(fn(Builder $query) => $query->byStockableType(MenuProduct::class))
-                ->badge(Inventory::byStockableType(MenuProduct::class)->count())
-                ->badgeColor('success')
-                ->icon('heroicon-o-squares-2x2'),
-
-            'customizations' => Tab::make(__('inventory.tabs.customizations'))
-                ->modifyQueryUsing(fn(Builder $query) => $query->byStockableType(CustomizationOption::class))
-                ->badge(Inventory::byStockableType(CustomizationOption::class)->count())
-                ->badgeColor('warning')
-                ->icon('heroicon-o-cog-6-tooth'),
 
             'low_stock' => Tab::make(__('inventory.tabs.low_stock'))
                 ->modifyQueryUsing(fn(Builder $query) => $query->lowStock())

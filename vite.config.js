@@ -7,9 +7,7 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/app.css',
-                'resources/js/app.js',
-                'resources/css/filament/admin/theme.css',
-                'resources/css/landing.css',
+                'resources/js/app.js',                                
                 'resources/js/landing.js'
             ],
             refresh: true,
@@ -26,17 +24,12 @@ export default defineConfig({
                     landing: ['./resources/js/landing.js']
                 }
             }
-        },
-        // Enable CSS code splitting
-        cssCodeSplit: true,
-        // Optimize for modern browsers
-        target: 'es2015',
-        // Minify for production
-        minify: 'terser',
-        terserOptions: {
-            compress: {
-                drop_console: true, // Remove console.logs in production
-            }
+        },        
+        cssCodeSplit: true,        
+        target: 'es2015',        
+        minify: 'esbuild',
+        esbuild: {            
+            drop: ['console'],
         }
     },
     server: {
@@ -44,7 +37,7 @@ export default defineConfig({
             host: 'localhost',
         },
         watch: {
-            usePolling: true, // Better for Docker/VM environments
+            usePolling: true,
         }
     },
     optimizeDeps: {

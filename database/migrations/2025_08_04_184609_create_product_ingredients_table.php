@@ -14,13 +14,10 @@ return new class extends Migration
         Schema::create('product_ingredients', function (Blueprint $table) {
             $table->id()->startingValue(1001);
             $table->foreignId('menu_product_id')->constrained('menu_products')->onDelete('cascade');
-
-            // Polimórfico: puede referenciar Ingredient u otro MenuProduct (para productos compuestos)
             $table->morphs('ingredient');
-
-            $table->decimal('quantity_needed', 8, 2); // Cantidad necesaria
-            $table->string('unit'); // Unidad de medida específica para esta relación
-            $table->text('notes')->nullable(); // Notas adicionales (ej: "agregar al final", "calentar primero")
+            $table->decimal('quantity_needed', 8, 2);
+            $table->string('unit');
+            $table->text('notes')->nullable();
             $table->timestamps();
 
             // Índices para optimización
