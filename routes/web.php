@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\OrderReviewController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\LandingController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Auth;
@@ -11,13 +12,6 @@ Route::get('/', function () {
 });
 
 Route::get('/ticket-order/{order}', [OrderController::class, 'viewOrderTicket'])->name('order.ticket');
-
-Route::get('/private-image/{path}', function ($path) {
-    abort_unless(Auth::check(), 403); // o tu lógica de permisos
-
-    $file = Storage::disk('private_reviews')->get($path);
-    return response($file)->header('Content-Type', 'image/jpeg');
-})->where('path', '.*')->name('private.image');
 
 //Route::get('/test', function () {
 //    $order = \App\Models\Order::latest()->first();

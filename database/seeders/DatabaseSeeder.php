@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
             OrderSeeder::class,
             OrderProductSeeder::class,
             OrderCustomizationSeeder::class,
+            IngredientSeeder::class,
+            ProductIngredientSeeder::class
         ]);
     }
 }

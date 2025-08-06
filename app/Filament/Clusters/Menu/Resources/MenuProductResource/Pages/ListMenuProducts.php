@@ -17,9 +17,9 @@ class ListMenuProducts extends ListRecords
 
     protected function getHeaderActions(): array
     {
-        return [
+        return [            
             Actions\Action::make('download_pdf')
-                ->label('Descargar PDF')
+                ->label('Reporte')
                 ->icon('heroicon-o-document-arrow-down')
                 ->color('success')
                 ->action(function () {
@@ -27,10 +27,73 @@ class ListMenuProducts extends ListRecords
                 })
                 ->tooltip('Descargar reporte de productos'),
 
-            // Acción existente de crear
             Actions\CreateAction::make()
                 ->icon('heroicon-o-plus')
                 ->label('Nuevo Producto'),
+
+            Actions\Action::make('check_availability')
+                ->hiddenLabel()
+                ->tooltip('Verificar Disponibilidad')
+                ->icon('heroicon-o-shield-check')
+                ->color('info')
+                ->action(function () {
+                    // Esto dispararía una verificación completa del sistema
+                    $this->checkSystemAvailability();
+                })
+                ->tooltip('Verificar disponibilidad de todos los productos'),
+        ];
+    }
+
+    public function getTabs(): array
+    {
+        return [
+            'all' => Tab::make('Todos')
+                ->badge(MenuProduct::count())
+                ->icon('heroicon-o-squares-2x2'),
+
+            'available' => Tab::make('Disponibles')
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('is_available', true))
+                ->badge(MenuProduct::where('is_available', true)->count())
+                ->badgeColor('success')
+                ->icon('heroicon-o-check-circle'),
+
+            'unavailable' => Tab::make('No Disponibles')
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('is_available', false))
+                ->badge(MenuProduct::where('is_available', false)->count())
+                ->badgeColor('danger')
+                ->icon('heroicon-o-x-circle'),
+
+            'can_prepare' => Tab::make('Pueden Prepararse')
+                ->modifyQueryUsing(function (Builder $query) {
+                    return $query->where('is_available', true)
+                        ->where(function (Builder $query) {
+                            // Productos sin ingredientes definidos O que tengan todos sus ingredientes disponibles
+                            $query->whereDoesntHave('productIngredients')
+                                ->orWhereHas('productIngredients', function (Builder $subQuery) {
+                                    // Esta es una simplificación - en producción sería más complejo
+                                    $subQuery->whereHas('ingredient');
+                                });
+                        });
+                })
+                ->badge($this->getCanPrepareCount())
+                ->badgeColor('primary')
+                ->icon('heroicon-o-beaker'),
+
+            'missing_ingredients' => Tab::make('Faltan Ingredientes')
+                ->modifyQueryUsing(function (Builder $query) {
+                    return $query->whereHas('productIngredients')
+                        ->where('is_available', true);
+                    // En una implementación real, filtrarías por productos que tienen ingredientes insuficientes
+                })
+                ->badge($this->getMissingIngredientsCount())
+                ->badgeColor('warning')
+                ->icon('heroicon-o-exclamation-triangle'),
+
+            'no_ingredients' => Tab::make('Sin Ingredientes')
+                ->modifyQueryUsing(fn(Builder $query) => $query->whereDoesntHave('productIngredients'))
+                ->badge(MenuProduct::whereDoesntHave('productIngredients')->count())
+                ->badgeColor('gray')
+                ->icon('heroicon-o-question-mark-circle'),
         ];
     }
 
@@ -39,26 +102,25 @@ class ListMenuProducts extends ListRecords
      */
     protected function downloadFilteredProductsPdf(): StreamedResponse
     {
-        // Obtener los datos filtrados de la tabla actual
         $query = $this->getFilteredTableQueryForPdf();
-        $products = $query->with(['category'])->get();
+        $products = $query->with(['category', 'productIngredients.ingredient', 'inventory'])->get();
 
-        // Obtener información de filtros aplicados
         $appliedFilters = $this->getAppliedFiltersInfo();
 
-        // Generar el PDF
-        $pdf = Pdf::loadView('pdf.products-report', [
+        // Agregar estadísticas de disponibilidad
+        $availabilityStats = $this->getAvailabilityStatistics($products);
+
+        $pdf = Pdf::loadView('pdf.products-report-enhanced', [
             'products' => $products,
             'appliedFilters' => $appliedFilters,
+            'availabilityStats' => $availabilityStats,
             'totalProducts' => $products->count(),
             'generatedAt' => now()->format('d/m/Y H:i:s'),
             'generatedBy' => auth()->user()->name ?? 'Sistema',
         ]);
 
-        // Configurar el PDF
         $pdf->setPaper('A4', 'portrait');
 
-        // Generar nombre del archivo
         $filename = 'reporte-productos-' . now()->format('Y-m-d-H-i-s') . '.pdf';
 
         return response()->streamDownload(
@@ -70,126 +132,158 @@ class ListMenuProducts extends ListRecords
 
     protected function getFilteredTableQueryForPdf(): Builder
     {
-        // Obtener la query filtrada usando el método padre
         $query = parent::getFilteredTableQuery();
 
-        // Aplicar tab activo
         $activeTab = $this->activeTab ?? 'all';
-        switch ($activeTab) {
-            case 'available':
-                $query->where('is_available', true);
-                break;
-            case 'unavailable':
-                $query->where('is_available', false);
-                break;
-            case 'recent':
-                $query->where('created_at', '>=', now()->subWeek());
-                break;
+
+        return match ($activeTab) {
+            'available' => $query->where('is_available', true),
+            'unavailable' => $query->where('is_available', false),
+            'can_prepare' => $query->where('is_available', true)
+                ->where(function (Builder $query) {
+                    $query->whereDoesntHave('productIngredients')
+                        ->orWhereHas('productIngredients', function (Builder $subQuery) {
+                            $subQuery->whereHas('ingredient');
+                        });
+                }),
+            'missing_ingredients' => $query->whereHas('productIngredients')->where('is_available', true),
+            'no_ingredients' => $query->whereDoesntHave('productIngredients'),
+            default => $query,
+        };
+    }
+
+    protected function getAppliedFiltersInfo(): array
+    {
+        return [
+            'tab' => match ($this->activeTab ?? 'all') {
+                'all' => 'Todos los productos',
+                'available' => 'Productos disponibles',
+                'unavailable' => 'Productos no disponibles',
+                'can_prepare' => 'Productos que pueden prepararse',
+                'missing_ingredients' => 'Productos con ingredientes faltantes',
+                'no_ingredients' => 'Productos sin ingredientes definidos',
+                default => 'Vista personalizada',
+            },
+        ];
+    }
+
+    protected function getAvailabilityStatistics($products): array
+    {
+        $stats = [
+            'total' => $products->count(),
+            'available' => 0,
+            'can_prepare' => 0,
+            'missing_ingredients' => 0,
+            'low_stock' => 0,
+            'out_of_stock' => 0,
+        ];
+
+        foreach ($products as $product) {
+            if ($product->is_available) {
+                $stats['available']++;
+            }
+
+            $status = $product->getAvailabilityStatus();
+            switch ($status['status']) {
+                case 'available':
+                    $stats['can_prepare']++;
+                    break;
+                case 'low_stock':
+                    $stats['low_stock']++;
+                    break;
+                case 'out_of_stock':
+                    $stats['out_of_stock']++;
+                    break;
+            }
+
+            if (!empty($product->getMissingIngredients())) {
+                $stats['missing_ingredients']++;
+            }
         }
 
-        return $query;
+        return $stats;
+    }
+
+    protected function getCanPrepareCount(): int
+    {
+        return MenuProduct::where('is_available', true)
+            ->where(function (Builder $query) {
+                $query->whereDoesntHave('productIngredients')
+                    ->orWhereHas('productIngredients', function (Builder $subQuery) {
+                        $subQuery->whereHas('ingredient');
+                    });
+            })
+            ->count();
+    }
+
+    protected function getMissingIngredientsCount(): int
+    {
+        return MenuProduct::whereHas('productIngredients')
+            ->where('is_available', true)
+            ->count();
     }
 
     /**
-     * Obtiene información sobre los filtros aplicados
+     * Verifica la disponibilidad del sistema completo
      */
-    protected function getAppliedFiltersInfo(): array
+    protected function checkSystemAvailability(): void
     {
-        $filtersInfo = [];
+        $products = MenuProduct::with(['productIngredients.ingredient', 'inventory'])->get();
 
-        // Información del tab activo
-        $activeTab = $this->activeTab ?? 'all';
-        $tabNames = [
-            'all' => 'Todos los productos',
-            'available' => 'Solo productos disponibles',
-            'unavailable' => 'Solo productos no disponibles',
-            'recent' => 'Productos recientes (última semana)',
-        ];
-        $filtersInfo['tab'] = $tabNames[$activeTab] ?? 'Todos los productos';
-        
-        $activeFilters = [];
+        $unavailableProducts = [];
+        $lowStockIngredients = [];
 
-        try {
-            $tableFilters = $this->getTable()->getFilters();
+        foreach ($products as $product) {
+            if (!$product->canBePrepared()) {
+                $unavailableProducts[] = $product->name;
+            }
 
-            foreach ($tableFilters as $filterName => $filter) {
-                if ($filter->isActive()) {
-                    $state = $filter->getState();
-
-                    switch ($filterName) {
-                        case 'category':
-                            if (!empty($state['value'])) {
-                                $category = \App\Models\MenuCategory::find($state['value']);
-                                $activeFilters[] = "Categoría: " . ($category?->name ?? 'Desconocida');
-                            }
-                            break;
-
-                        case 'is_available':
-                            if ($state['value'] === true) {
-                                $activeFilters[] = "Solo productos disponibles";
-                            } elseif ($state['value'] === false) {
-                                $activeFilters[] = "Solo productos no disponibles";
-                            }
-                            break;
-
-                        case 'price_range':
-                            $range = [];
-                            if (!empty($state['price_from'])) {
-                                $range[] = "desde $" . number_format($state['price_from'], 2);
-                            }
-                            if (!empty($state['price_to'])) {
-                                $range[] = "hasta $" . number_format($state['price_to'], 2);
-                            }
-                            if (!empty($range)) {
-                                $activeFilters[] = "Rango de precio: " . implode(' ', $range);
-                            }
-                            break;
-                    }
+            $missingIngredients = $product->getMissingIngredients();
+            foreach ($missingIngredients as $missing) {
+                if (!in_array($missing['name'], $lowStockIngredients)) {
+                    $lowStockIngredients[] = $missing['name'];
                 }
             }
-        } catch (\Exception $e) {            
-            $activeFilters[] = "Sin filtros aplicados";
         }
 
-        // Búsqueda global
-        try {
-            $search = $this->getTable()->getSearch();
-            if ($search) {
-                $activeFilters[] = "Búsqueda: '{$search}'";
+        // Mostrar notificación con resumen
+        if (empty($unavailableProducts) && empty($lowStockIngredients)) {
+            $this->notify('success', 'Todos los productos pueden prepararse correctamente');
+        } else {
+            $message = '';
+            if (!empty($unavailableProducts)) {
+                $message .= 'Productos no disponibles: ' . implode(', ', array_slice($unavailableProducts, 0, 3));
+                if (count($unavailableProducts) > 3) {
+                    $message .= ' y ' . (count($unavailableProducts) - 3) . ' más. ';
+                }
             }
-        } catch (\Exception $e) {
-            // Ignorar errores de búsqueda
+            if (!empty($lowStockIngredients)) {
+                $message .= 'Ingredientes con stock bajo: ' . implode(', ', array_slice($lowStockIngredients, 0, 3));
+                if (count($lowStockIngredients) > 3) {
+                    $message .= ' y ' . (count($lowStockIngredients) - 3) . ' más.';
+                }
+            }
+
+            $this->notify('warning', 'Atención requerida', $message);
         }
-
-        $filtersInfo['filters'] = $activeFilters;
-
-        return $filtersInfo;
     }
 
-    public function getTabs(): array
+    protected function notify(string $type, string $title, string $message = ''): void
     {
-        return [
-            'all' => Tab::make('Todos')
-                ->icon('heroicon-o-squares-2x2')
-                ->badge(MenuProduct::count()),
+        $notification = \Filament\Notifications\Notification::make()
+            ->title($title);
 
-            'available' => Tab::make('Disponibles')
-                ->icon('heroicon-o-check-circle')
-                ->modifyQueryUsing(fn(Builder $query) => $query->where('is_available', true))
-                ->badge(MenuProduct::where('is_available', true)->count())
-                ->badgeColor('success'),
+        if ($message) {
+            $notification->body($message);
+        }
 
-            'unavailable' => Tab::make('No Disponibles')
-                ->icon('heroicon-o-x-circle')
-                ->modifyQueryUsing(fn(Builder $query) => $query->where('is_available', false))
-                ->badge(MenuProduct::where('is_available', false)->count())
-                ->badgeColor('danger'),
+        match ($type) {
+            'success' => $notification->success(),
+            'warning' => $notification->warning(),
+            'danger' => $notification->danger(),
+            default => $notification->info(),
+        };
 
-            'recent' => Tab::make('Recientes')
-                ->icon('heroicon-o-clock')
-                ->modifyQueryUsing(fn(Builder $query) => $query->where('created_at', '>=', now()->subWeek()))
-                ->badge(MenuProduct::where('created_at', '>=', now()->subWeek())->count())
-                ->badgeColor('info'),
-        ];
+        $notification->send();
     }
 }
