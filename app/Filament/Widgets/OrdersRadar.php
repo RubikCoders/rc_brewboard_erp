@@ -3,10 +3,13 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Order;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Filament\Widgets\ChartWidget;
 
 class OrdersRadar extends ChartWidget
 {
+    use HasWidgetShield;
+
     protected static ?string $heading = 'Distribución de ordenes';
     protected static ?int $sort = 3;
     protected function getData(): array

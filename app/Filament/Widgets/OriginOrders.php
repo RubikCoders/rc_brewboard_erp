@@ -6,11 +6,14 @@ use App\Filament\Clusters\Order\Resources\OrderResource;
 use App\Models\Order;
 use App\Filament\Clusters\Order\Resources\OrderResource\Pages\ListOrders;
 use App\Models\Order as ModelsOrder;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class OriginOrders extends BaseWidget
 {
+    use HasWidgetShield;
+
     protected static ?int $sort = 2;
 
     protected function getStats(): array

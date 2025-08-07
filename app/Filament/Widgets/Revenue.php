@@ -7,11 +7,13 @@ use App\Models\Order as ModelsOrder;
 use App\Filament\Clusters\Order\Pages\BaristaView;
 use App\Filament\Clusters\Order\Resources\OrderResource\Pages\ListOrders;
 use App\Helpers\Money;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class Revenue extends BaseWidget
 {
+    use HasWidgetShield;
     protected static ?int $sort = 1;
 
     protected function getStats(): array

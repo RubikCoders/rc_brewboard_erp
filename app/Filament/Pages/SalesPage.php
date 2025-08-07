@@ -6,6 +6,7 @@ use App\Helpers\Formatter;
 use App\Helpers\Money;
 use App\Models\Order;
 use Barryvdh\DomPDF\Facade\Pdf;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Carbon\Carbon;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Checkbox;
@@ -25,7 +26,7 @@ use Illuminate\Support\HtmlString;
 
 class SalesPage extends Page implements HasTable
 {
-    use InteractsWithTable;
+    use InteractsWithTable, HasPageShield;
     protected static ?int $navigationSort = 100;
 
     protected static ?string $navigationIcon = 'heroicon-o-document-currency-dollar';

@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Models\Order;
 use App\Models\OrderReview;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Contracts\Support\Htmlable;
@@ -11,6 +12,8 @@ use Illuminate\Support\HtmlString;
 
 class ReviewsChart extends ChartWidget
 {
+    use HasWidgetShield;
+
     protected static ?int $sort = 3;
 
     public function getHeading(): string|Htmlable|null
