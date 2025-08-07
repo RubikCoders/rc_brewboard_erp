@@ -72,7 +72,8 @@ return [
         "order_delivered" => "Marcar como entregada",
         "order_canceled" => "Cancelar orden",
         "restore_order" => "Anular cancelación",
-        "ticket" => "Recibo"
+        "ticket" => "Recibo",
+        "report" => "Reporte",
     ],
 
     "filters" => [
@@ -85,6 +86,10 @@ return [
         "pending" => "Pendientes",
         "ready" => "Listas",
         "cancelled" => "Cancelados",
+    ],
+
+    "tooltips" => [
+        "report" => "Descargar reporte completo de ventas"
     ],
 
     "notification" => [

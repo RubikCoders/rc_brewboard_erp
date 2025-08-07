@@ -33,27 +33,57 @@ Route::get('/private-image/{path}', function ($path) {
     return response($file)->header('Content-Type', 'image/jpeg');
 })->where('path', '.*')->name('private.image');
 
-//Route::get('/test', function () {
-//    $order = \App\Models\Order::latest()->first();
-//    $orderProducts = $order->orderProducts;
-//
-//    foreach ($orderProducts as $orderProduct) {
-//        $total = 0;
-//
-//        $total += $orderProduct->total_price * $orderProduct->quantity;
-//
-//        foreach ($orderProduct->customizations as $customization) {
-//            $total += $customization->customization->extra_price;
-//        }
-//
-//        $orderProduct->total_price = Money::format($total);
-//    }
-//
-//    $pdf = Pdf::loadView('pdf.order-ticket', [
-//        'order' => $order,
-//        'orderProducts' => $orderProducts
-//    ])
-//        ->setPaper([0, 0, 240, 600]); // tamaño tipo ticket
-//
-//    return $pdf->stream('ticket.pdf');
-//});
+Route::get('/test', function () {
+    // Necessary when you want to show all records
+    ini_set('memory_limit', '512M');
+    set_time_limit(60);
+    $allSales = false;
+
+    $startDate = \Carbon\Carbon::parse('2025-07-01')->startOfDay();
+    $endDate = \Carbon\Carbon::parse('2025-08-01')->endOfDay();
+
+    // Consulta de órdenes finalizadas entre las fechas
+    if ($allSales) {
+        $orders = \App\Models\Order::all();
+    } else {
+        $orders = \App\Models\Order::whereBetween('created_at', [$startDate, $endDate])
+            ->where('status', \App\Models\Order::STATUS_FINISHED)
+            ->get();
+    }
+
+    // Información de generación
+    $generatedAt = \App\Helpers\Formatter::dateTime(\Carbon\Carbon::now());
+    $generatedBy = Auth::user()?->name ?? 'Sistema';
+
+    // Rango de fechas mostrado
+    $dateRange = $allSales
+        ? 'Todas las ventas'
+        : \App\Helpers\Formatter::date($startDate) . ' hasta ' . \App\Helpers\Formatter::date($endDate);
+
+    // Datos para el reporte
+    $total = \App\Helpers\Money::format($orders->sum('total'));
+    $averageTicket = \App\Helpers\Money::format($orders->avg('total'));
+
+    // set correct from value
+    foreach ($orders as $order) {
+        $order->from = match ($order->from) {
+            "erp" => __("order.erp"),
+            "csp" => __("order.csp"),
+        };
+
+        $order->total = \App\Helpers\Money::format($order->total);
+        $order->tax = \App\Helpers\Money::format($order->tax);
+    }
+
+    // Generar el PDF
+    $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.sales-report', [
+        'generatedAt' => $generatedAt,
+        'dateRange' => $dateRange,
+        'generatedBy' => $generatedBy,
+        'orders' => $orders,
+        'total' => $total,
+        'averageTicket' => $averageTicket,
+    ]);
+
+    return $pdf->stream('sales-report.pdf');
+});
