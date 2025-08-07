@@ -3,11 +3,14 @@
 namespace App\Filament\Widgets;
 
 use App\Models\OrderProduct;
+use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Carbon\Carbon;
 use Filament\Widgets\ChartWidget;
 
 class PopularItems extends ChartWidget
 {
+    use HasWidgetShield;
+
     protected static ?string $heading = 'Productos más populares';
     protected static ?int $sort = 4;
     public ?string $filter = 'hot_drinks'; // Valor por defecto
