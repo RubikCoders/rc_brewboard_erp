@@ -27,6 +27,11 @@ class OrderProduct extends Model
         'kitchen_status',
     ];
 
+    //region Methods
+
+    
+    //endregion
+
     //region Relationships
     public function order()
     {

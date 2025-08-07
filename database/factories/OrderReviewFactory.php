@@ -58,7 +58,7 @@ class OrderReviewFactory extends Factory
             }),
             'comment' => $this->faker->randomElement($comments),
             'image_path' => $this->faker->randomElement($images),
-            'created_at' => $this->faker->dateTimeBetween('-30 days', 'now'),
+            'created_at' => $this->faker->dateTimeBetween('-12 months', 'now'),
         ];
     }
 }

@@ -13,6 +13,6 @@ class OrderCustomizationSeeder extends Seeder
      */
     public function run(): void
     {
-        OrderCustomization::factory()->count(5000)->create();
+        OrderCustomization::factory()->count(10000)->create();
     }
 }
