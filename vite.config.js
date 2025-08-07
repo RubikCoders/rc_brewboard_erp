@@ -29,14 +29,10 @@ export default defineConfig({
         },
         // Enable CSS code splitting
         cssCodeSplit: true,
-        // Optimize for modern browsers
         target: 'es2015',
-        // Minify for production
-        minify: 'terser',
-        terserOptions: {
-            compress: {
-                drop_console: true, // Remove console.logs in production
-            }
+        minify: 'esbuild',
+        esbuild: {            
+            drop: ['console'],
         }
     },
     server: {
