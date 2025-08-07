@@ -26,6 +26,7 @@ use Illuminate\Support\HtmlString;
 class SalesPage extends Page implements HasTable
 {
     use InteractsWithTable;
+    protected static ?int $navigationSort = 100;
 
     protected static ?string $navigationIcon = 'heroicon-o-document-currency-dollar';
 
