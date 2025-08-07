@@ -35,7 +35,6 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             //            ->registration()
             ->profile()
-            ->databaseNotifications()
             ->colors([
                 'primary' => Color::hex('#698a5f'),
                 'background' => Color::hex('#FFFDF6'),

@@ -84,7 +84,7 @@ return [
     "tabs" => [
         "all" => "Todos",
         "pending" => "Pendientes",
-        "ready" => "Listas",
+        "ready" => "Entregadas",
         "cancelled" => "Cancelados",
     ],
 

@@ -147,6 +147,7 @@ class MenuProductResource extends Resource
                     ->schema([
                         Forms\Components\Repeater::make('productIngredients')
                             ->relationship()
+                            ->label("Ingredientes")
                             ->schema([
                                 Forms\Components\Grid::make(4)
                                     ->schema([
@@ -213,6 +214,7 @@ class MenuProductResource extends Resource
                     ->schema([
                         Forms\Components\Repeater::make('customizations')
                             ->relationship()
+                            ->label("Personalizaciones")
                             ->schema([
                                 Forms\Components\Grid::make(2)
                                     ->schema([
@@ -354,11 +356,11 @@ class MenuProductResource extends Resource
                     ->label('Faltan ingredientes')
                     ->query(fn(Builder $query) => $query->whereHas('productIngredients')),
             ])
-            ->actions([                
+            ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\ActionGroup::make([
-                    Tables\Actions\Action::make('toggle_availability')                        
+                    Tables\Actions\Action::make('toggle_availability')
                         ->label('Deshabilitar producto')
                         ->icon(fn(MenuProduct $record) => $record->is_available ? 'heroicon-o-eye-slash' : 'heroicon-o-eye')
                         ->color(fn(MenuProduct $record) => $record->is_available ? 'info' : 'success')

@@ -270,11 +270,6 @@ class MenuCategoryResource extends Resource
         return static::getModel()::count();
     }
 
-    public static function getGloballySearchableAttributes(): array
-    {
-        return ['name', 'description'];
-    }
-
     public static function getGlobalSearchResultTitle(Model $record): string
     {
         return $record->name;
