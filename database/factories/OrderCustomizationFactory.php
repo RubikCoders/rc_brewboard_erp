@@ -18,7 +18,7 @@ class OrderCustomizationFactory extends Factory
      */
     public function definition(): array
     {
-        $orderProduct = OrderProduct::find($this->faker->numberBetween(1001, 2000));
+        $orderProduct = OrderProduct::find($this->faker->numberBetween(1001, 4000));
         $customizations = $orderProduct->product->customizations;
         $customizationOptions = $customizations->random();
         $customizationOption = $customizationOptions->options->random();
