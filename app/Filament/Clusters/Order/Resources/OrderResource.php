@@ -21,6 +21,7 @@ use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -148,10 +149,20 @@ class OrderResource extends Resource
     private static function tableFilters(): array
     {
         return [
-            Filter::make(__("order.filters.payment_card"))
-                ->query(fn(Builder $query): Builder => $query->where('payment_method', Order::PAYMENT_METHOD_CARD)),
-            Filter::make(__("order.filters.payment_cash"))
-                ->query(fn(Builder $query): Builder => $query->where('payment_method', Order::PAYMENT_METHOD_CASH))
+            SelectFilter::make('payment_method')
+                ->label(__('Método de pago'))
+                ->multiple()
+                ->options([
+                    Order::PAYMENT_METHOD_CARD => __('order.filters.payment_card'),
+                    Order::PAYMENT_METHOD_CASH => __('order.filters.payment_cash'),
+                ])
+                ->query(function (Builder $query, array $data): Builder {
+                    if (!empty($data['value'])) {
+                        $query->whereIn('payment_method', $data['value']);
+                    }
+
+                    return $query;
+                })
         ];
     }
 
