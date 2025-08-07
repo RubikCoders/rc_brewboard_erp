@@ -9,7 +9,6 @@ export default defineConfig({
                 'resources/css/app.css',
                 'resources/js/app.js',
                 'resources/css/filament/admin/theme.css',
-                'resources/css/landing.css',
                 'resources/js/landing.js'
             ],
             refresh: true,
@@ -29,14 +28,10 @@ export default defineConfig({
         },
         // Enable CSS code splitting
         cssCodeSplit: true,
-        // Optimize for modern browsers
         target: 'es2015',
-        // Minify for production
-        minify: 'terser',
-        terserOptions: {
-            compress: {
-                drop_console: true, // Remove console.logs in production
-            }
+        minify: 'esbuild',
+        esbuild: {            
+            drop: ['console'],
         }
     },
     server: {
