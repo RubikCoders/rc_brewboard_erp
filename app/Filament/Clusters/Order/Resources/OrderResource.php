@@ -32,7 +32,9 @@ use App\Filament\Clusters\Order\Resources\OrderResource\Widgets\OrderListWidget;
 class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
+
     protected static ?int $navigationSort = 1;
+
     protected static ?string $navigationIcon = 'heroicon-o-square-2-stack';
     protected static ?string $cluster = OrderCluster::class;
 
