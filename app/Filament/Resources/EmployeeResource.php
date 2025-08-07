@@ -218,22 +218,6 @@ class EmployeeResource extends Resource
                         }
                         return null;
                     }),
-
-                // Tables\Columns\TextColumn::make('age')
-                //     ->label('Edad')
-                //     ->getStateUsing(function (Employee $record): ?string {
-                //         if ($record->birthdate) {
-                //             return $record->birthdate->age . ' años';
-                //         }
-                //         return 'N/A';
-                //     })
-                //     ->toggleable(isToggledHiddenByDefault: true)
-                //     ->tooltip(function (Employee $record): ?string {
-                //         if ($record->birthdate) {
-                //             return "Nacimiento: {$record->birthdate->format('d/m/Y')}";
-                //         }
-                //         return 'Fecha de nacimiento no registrada';
-                //     })
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('role_id')
