@@ -20,6 +20,7 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use App\Filament\Widgets\Revenue;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
@@ -41,6 +42,13 @@ class SalesPage extends Page implements HasTable
     public function getTitle(): string
     {
         return __("sales.title");
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            Revenue::make(),
+        ];
     }
 
     protected function getHeaderActions(): array

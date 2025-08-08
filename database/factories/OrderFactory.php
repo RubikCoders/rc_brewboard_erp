@@ -16,7 +16,7 @@ class OrderFactory extends Factory
      */
     public function definition(): array
     {
-        $status = $this->faker->randomElement([0, 1, 2]);
+        $status = $this->faker->randomElement([1, 1, 1, 1, 1, 1, 0, 0, 0, 2]);
         $paymentMethod = $this->faker->randomElement(['efectivo', 'tarjeta']);
         $paymentFolio = $paymentMethod == "tarjeta" ? $this->faker->numerify('######') : null;
 

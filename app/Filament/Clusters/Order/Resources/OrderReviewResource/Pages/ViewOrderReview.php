@@ -86,14 +86,14 @@ class ViewOrderReview extends ViewRecord
                             ->content(function () {
                                 if (is_null($this->record->order))
                                     return "";
-                                return "#" . $this->record->order->customer_name;
+                                return $this->record->order->customer_name;
                             }),
                         Placeholder::make("order.created_at")
                             ->label(__("orderreview.fields.order_created_at"))
                             ->content(function () {
                                 if (is_null($this->record->order))
                                     return "";
-                                return "#" . $this->record->order->created_at;
+                                return $this->record->order->created_at;
                             }),
                     ]),
 
