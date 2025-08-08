@@ -23,9 +23,11 @@ jobs:
         run: |
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Sync project via rsync excluding .env
+      - name: Sync project via rsync excluding .env and public/build
         run: |
-          rsync -avz --delete --exclude='.env' \
+          rsync -avz --delete \
+            --exclude='.env' \
+            --exclude='public/build' \
             -e "ssh -i ~/.ssh/id_rsa -o IdentitiesOnly=yes" \
             ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home1/labor212/repositories/rc_brewboard_erp
 
