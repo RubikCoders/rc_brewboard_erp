@@ -1,0 +1,33 @@
+.fi-simple-layout {
+    background-image: url('/images/bg.webp');
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.fi-simple-layout main {
+    box-shadow: 9px 9px 39px -20px rgba(0, 0, 0, 0.5) !important;
+    -webkit-box-shadow: 9px 9px 39px -20px rgba(0, 0, 0, 0.5) !important;
+    -moz-box-shadow: 9px 9px 39px -20px rgba(0, 0, 0, 0.5) !important;
+}
+
+.fi-wi-stats-overview-stat {
+    border-radius: 0 !important;
+    border: none !important;
+
+    --tw-shadow: 0 !important;
+}
+
+.fi-tabs {
+    border-radius: 0 !important;
+    border: none !important;
+
+    --tw-shadow: 0 !important;
+}
+
+section.fi-section,
+.fi-ta-ctn {
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    box-shadow: 4px 5px 13px -7px rgba(0, 0, 0, 0.14) !important;
+    -webkit-box-shadow: 4px 5px 13px -7px rgba(0, 0, 0, 0.14) !important;
+    -moz-box-shadow: 4px 5px 13px -7px rgba(0, 0, 0, 0.14) !important;
+}

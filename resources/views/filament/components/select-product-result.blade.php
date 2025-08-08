@@ -2,7 +2,7 @@
     <div class="flex">
         <div class="px-2 py-3">
             <div class="h-10 w-10">
-                <img src="{{$image_url }}" alt="{{ $name }}" role="img"
+                <img src="{{asset($image_url) }}" alt="{{ $name }}" role="img"
                      class="h-full w-full rounded-full overflow-hidden shadow object-cover"/>
             </div>
         </div>

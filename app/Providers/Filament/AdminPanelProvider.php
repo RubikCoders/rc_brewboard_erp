@@ -10,6 +10,8 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Support\Assets\Css;
+use Filament\Support\Assets\Js;
 use Filament\Support\Colors\Color;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -46,9 +48,7 @@ class AdminPanelProvider extends PanelProvider
                 'info' => Color::hex('#84BFC3'),
             ])
             ->spa()
-            //            ->brandLogo(asset('brand/2.png'))
             ->darkMode(false)
-            ->brandLogoHeight('5rem')
             ->sidebarCollapsibleOnDesktop()
             ->discoverClusters(in: app_path('Filament/Clusters'), for: 'App\\Filament\\Clusters')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
@@ -92,6 +92,10 @@ class AdminPanelProvider extends PanelProvider
                     ->icon('heroicon-o-shield-check')
                     ->collapsed()
                     ->collapsible(),
+            ])
+            ->assets([
+                Css::make('general-style', resource_path('css/general.css')),
             ]);
+        ;
     }
 }
