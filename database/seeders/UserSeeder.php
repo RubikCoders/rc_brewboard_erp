@@ -35,7 +35,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'id' => 610,
-            'name' => 'Jorgue Contreras',
+            'name' => 'Jorge Contreras',
             'email' => 'jcontreras@brewboard.com',
             'password' => bcrypt('password')
         ]);
@@ -47,5 +47,26 @@ class UserSeeder extends Seeder
             'password' => bcrypt('password')
         ]);
 
+        User::create([
+            'id' => 338,
+            'name' => 'María Hernández',
+            'email' => 'mhernandez@brewboard.com',
+            'password' => bcrypt('password')
+        ]);
+
+        User::create([
+            'id' => 339,
+            'name' => 'Javier Ramírez',
+            'email' => 'jramirez@brewboard.com',
+            'password' => bcrypt('password')
+        ]);
+
+        User::create([
+            'id' => 340,
+            'name' => 'Fernanda Gómez',
+            'email' => 'fgomez@brewboard.com',
+            'password' => bcrypt('password')
+        ]);
+            
     }
 }

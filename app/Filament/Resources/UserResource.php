@@ -341,7 +341,7 @@ class UserResource extends Resource
             ])
             ->defaultSort('created_at', 'desc')
             ->paginated([5, 10, 25, 50])
-            ->defaultPaginationPageOption(5)
+            ->defaultPaginationPageOption(10)
             ->striped()
             ->persistSortInSession()
             ->persistSearchInSession()

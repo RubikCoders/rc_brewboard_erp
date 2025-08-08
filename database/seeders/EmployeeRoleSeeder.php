@@ -18,8 +18,23 @@ class EmployeeRoleSeeder extends Seeder
         ]);
 
         EmployeeRole::create([
-            'name' => 'Bartender',
-            'description' => 'Personal que atiende a los clientes y prepara los pedidos'
+            'name' => 'Barista matutino',
+            'description' => 'Personal que atiende a los clientes y prepara los pedidos, encargado de la apertura de la sucursal'
+        ]);
+
+        EmployeeRole::create([
+            'name' => 'Barista vespertino',
+            'description' => 'Personal que atiende a los clientes y prepara los pedidos, encargado del cierre de la sucursal'
+        ]);
+
+        EmployeeRole::create([
+            'name' => 'Limpieza',
+            'description' => 'Personal encargado de limpiar la sucursal'
+        ]);
+
+        EmployeeRole::create([
+            'name' => 'Mantenimiento',
+            'description' => 'Personal que realiza el mantenimiento de la sucursal'
         ]);
 
     }
