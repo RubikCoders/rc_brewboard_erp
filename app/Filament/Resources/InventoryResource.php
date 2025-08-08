@@ -69,7 +69,7 @@ class InventoryResource extends Resource
                                     ])
                                     ->searchable()
                                     ->preload()
-                                    ->required()
+                                    ->rules(['required'])
                                     ->live()
                                     ->afterStateUpdated(fn(callable $set) => [
                                         $set('name', null),
@@ -92,27 +92,25 @@ class InventoryResource extends Resource
                                 Forms\Components\TextInput::make('name')
                                     ->label(__('inventory.fields.ingredient_name'))
                                     ->placeholder('ej: Café soluble, Leche entera, Agua')
-                                    ->required()
-                                    ->maxLength(255)
+                                    ->rules(['required', 'string', 'max:255'])
                                     ->live(onBlur: true)
                                     ->columnSpan(1),
 
                                 Forms\Components\TextInput::make('unit')
                                     ->label(__('inventory.fields.ingredient_unit'))
-                                    ->required()
-                                    ->maxLength(50)
+                                    ->rules(['required', 'string', 'max:50'])
                                     ->placeholder(__('inventory.placeholders.ingredient_unit_placeholder'))
                                     ->columnSpan(1),
 
                                 Forms\Components\TextInput::make('category')
                                     ->label(__('inventory.fields.ingredient_category'))
-                                    ->maxLength(100)
+                                    ->rules(['nullable', 'string', 'max:100'])
                                     ->placeholder(__('inventory.placeholders.ingredient_category_placeholder'))
                                     ->columnSpan(1),
 
                                 Forms\Components\Textarea::make('description')
                                     ->label(__('inventory.fields.ingredient_description'))
-                                    ->maxLength(500)
+                                    ->rules(['nullable', 'string', 'max:500'])
                                     ->columnSpan(1),
                             ])
                     ])
@@ -127,21 +125,19 @@ class InventoryResource extends Resource
                                 Forms\Components\Select::make('customization_id')
                                     ->label(__('inventory.fields.customization_parent'))
                                     ->options(ProductCustomization::pluck('name', 'id'))
-                                    ->required()
+                                    ->rules(['required', 'integer', 'exists:product_customizations,id'])
                                     ->searchable()
                                     ->columnSpan(1),
 
                                 Forms\Components\TextInput::make('name')
                                     ->label(__('inventory.fields.customization_option_name'))
-                                    ->required()
-                                    ->maxLength(255)
+                                    ->rules(['required', 'string', 'max:255'])
                                     ->placeholder(__('inventory.placeholders.customization_option_placeholder'))
                                     ->columnSpan(1),
 
                                 Forms\Components\TextInput::make('extra_price')
                                     ->label(__('inventory.fields.extra_price'))
-                                    ->numeric()
-                                    ->minValue(0)
+                                    ->rules(['nullable', 'numeric', 'min:0'])
                                     ->step(0.01)
                                     ->prefix('$')
                             ])
@@ -155,34 +151,27 @@ class InventoryResource extends Resource
                             ->schema([
                                 Forms\Components\TextInput::make('stock')
                                     ->label(__('inventory.fields.stock'))
-                                    ->required()
-                                    ->numeric()
-                                    ->minValue(0)
-                                    ->step(1)
+                                    ->rules(['required', 'integer', 'min:0'])
                                     ->suffix(__('inventory.fields.units'))
                                     ->columnSpan(1),
 
                                 Forms\Components\TextInput::make('min_stock')
                                     ->label(__('inventory.fields.min_stock'))
-                                    ->required()
-                                    ->numeric()
-                                    ->minValue(0)
-                                    ->step(1)
+                                    ->rules(['required', 'integer', 'min:0'])
                                     ->suffix(__('inventory.fields.units'))
                                     ->columnSpan(1),
 
                                 Forms\Components\TextInput::make('max_stock')
                                     ->label(__('inventory.fields.max_stock'))
-                                    ->required()
-                                    ->numeric()
-                                    ->minValue(0)
-                                    ->step(1)
+                                    ->rules(['required', 'integer', 'min:0'])
                                     ->suffix(__('inventory.fields.units'))
                                     ->columnSpan(1),
                             ])
                     ])
                     ->columnSpan(2),
-            ]);
+            ])
+            ->columns(2)
+            ->extraAttributes(['novalidate' => true]);;
     }
 
     public static function table(Table $table): Table
@@ -191,6 +180,7 @@ class InventoryResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->label(__('inventory.fields.id'))
+                    ->prefix('#INV-')
                     ->sortable()
                     ->searchable(),
 

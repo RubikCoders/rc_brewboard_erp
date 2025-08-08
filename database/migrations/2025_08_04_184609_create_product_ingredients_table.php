@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('menu_product_id')->constrained('menu_products')->onDelete('cascade');
             $table->morphs('ingredient');
             $table->decimal('quantity_needed', 8, 2);
-            $table->string('unit');
+            $table->string('unit')->default('unidad');
             $table->text('notes')->nullable();
             $table->timestamps();
 

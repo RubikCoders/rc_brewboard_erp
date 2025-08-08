@@ -59,24 +59,22 @@ class MenuProductResource extends Resource
                                 Forms\Components\TextInput::make('name')
                                     ->label(__('product.fields.name'))
                                     ->placeholder(__('product.fields.name_placeholder'))
-                                    ->required()
-                                    ->maxLength(255)
+                                    ->rules(['required', 'string', 'max:255'])
                                     ->columnSpan(1),
 
                                 Forms\Components\Select::make('category_id')
                                     ->label(__('product.fields.category_id'))
                                     ->relationship('category', 'name')
-                                    ->required()
+                                    ->rules(['required', 'integer', 'exists:menu_categories,id'])
                                     ->searchable()
                                     ->preload()
                                     ->createOptionForm([
                                         Forms\Components\TextInput::make('name')
                                             ->label(__('category.fields.name'))
-                                            ->required()
-                                            ->maxLength(255),
+                                            ->rules(['required', 'string', 'max:255']),
                                         Forms\Components\Textarea::make('description')
                                             ->label(__('category.fields.description'))
-                                            ->maxLength(500),
+                                            ->rules(['nullable', 'string', 'max:500']),
                                     ])
                                     ->columnSpan(1),
                             ])
@@ -89,7 +87,7 @@ class MenuProductResource extends Resource
                         Forms\Components\Textarea::make('description')
                             ->label(__('product.fields.description'))
                             ->placeholder(__('product.fields.description_placeholder'))
-                            ->maxLength(500)
+                            ->rules(['nullable', 'string', 'max:500'])
                             ->rows(3)
                             ->columnSpanFull(),
 
@@ -98,7 +96,7 @@ class MenuProductResource extends Resource
                             ->placeholder(__('product.fields.ingredients_placeholder'))
                             ->hint('Este campo es para mostrar ingredientes al cliente. El control de inventario se maneja por separado.')
                             ->hintColor('primary')
-                            ->maxLength(500)
+                            ->rules(['nullable', 'string', 'max:500'])
                             ->rows(2)
                             ->columnSpanFull(),
 
@@ -118,19 +116,15 @@ class MenuProductResource extends Resource
                             ->schema([
                                 Forms\Components\TextInput::make('base_price')
                                     ->label(__('product.fields.base_price'))
-                                    ->required()
-                                    ->numeric()
+                                    ->rules(['required', 'numeric', 'min:0'])
                                     ->prefix('$')
                                     ->step(0.01)
-                                    ->minValue(0)
                                     ->columnSpan(1),
 
                                 Forms\Components\TextInput::make('estimated_time_min')
                                     ->label(__('product.fields.estimated_time_min'))
-                                    ->required()
-                                    ->numeric()
+                                    ->rules(['required', 'integer', 'min:1'])
                                     ->suffix('min')
-                                    ->minValue(1)
                                     ->columnSpan(1),
 
                                 Forms\Components\Toggle::make('is_available')
@@ -156,7 +150,7 @@ class MenuProductResource extends Resource
                                                 Ingredient::class => 'Materia Prima',
                                                 MenuProduct::class => 'Producto Compuesto',
                                             ])
-                                            ->required()
+                                            ->rules(['required', 'string'])
                                             ->reactive()
                                             ->columnSpan(1),
 
@@ -172,29 +166,21 @@ class MenuProductResource extends Resource
                                                 return [];
                                             })
                                             ->searchable()
-                                            ->required()
+                                            ->rules(['required', 'integer'])
                                             ->reactive()
                                             ->columnSpan(1),
 
                                         Forms\Components\TextInput::make('quantity_needed')
                                             ->label('Cantidad')
-                                            ->required()
-                                            ->numeric()
+                                            ->rules(['required', 'numeric', 'min:0.01'])
                                             ->step(0.01)
-                                            ->minValue(0.01)
-                                            ->columnSpan(1),
-
-                                        Forms\Components\TextInput::make('unit')
-                                            ->label('Unidad')
-                                            ->placeholder('ml, g, shots, etc.')
-                                            ->required()
                                             ->columnSpan(1),
                                     ]),
 
                                 Forms\Components\Textarea::make('notes')
                                     ->label('Notas')
                                     ->placeholder('Instrucciones especiales...')
-                                    ->maxLength(255)
+                                    ->rules(['nullable', 'string', 'max:255'])
                                     ->columnSpanFull(),
                             ])
                             ->addActionLabel('Agregar Ingrediente')
@@ -207,7 +193,7 @@ class MenuProductResource extends Resource
                     ->collapsible()
                     ->collapsed(),
 
-                // Sección de personalizaciones (existente, mantener como está)
+                // Sección de personalizaciones
                 Forms\Components\Section::make(__('product.sections.customizations.title'))
                     ->description(__('product.sections.customizations.description'))
                     ->schema([
@@ -219,7 +205,7 @@ class MenuProductResource extends Resource
                                         Forms\Components\TextInput::make('name')
                                             ->label(__('product.fields.customization_name'))
                                             ->placeholder(__('product.fields.customization_name_placeholder'))
-                                            ->required()
+                                            ->rules(['required', 'string', 'max:255'])
                                             ->columnSpan(1),
 
                                         Forms\Components\Toggle::make('required')
@@ -236,37 +222,33 @@ class MenuProductResource extends Resource
                                                 Forms\Components\TextInput::make('name')
                                                     ->label(__('product.fields.option_name'))
                                                     ->placeholder(__('product.fields.option_name_placeholder'))
-                                                    ->required()
+                                                    ->rules(['required', 'string', 'max:255'])
                                                     ->columnSpan(1),
 
                                                 Forms\Components\TextInput::make('extra_price')
                                                     ->label(__('product.fields.option_extra_price'))
-                                                    ->numeric()
+                                                    ->rules(['nullable', 'numeric', 'min:0'])
                                                     ->prefix('$')
                                                     ->step(0.01)
-                                                    ->minValue(0)
-                                                    ->default(0)
                                                     ->columnSpan(1),
                                             ])
                                     ])
                                     ->addActionLabel('Agregar Opción')
                                     ->collapsible()
-                                    ->cloneable()
                                     ->columnSpanFull()
-                                    ->defaultItems(1)
-                                    ->minItems(1)
-                                    ->maxItems(20)
+                                    ->defaultItems(1),
                             ])
-                            ->addActionLabel(__('product.customizations.add_type'))
+                            ->addActionLabel('Agregar Tipo de Personalización')
                             ->collapsible()
-                            ->cloneable()
                             ->columnSpanFull()
                             ->defaultItems(0),
                     ])
                     ->columnSpan(2)
                     ->collapsible()
                     ->collapsed(),
-            ]);
+            ])
+            ->columns(2)
+            ->extraAttributes(['novalidate' => true]);
     }
 
     public static function table(Table $table): Table

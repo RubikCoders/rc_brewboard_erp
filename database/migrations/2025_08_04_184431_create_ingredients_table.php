@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('ingredients', function (Blueprint $table) {
             $table->id()->startingValue(1001);
             $table->string('name');
-            $table->string('unit');
+            $table->string('unit')->default('unidad');
             $table->string('category')->nullable();
             $table->text('description')->nullable();
             $table->boolean('is_active')->default(true);
