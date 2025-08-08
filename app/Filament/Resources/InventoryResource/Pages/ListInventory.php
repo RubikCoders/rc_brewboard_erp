@@ -20,8 +20,8 @@ class ListInventory extends ListRecords
 
     protected function getHeaderActions(): array
     {
-        return [            
-            
+        return [
+
             Actions\Action::make('inventory_report')
                 ->label(__('inventory.actions.report'))
                 ->icon('heroicon-o-document-chart-bar')
@@ -34,7 +34,7 @@ class ListInventory extends ListRecords
             Actions\CreateAction::make()
                 ->icon('heroicon-o-plus')
                 ->label(__('inventory.actions.create')),
-            
+
             Actions\Action::make('check_all_inventory')
                 ->hiddenLabel()
                 ->tooltip(__('inventory.actions.check_all'))
@@ -43,7 +43,7 @@ class ListInventory extends ListRecords
                 ->action(function () {
                     $this->checkInventoryStatus();
                 })
-                ->tooltip(__('inventory.tooltips.check_all')),          
+                ->tooltip(__('inventory.tooltips.check_all')),
         ];
     }
 
@@ -98,11 +98,11 @@ class ListInventory extends ListRecords
         }
 
         if ($stats['critical_stock'] > 0) {
-            $statusMessage[] = "{$stats['critical_stock']} en stock crítico";
+            $statusMessage[] = "{$stats['critical_stock']} en existencia crítica";
         }
 
         if ($stats['low_stock'] > 0) {
-            $statusMessage[] = "{$stats['low_stock']} con stock bajo";
+            $statusMessage[] = "{$stats['low_stock']} con existencia baja";
         }
 
         if (empty($statusMessage)) {
@@ -126,6 +126,9 @@ class ListInventory extends ListRecords
      */
     protected function downloadInventoryReport(): StreamedResponse
     {
+        ini_set('memory_limit', '512M');
+        set_time_limit(60);
+
         $query = $this->getFilteredTableQuery();
         $inventoryItems = $query->with(['stockable'])->get();
         $stats = Inventory::getGlobalStats();
@@ -146,7 +149,7 @@ class ListInventory extends ListRecords
         $filename = 'reporte-inventario-' . now()->format('Y-m-d-H-i-s') . '.pdf';
 
         return response()->streamDownload(
-            fn() => print($pdf->output()),
+            fn() => print ($pdf->output()),
             $filename,
             ['Content-Type' => 'application/pdf']
         );

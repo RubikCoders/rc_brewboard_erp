@@ -213,11 +213,11 @@
         <div class="info-section">
             <h3>Indicadores Clave</h3>
             <div class="info-row">
-                <div class="info-label">% Sin stock:</div>
+                <div class="info-label">% Sin existencia:</div>
                 <div class="info-value">{{ $stats['out_of_stock_percentage'] }}%</div>
             </div>
             <div class="info-row">
-                <div class="info-label">% Stock bajo:</div>
+                <div class="info-label">% Existencia baja:</div>
                 <div class="info-value">{{ $stats['low_stock_percentage'] }}%</div>
             </div>
             <div class="info-row">
@@ -231,22 +231,22 @@
     <div class="stats-grid">
         <div class="stat-card success">
             <div class="stat-number">{{ $stats['normal_stock'] }}</div>
-            <div class="stat-label">Stock Normal</div>
+            <div class="stat-label">Existencia Normal</div>
         </div>
         
         <div class="stat-card warning">
             <div class="stat-number">{{ $stats['low_stock'] }}</div>
-            <div class="stat-label">Stock Bajo</div>
+            <div class="stat-label">Existencia Baja</div>
         </div>
         
         <div class="stat-card danger">
             <div class="stat-number">{{ $stats['out_of_stock'] }}</div>
-            <div class="stat-label">Sin Stock</div>
+            <div class="stat-label">Sin Existencia</div>
         </div>
         
         <div class="stat-card info">
             <div class="stat-number">{{ $stats['excess_stock'] }}</div>
-            <div class="stat-label">Stock Excesivo</div>
+            <div class="stat-label">Existencia Excesiva</div>
         </div>
     </div>
 

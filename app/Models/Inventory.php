@@ -186,11 +186,11 @@ class Inventory extends Model
         $status = $this->getStockStatus();
 
         return match ($status) {
-            'out_of_stock' => 'Sin stock',
-            'critical' => "Stock crítico ({$this->stock} restantes)",
-            'low' => "Stock bajo ({$this->stock}/{$this->min_stock})",
-            'excess' => "Stock excesivo ({$this->stock}/{$this->max_stock})",
-            'normal' => "Stock normal ({$this->stock})",
+            'out_of_stock' => 'Sin existencia',
+            'critical' => "Existencia crítica ({$this->stock} restantes)",
+            'low' => "Existencia baja ({$this->stock}/{$this->min_stock})",
+            'excess' => "Existencia excesiva ({$this->stock}/{$this->max_stock})",
+            'normal' => "Existencia normal ({$this->stock})",
             default => "Estado desconocido"
         };
     }

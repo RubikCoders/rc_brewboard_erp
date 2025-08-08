@@ -10,7 +10,7 @@ return [
   "navigation" => [
     "inventory" => "Inventario",
     "ingredients" => "Ingredientes",
-    "stock_alerts" => "Alertas de Stock",
+    "stock_alerts" => "Alertas de Existencia",
   ],
 
   "sections" => [
@@ -19,7 +19,7 @@ return [
       "description" => "Selecciona el tipo y artículo para gestionar"
     ],
     "stock_levels" => [
-      "title" => "Niveles de Stock",
+      "title" => "Niveles de existencia",
       "description" => "Configura las cantidades mínimas, máximas y actuales"
     ],
   ],
@@ -30,10 +30,10 @@ return [
     "stockable_id" => "Artículo",
     "item_name" => "Nombre del Artículo",
     "type" => "Tipo",
-    "stock" => "Stock Actual",
-    "current_stock" => "Stock Actual",
-    "min_stock" => "Stock Mínimo",
-    "max_stock" => "Stock Máximo",
+    "stock" => "Existencia Actual",
+    "current_stock" => "Existencia Actual",
+    "min_stock" => "Existencia Mínima",
+    "max_stock" => "Existencia Máxima",
     "status" => "Estado",
     "percentage" => "Porcentaje",
     "action_type" => "Tipo de Acción",
@@ -64,27 +64,27 @@ return [
     "ingredients" => "Materias Primas",
     "products" => "Productos",
     "customizations" => "Personalizaciones",
-    "low_stock" => "Stock Bajo",
-    "out_of_stock" => "Sin Stock",
-    "critical" => "Stock Crítico",
-    "excess" => "Stock Excesivo",
+    "low_stock" => "Existencia Baja",
+    "out_of_stock" => "Sin Existencias",
+    "critical" => "Existencia Crítica",
+    "excess" => "Existencia Excesiva",
     "custom" => "Vista Personalizada",
   ],
 
   "filters" => [
-    "low_stock" => "Stock Bajo",
-    "out_of_stock" => "Sin Stock",
-    "critical_stock" => "Stock Crítico",
-    "excess_stock" => "Stock Excesivo",
+    "low_stock" => "Existencia Baja",
+    "out_of_stock" => "Sin Existencia",
+    "critical_stock" => "Existencia Crítica",
+    "excess_stock" => "Existencia Excesiva",
   ],
 
   "actions" => [
     "create" => "Crear Inventario",
     "quick_adjust" => "Ajuste Rápido",
     "bulk_adjust" => "Ajuste Masivo",
-    "add_stock" => "Agregar Stock",
-    "remove_stock" => "Quitar Stock",
-    "set_stock" => "Establecer Stock",
+    "add_stock" => "Agregar Existencia",
+    "remove_stock" => "Quitar Existencia",
+    "set_stock" => "Establecer Existencia",
     "check_all" => "Verificar Todo",
     "report" => "Reporte",
     "import" => "Importar",
@@ -95,7 +95,7 @@ return [
   "notifications" => [
     "created" => "Inventario creado",
     "updated" => "Inventario actualizado",
-    "adjusted" => "Stock ajustado correctamente",
+    "adjusted" => "Existencia ajustada correctamente",
     "imported" => "Inventario importado exitosamente",
     "already_exists" => "Inventario ya existe",
     "status_good" => "Estado del inventario: Bueno",
@@ -133,7 +133,7 @@ return [
         "description" => "Información básica del elemento en inventario"
       ],
       "stock_info" => [
-        "title" => "Información de Stock",
+        "title" => "Información de Existencias",
         "description" => "Estado actual y recomendaciones"
       ],
       "system_info" => [
@@ -142,7 +142,7 @@ return [
       ]
     ],
     "labels" => [
-      "stock_status" => "Estado del Stock",
+      "stock_status" => "Estado de la Existencia",
       "capacity_used" => "Capacidad Utilizada",
       "recommended_action" => "Acción Recomendada",
       "priority_level" => "Nivel de Prioridad",
@@ -163,20 +163,20 @@ return [
 
   "stats" => [
     "total_items" => "Total de Artículos",
-    "in_stock" => "En Stock",
-    "low_stock" => "Stock Bajo",
-    "out_of_stock" => "Sin Stock",
-    "critical_stock" => "Stock Crítico",
-    "excess_stock" => "Stock Excesivo",
+    "in_stock" => "En Existencia",
+    "low_stock" => "Existencia Baja",
+    "out_of_stock" => "Sin Existencia",
+    "critical_stock" => "Existencia Crítica",
+    "excess_stock" => "Existencia Excesiva",
     "percentage_availability" => "% Disponibilidad",
   ],
 
   "status_messages" => [
-    "in_stock" => "En stock",
-    "low_stock" => "Stock bajo",
-    "out_of_stock" => "Sin stock",
-    "critical_stock" => "Stock crítico",
-    "excess_stock" => "Stock excesivo",
+    "in_stock" => "En existencia",
+    "low_stock" => "Existencia baja",
+    "out_of_stock" => "Sin existencia",
+    "critical_stock" => "Existencia crítica",
+    "excess_stock" => "Existencia excesiva",
     "normal" => "Normal",
     "restock_needed" => "Reabastecer necesario",
     "optimal_level" => "Nivel óptimo",
@@ -184,31 +184,31 @@ return [
 
   "alerts" => [
     "urgent_restock" => "Reabastecimiento urgente",
-    "low_stock_warning" => "Advertencia de stock bajo",
-    "out_of_stock_alert" => "Alerta: Sin stock",
+    "low_stock_warning" => "Advertencia de existencia baja",
+    "out_of_stock_alert" => "Alerta: Sin existencia",
     "excess_inventory" => "Inventario excesivo",
   ],
 
   "help_text" => [
-    "stock_levels" => "El stock mínimo determina cuándo recibir alertas. El máximo define el nivel objetivo.",
+    "stock_levels" => "La existencia mínima determina cuándo recibir alertas. El máximo define el nivel objetivo.",
     "quick_adjust" => "Realiza ajustes rápidos de inventario con registro de motivo.",
     "bulk_operations" => "Selecciona múltiples artículos para operaciones masivas.",
     "import_data" => "Importa datos desde archivos CSV o Excel para actualización masiva.",
   ],
 
   "stock_status" => [
-    "optimal" => "Stock Óptimo - Sin Acciones",
-    "low_warning" => "Stock Bajo - Reabastecer Pronto",
-    "critical_urgent" => "Stock Crítico - Acción Inmediata",
-    "out_critical" => "Sin Stock - Crítico",
-    "excess_review" => "Stock Excesivo - Revisar",
+    "optimal" => "Existencia Óptima - Sin Acciones",
+    "low_warning" => "Existencia Baja - Reabastecer Pronto",
+    "critical_urgent" => "Existencia Crítica - Acción Inmediata",
+    "out_critical" => "Sin Existencia - Crítica",
+    "excess_review" => "Existencia Excesiva - Revisar",
   ],
 
   "recommendations" => [
     "urgent_restock" => "URGENTE: Reabastecer inmediatamente",
     "priority_restock" => "PRIORITARIO: Reabastecer pronto",
     "plan_restock" => "Planificar reabastecimiento",
-    "review_levels" => "Revisar niveles máximos y usar stock actual",
+    "review_levels" => "Revisar niveles máximos y usar existencia actual",
     "maintain_current" => "Mantener niveles actuales - Sin acciones necesarias",
   ],
 ];

@@ -45,7 +45,7 @@
                 
                 @if($ingredient->inventory->isLowStock())
                     <div class="text-amber-600">
-                        ⚠️ Stock bajo (mín: {{ $ingredient->inventory->min_stock }})
+                        ⚠️ Existencia baja (mín: {{ $ingredient->inventory->min_stock }})
                     </div>
                 @endif
             @else

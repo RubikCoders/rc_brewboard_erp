@@ -503,7 +503,7 @@ class MenuProductResource extends Resource
                                             ),
 
                                         Infolists\Components\ViewEntry::make('stock_status')
-                                            ->label('Stock')
+                                            ->label('Existencia')
                                             ->view('filament.infolists.entries.ingredient-stock-status'),
                                     ]),
 

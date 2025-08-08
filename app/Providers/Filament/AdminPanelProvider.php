@@ -92,7 +92,6 @@ class AdminPanelProvider extends PanelProvider
                     ->icon('heroicon-o-shield-check')
                     ->collapsed()
                     ->collapsible(),
-            ])
-            ->viteTheme('resources/css/filament/admin/theme.css'); // Tema personalizado
+            ]);
     }
 }

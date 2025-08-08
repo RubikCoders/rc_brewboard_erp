@@ -247,7 +247,7 @@ class ListMenuProducts extends ListRecords
                 }
             }
             if (!empty($lowStockIngredients)) {
-                $message .= 'Ingredientes con stock bajo: ' . implode(', ', array_slice($lowStockIngredients, 0, 3));
+                $message .= 'Ingredientes con existencia baja: ' . implode(', ', array_slice($lowStockIngredients, 0, 3));
                 if (count($lowStockIngredients) > 3) {
                     $message .= ' y ' . (count($lowStockIngredients) - 3) . ' más.';
                 }
