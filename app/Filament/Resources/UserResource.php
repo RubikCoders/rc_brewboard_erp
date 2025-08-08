@@ -14,7 +14,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
 
 class UserResource extends Resource
 {
@@ -27,17 +26,6 @@ class UserResource extends Resource
 
     protected static ?string $modelLabel = 'Usuario';
     protected static ?string $pluralModelLabel = 'Usuarios';
-
-    // public static function getNavigationBadge(): ?string
-    // {
-    //     return static::getModel()::count();
-    // }
-
-    // public static function getNavigationBadgeColor(): ?string
-    // {
-    //     $count = static::getModel()::count();
-    //     return $count > 5 ? 'success' : 'warning';
-    // }
 
     public static function form(Form $form): Form
     {

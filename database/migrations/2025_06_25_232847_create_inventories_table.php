@@ -16,7 +16,6 @@ return new class extends Migration
 
             // Morphs to products (food) and customizations
             $table->morphs('stockable');
-
             $table->integer('stock');
             $table->integer('min_stock');
             $table->integer('max_stock');

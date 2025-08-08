@@ -25,7 +25,7 @@ return [
   ],
 
   "fields" => [
-    "id" => "ID",
+    "id" => "Identificador",
     "stockable_type" => "Tipo de Artículo",
     "stockable_id" => "Artículo",
     "item_name" => "Nombre del Artículo",
@@ -43,10 +43,18 @@ return [
     "import_file" => "Archivo de Importación",
     "created_at" => "Creado el",
     "updated_at" => "Actualizado el",
+    "ingredient_name" => "Nombre del ingrediente",
+    "ingredient_unit" => "Unidad de medida",
+    "ingredient_category" => "Categoría",
+    "ingredient_description" => "Descripción",
+    "customization_option_name" => "Nombre de la opción",
+    "customization_parent" => "Personalización",
+    "extra_price" => "Precio adicional",
+    "item_type" => "Tipo de artículo",
   ],
 
   "options" => [
-    "ingredient" => "Materia Prima",
+    "ingredient" => "Ingrediente Base",
     "menu_product" => "Producto del Menú",
     "customization_option" => "Opción de Personalización",
   ],
@@ -99,11 +107,17 @@ return [
     "item_updated_successfully" => "La información del inventario se ha actualizado",
     "inventory_already_exists" => "Ya existe un registro de inventario para este artículo",
     "all_items_ok" => "Todos los :total artículos están en niveles óptimos",
+    "ingredient_with_inventory_exists" => "Este ingrediente ya tiene un registro de inventario",
+    "customization_with_inventory_exists" => "Esta opción de personalización ya tiene un registro de inventario",
+    "invalid_item_type" => "Tipo de artículo no válido",
   ],
 
   "placeholders" => [
     "reason" => "Ej: Recepción de mercancía, venta, merma, conteo físico...",
     "bulk_reason" => "Ej: Conteo físico mensual, ajuste por inventario...",
+    "ingredient_unit_placeholder" => "ej: kg, litros, unidades",
+    "ingredient_category_placeholder" => "ej: Lácteos, Granos, Bebidas",
+    "customization_option_placeholder" => "ej: Leche de soya, Extra shot",
   ],
 
   "tooltips" => [
@@ -126,6 +140,24 @@ return [
         "title" => "Información del Sistema",
         "description" => "Datos técnicos y fechas de registro"
       ]
+    ],
+    "labels" => [
+      "stock_status" => "Estado del Stock",
+      "capacity_used" => "Capacidad Utilizada",
+      "recommended_action" => "Acción Recomendada",
+      "priority_level" => "Nivel de Prioridad",
+      "estimated_duration" => "Duración Estimada",
+      "restock_quantity" => "Cantidad a Reabastecer",
+      "estimated_cost" => "Costo Estimado",
+      "additional_tips" => "Consejos Adicionales",
+      "last_update" => "Última Actualización",
+    ],
+    "priority" => [
+      "maximum" => "MÁXIMA",
+      "high" => "ALTA",
+      "medium" => "MEDIA",
+      "low" => "BAJA",
+      "none" => "NINGUNA",
     ],
   ],
 
@@ -157,20 +189,26 @@ return [
     "excess_inventory" => "Inventario excesivo",
   ],
 
-  "validation" => [
-    "stock_required" => "El stock actual es obligatorio",
-    "min_stock_required" => "El stock mínimo es obligatorio",
-    "max_stock_required" => "El stock máximo es obligatorio",
-    "max_greater_than_min" => "El stock máximo debe ser mayor al mínimo",
-    "stock_positive" => "El stock debe ser un número positivo",
-    "quantity_positive" => "La cantidad debe ser mayor a 0",
-    "stockable_required" => "Debe seleccionar un artículo",
-  ],
-
   "help_text" => [
     "stock_levels" => "El stock mínimo determina cuándo recibir alertas. El máximo define el nivel objetivo.",
     "quick_adjust" => "Realiza ajustes rápidos de inventario con registro de motivo.",
     "bulk_operations" => "Selecciona múltiples artículos para operaciones masivas.",
     "import_data" => "Importa datos desde archivos CSV o Excel para actualización masiva.",
+  ],
+
+  "stock_status" => [
+    "optimal" => "Stock Óptimo - Sin Acciones",
+    "low_warning" => "Stock Bajo - Reabastecer Pronto",
+    "critical_urgent" => "Stock Crítico - Acción Inmediata",
+    "out_critical" => "Sin Stock - Crítico",
+    "excess_review" => "Stock Excesivo - Revisar",
+  ],
+
+  "recommendations" => [
+    "urgent_restock" => "URGENTE: Reabastecer inmediatamente",
+    "priority_restock" => "PRIORITARIO: Reabastecer pronto",
+    "plan_restock" => "Planificar reabastecimiento",
+    "review_levels" => "Revisar niveles máximos y usar stock actual",
+    "maintain_current" => "Mantener niveles actuales - Sin acciones necesarias",
   ],
 ];

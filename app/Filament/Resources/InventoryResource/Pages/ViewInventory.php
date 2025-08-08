@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\InventoryResource\Pages;
 
 use App\Filament\Resources\InventoryResource;
+use App\Models\Ingredient;
+use App\Models\CustomizationOption;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 
@@ -13,10 +15,12 @@ class ViewInventory extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
+            Actions\EditAction::make(),
+
             // Acción para ajuste rápido desde vista
             Actions\Action::make('quick_adjust')
                 ->label(__('inventory.actions.quick_adjust'))
-                ->icon('heroicon-o-plus-minus')
+                ->icon('heroicon-o-arrows-right-left')
                 ->color('warning')
                 ->form([
                     \Filament\Forms\Components\Grid::make(2)
@@ -29,7 +33,7 @@ class ViewInventory extends ViewRecord
                                     'set' => __('inventory.actions.set_stock'),
                                 ])
                                 ->required()
-                                ->reactive()
+                                ->live()
                                 ->columnSpan(1),
 
                             \Filament\Forms\Components\TextInput::make('quantity')
@@ -50,7 +54,7 @@ class ViewInventory extends ViewRecord
                 ->action(function (array $data) {
                     $record = $this->getRecord();
                     $quantity = (int) $data['quantity'];
-                    $reason = $data['reason'] ?? null;
+                    $reason = $data['reason'] ?? 'Ajuste manual de stock';
 
                     match ($data['action_type']) {
                         'add' => $record->add($quantity),
@@ -58,25 +62,18 @@ class ViewInventory extends ViewRecord
                         'set' => $record->adjustTo($quantity, $reason),
                     };
 
-                    // Refrescar la vista
-                    redirect($this->getResource()::getUrl('view', ['record' => $record]));
-                })
-                ->successNotification(
                     \Filament\Notifications\Notification::make()
                         ->success()
                         ->title(__('inventory.notifications.adjusted'))
-                ),
+                        ->body("Stock actualizado correctamente")
+                        ->send();
 
-            // Acción para ver historial (futura implementación)
-            Actions\Action::make('view_history')
-                ->label(__('inventory.actions.view_history'))
-                ->icon('heroicon-o-clock')
-                ->color('info')
-                ->url(fn() => '#') // Placeholder para futura implementación
-                ->disabled(true)
-                ->tooltip(__('inventory.tooltips.coming_soon')),
-
-            Actions\EditAction::make(),
+                    // Refrescar la página para mostrar los cambios
+                    $this->redirect($this->getResource()::getUrl('view', ['record' => $record]));
+                })
+                ->requiresConfirmation()
+                ->modalDescription('Esta acción modificará el nivel de stock actual del inventario.')
+                ->modalSubmitActionLabel('Aplicar ajuste'),
         ];
     }
 }

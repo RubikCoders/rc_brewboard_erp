@@ -7,6 +7,7 @@ use App\Models\Inventory;
 use App\Models\Ingredient;
 use App\Models\MenuProduct;
 use App\Models\CustomizationOption;
+use App\Models\ProductCustomization;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -54,50 +55,96 @@ class InventoryResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
+        return $form            
             ->schema([
                 Forms\Components\Section::make(__('inventory.sections.item_info.title'))
                     ->description(__('inventory.sections.item_info.description'))
                     ->schema([
-                        Forms\Components\Grid::make(2)
+                        Forms\Components\Grid::make(1)
                             ->schema([
-                                Forms\Components\Select::make('stockable_type')
-                                    ->label(__('inventory.fields.stockable_type'))
+                                Forms\Components\Select::make('item_type')
+                                    ->label(__('inventory.fields.item_type'))
                                     ->options([
-                                        Ingredient::class => __('inventory.options.ingredient'),
-                                        MenuProduct::class => __('inventory.options.menu_product'),
-                                        CustomizationOption::class => __('inventory.options.customization_option'),
+                                        'ingredient' => __('inventory.options.ingredient'),
+                                        'customization_option' => __('inventory.options.customization_option'),
                                     ])
-                                    ->required()
-                                    ->reactive()
-                                    ->afterStateUpdated(fn(callable $set) => $set('stockable_id', null))
-                                    ->columnSpan(1),
-
-                                Forms\Components\Select::make('stockable_id')
-                                    ->label(__('inventory.fields.stockable_id'))
-                                    ->options(function (callable $get) {
-                                        $type = $get('stockable_type');
-
-                                        return match ($type) {
-                                            Ingredient::class => Ingredient::active()->pluck('name', 'id')->toArray(),
-                                            MenuProduct::class => MenuProduct::available()->pluck('name', 'id')->toArray(),
-                                            CustomizationOption::class => CustomizationOption::with('customization')
-                                                ->get()
-                                                ->mapWithKeys(fn($option) => [
-                                                    $option->id => $option->customization->name . ' - ' . $option->name
-                                                ])
-                                                ->toArray(),
-                                            default => [],
-                                        };
-                                    })
                                     ->searchable()
-                                    ->required()
-                                    ->reactive()
+                                    ->preload()
+                                    ->rules(['required'])
+                                    ->live()
+                                    ->afterStateUpdated(fn(callable $set) => [
+                                        $set('name', null),
+                                        $set('unit', null),
+                                        $set('category', null),
+                                        $set('description', null),
+                                        $set('customization_id', null),
+                                        $set('extra_price', null),
+                                    ])
                                     ->columnSpan(1),
                             ])
                     ])
                     ->columnSpan(2),
 
+                Forms\Components\Section::make(__('inventory.options.ingredient'))
+                    ->description('Información de la materia prima')
+                    ->schema([
+                        Forms\Components\Grid::make(2)
+                            ->schema([
+                                Forms\Components\TextInput::make('name')
+                                    ->label(__('inventory.fields.ingredient_name'))
+                                    ->placeholder('ej: Café soluble, Leche entera, Agua')
+                                    ->rules(['required', 'string', 'max:255'])
+                                    ->live(onBlur: true)
+                                    ->columnSpan(1),
+
+                                Forms\Components\TextInput::make('unit')
+                                    ->label(__('inventory.fields.ingredient_unit'))
+                                    ->rules(['required', 'string', 'max:50'])
+                                    ->placeholder(__('inventory.placeholders.ingredient_unit_placeholder'))
+                                    ->columnSpan(1),
+
+                                Forms\Components\TextInput::make('category')
+                                    ->label(__('inventory.fields.ingredient_category'))
+                                    ->rules(['nullable', 'string', 'max:100'])
+                                    ->placeholder(__('inventory.placeholders.ingredient_category_placeholder'))
+                                    ->columnSpan(1),
+
+                                Forms\Components\Textarea::make('description')
+                                    ->label(__('inventory.fields.ingredient_description'))
+                                    ->rules(['nullable', 'string', 'max:500'])
+                                    ->columnSpan(1),
+                            ])
+                    ])
+                    ->visible(fn(Forms\Get $get): bool => $get('item_type') === 'ingredient')
+                    ->columnSpan(2),
+
+                Forms\Components\Section::make(__('inventory.options.customization_option'))
+                    ->description('Información de la opción de personalización')
+                    ->schema([
+                        Forms\Components\Grid::make(2)
+                            ->schema([
+                                Forms\Components\Select::make('customization_id')
+                                    ->label(__('inventory.fields.customization_parent'))
+                                    ->options(ProductCustomization::pluck('name', 'id'))
+                                    ->rules(['required', 'integer', 'exists:product_customizations,id'])
+                                    ->searchable()
+                                    ->columnSpan(1),
+
+                                Forms\Components\TextInput::make('name')
+                                    ->label(__('inventory.fields.customization_option_name'))
+                                    ->rules(['required', 'string', 'max:255'])
+                                    ->placeholder(__('inventory.placeholders.customization_option_placeholder'))
+                                    ->columnSpan(1),
+
+                                Forms\Components\TextInput::make('extra_price')
+                                    ->label(__('inventory.fields.extra_price'))
+                                    ->rules(['nullable', 'numeric', 'min:0'])
+                                    ->step(0.01)
+                                    ->prefix('$')
+                            ])
+                    ])
+                    ->visible(fn(Forms\Get $get): bool => $get('item_type') === 'customization_option')
+                    ->columnSpan(2),
                 Forms\Components\Section::make(__('inventory.sections.stock_levels.title'))
                     ->description(__('inventory.sections.stock_levels.description'))
                     ->schema([
@@ -105,34 +152,27 @@ class InventoryResource extends Resource
                             ->schema([
                                 Forms\Components\TextInput::make('stock')
                                     ->label(__('inventory.fields.stock'))
-                                    ->required()
-                                    ->numeric()
-                                    ->minValue(0)
-                                    ->step(1)
+                                    ->rules(['required', 'integer', 'min:0'])
                                     ->suffix(__('inventory.fields.units'))
                                     ->columnSpan(1),
 
                                 Forms\Components\TextInput::make('min_stock')
                                     ->label(__('inventory.fields.min_stock'))
-                                    ->required()
-                                    ->numeric()
-                                    ->minValue(0)
-                                    ->step(1)
+                                    ->rules(['required', 'integer', 'min:0'])
                                     ->suffix(__('inventory.fields.units'))
                                     ->columnSpan(1),
 
                                 Forms\Components\TextInput::make('max_stock')
                                     ->label(__('inventory.fields.max_stock'))
-                                    ->required()
-                                    ->numeric()
-                                    ->minValue(0)
-                                    ->step(1)
+                                    ->rules(['required', 'integer', 'min:0'])
                                     ->suffix(__('inventory.fields.units'))
                                     ->columnSpan(1),
                             ])
                     ])
                     ->columnSpan(2),
-            ]);
+            ])
+            ->columns(2)
+            ->extraAttributes(['novalidate' => true]);;
     }
 
     public static function table(Table $table): Table
@@ -141,6 +181,7 @@ class InventoryResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->label(__('inventory.fields.id'))
+                    ->prefix('#INV-')
                     ->sortable()
                     ->searchable(),
 
@@ -223,7 +264,8 @@ class InventoryResource extends Resource
                         Ingredient::class => __('inventory.options.ingredient'),
                         MenuProduct::class => __('inventory.options.menu_product'),
                         CustomizationOption::class => __('inventory.options.customization_option'),
-                    ]),
+                    ])
+                    ->native(false),
 
                 Tables\Filters\Filter::make('low_stock')
                     ->label(__('inventory.filters.low_stock'))
@@ -242,57 +284,8 @@ class InventoryResource extends Resource
                     ->query(fn(Builder $query) => $query->excessStock()),
             ])
             ->actions([
-                Tables\Actions\Action::make('quick_adjust')
-                    ->label(__('inventory.actions.quick_adjust'))
-                    ->icon('heroicon-o-arrows-right-left')
-                    ->color('warning')
-                    ->form([
-                        Forms\Components\Grid::make(2)
-                            ->schema([
-                                Forms\Components\Select::make('action_type')
-                                    ->label(__('inventory.fields.action_type'))
-                                    ->options([
-                                        'add' => __('inventory.actions.add_stock'),
-                                        'remove' => __('inventory.actions.remove_stock'),
-                                        'set' => __('inventory.actions.set_stock'),
-                                    ])
-                                    ->required()
-                                    ->reactive()
-                                    ->columnSpan(1),
-
-                                Forms\Components\TextInput::make('quantity')
-                                    ->label(__('inventory.fields.quantity'))
-                                    ->required()
-                                    ->numeric()
-                                    ->minValue(0)
-                                    ->step(1)
-                                    ->columnSpan(1),
-                            ]),
-
-                        Forms\Components\Textarea::make('reason')
-                            ->label(__('inventory.fields.reason'))
-                            ->placeholder(__('inventory.placeholders.reason'))
-                            ->maxLength(255)
-                            ->columnSpanFull(),
-                    ])
-                    ->action(function (Inventory $record, array $data) {
-                        $quantity = (int) $data['quantity'];
-                        $reason = $data['reason'] ?? null;
-
-                        match ($data['action_type']) {
-                            'add' => $record->add($quantity),
-                            'remove' => $record->consume($quantity),
-                            'set' => $record->adjustTo($quantity, $reason),
-                        };
-                    })
-                    ->successNotification(
-                        \Filament\Notifications\Notification::make()
-                            ->success()
-                            ->title(__('inventory.notifications.adjusted'))
-                    ),
-
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make(),                
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -348,13 +341,16 @@ class InventoryResource extends Resource
     {
         return $infolist
             ->schema([
+                // Sección principal de información del artículo
                 Infolists\Components\Section::make(__('inventory.view.sections.item_details.title'))
                     ->description(__('inventory.view.sections.item_details.description'))
                     ->schema([
-                        Infolists\Components\Grid::make(2)
+                        Infolists\Components\Grid::make(3)
                             ->schema([
                                 Infolists\Components\TextEntry::make('stockable.name')
                                     ->label(__('inventory.fields.item_name'))
+                                    ->size(Infolists\Components\TextEntry\TextEntrySize::Large)
+                                    ->weight(FontWeight::Bold)
                                     ->formatStateUsing(function ($record) {
                                         if ($record->stockable_type === CustomizationOption::class) {
                                             $option = $record->stockable;
@@ -362,8 +358,11 @@ class InventoryResource extends Resource
                                         }
                                         return $record->stockable?->name ?? __('inventory.unknown_item');
                                     })
-                                    ->size(Infolists\Components\TextEntry\TextEntrySize::Large)
-                                    ->weight(FontWeight::Bold),
+                                    ->icon(fn($record) => match ($record->stockable_type) {
+                                        Ingredient::class => 'heroicon-o-check-circle',
+                                        CustomizationOption::class => 'heroicon-o-cog-6-check-circle',
+                                        default => 'heroicon-o-cube'
+                                    }),
 
                                 Infolists\Components\TextEntry::make('stockable_type')
                                     ->label(__('inventory.fields.type'))
@@ -380,19 +379,64 @@ class InventoryResource extends Resource
                                         CustomizationOption::class => 'warning',
                                         default => 'gray',
                                     }),
-                            ])
+
+                                Infolists\Components\TextEntry::make('updated_at')
+                                    ->label('Última Actualización')
+                                    ->dateTime('d/m/Y H:i')
+                                    ->icon('heroicon-o-clock')
+                                    ->color('gray'),
+                            ]),
                     ])
                     ->columnSpan(2),
 
+                // Sección de estado actual mejorada
                 Infolists\Components\Section::make(__('inventory.view.sections.stock_info.title'))
                     ->description(__('inventory.view.sections.stock_info.description'))
                     ->schema([
-                        Infolists\Components\ViewEntry::make('stock_overview')
-                            ->view('filament.infolists.entries.inventory-stock-overview')
-                            ->columnSpanFull(),
-                    ])
-                    ->columnSpan(2),
+                        // Grid principal con métricas
+                        Infolists\Components\Grid::make(3)
+                            ->schema([
+                                Infolists\Components\TextEntry::make('stock')
+                                    ->label(__('inventory.fields.current_stock'))
+                                    ->size(Infolists\Components\TextEntry\TextEntrySize::Large)
+                                    ->weight(FontWeight::Bold)
+                                    ->suffix(' unidades')
+                                    ->color(function ($record) {
+                                        return match ($record->getStockStatus()) {
+                                            'out_of_stock', 'critical' => 'danger',
+                                            'low' => 'warning',
+                                            'excess' => 'info',
+                                            'normal' => 'success',
+                                            default => 'gray',
+                                        };
+                                    })
+                                    ->icon(function ($record) {
+                                        return match ($record->getStockStatus()) {
+                                            'out_of_stock' => 'heroicon-o-x-circle',
+                                            'critical' => 'heroicon-o-exclamation-triangle',
+                                            'low' => 'heroicon-o-exclamation-circle',
+                                            'excess' => 'heroicon-o-arrow-trending-up',
+                                            'normal' => 'heroicon-o-check-circle',
+                                            default => 'heroicon-o-cube',
+                                        };
+                                    }),
 
+                                Infolists\Components\TextEntry::make('min_stock')
+                                    ->label(__('inventory.fields.min_stock'))
+                                    ->suffix(' unidades')
+                                    ->color('gray')
+                                    ->icon('heroicon-o-arrow-down-circle'),
+
+                                Infolists\Components\TextEntry::make('max_stock')
+                                    ->label(__('inventory.fields.max_stock'))
+                                    ->suffix(' unidades')
+                                    ->color('gray')
+                                    ->icon('heroicon-o-arrow-up-circle'),
+                            ]),                        
+                    ])
+                    ->columnSpan(2),                
+
+                // Sección de información del sistema
                 Infolists\Components\Section::make(__('inventory.view.sections.system_info.title'))
                     ->description(__('inventory.view.sections.system_info.description'))
                     ->schema([
@@ -400,12 +444,17 @@ class InventoryResource extends Resource
                             ->schema([
                                 Infolists\Components\TextEntry::make('created_at')
                                     ->label(__('inventory.fields.created_at'))
-                                    ->dateTime(),
+                                    ->dateTime('d/m/Y H:i')
+                                    ->icon('heroicon-o-plus-circle')
+                                    ->color('success'),
 
-                                Infolists\Components\TextEntry::make('updated_at')
-                                    ->label(__('inventory.fields.updated_at'))
-                                    ->dateTime(),
-                            ])
+                                Infolists\Components\TextEntry::make('id')
+                                    ->label(__('inventory.fields.id'))
+                                    ->prefix('INV-')
+                                    ->copyable()
+                                    ->icon('heroicon-o-hashtag')
+                                    ->color('gray'),
+                            ]),
                     ])
                     ->columnSpan(2)
                     ->collapsible()

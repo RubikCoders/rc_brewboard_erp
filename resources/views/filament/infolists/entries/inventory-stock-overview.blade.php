@@ -16,7 +16,7 @@
         </div>
         
         {{-- Stock mínimo --}}
-        <div class="text-center p-4 bg-amber-50 rounded-lg border border-amber-200">
+        <div class="text-center p-4 bg-amber-500 rounded-lg border border-amber-500">
             <div class="text-2xl font-bold text-amber-900">{{ $record->min_stock }}</div>
             <div class="text-sm text-amber-700">Stock Mínimo</div>
         </div>
