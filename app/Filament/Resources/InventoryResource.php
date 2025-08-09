@@ -360,7 +360,7 @@ class InventoryResource extends Resource
                                     })
                                     ->icon(fn($record) => match ($record->stockable_type) {
                                         Ingredient::class => 'heroicon-o-check-circle',
-                                        CustomizationOption::class => 'heroicon-o-cog-6-check-circle',
+                                        CustomizationOption::class => 'heroicon-o-check-circle',
                                         default => 'heroicon-o-cube'
                                     }),
 
@@ -400,7 +400,12 @@ class InventoryResource extends Resource
                                     ->label(__('inventory.fields.current_stock'))
                                     ->size(Infolists\Components\TextEntry\TextEntrySize::Large)
                                     ->weight(FontWeight::Bold)
-                                    ->suffix(' unidades')
+                                    ->suffix(function ($record) {
+                                        if ($record->stockable && method_exists($record->stockable, 'getAttribute')) {
+                                            return ' ' . ($record->stockable->unit ?? __('inventory.fields.units'));
+                                        }
+                                        return ' ' . __('inventory.fields.units');
+                                    })
                                     ->color(function ($record) {
                                         return match ($record->getStockStatus()) {
                                             'out_of_stock', 'critical' => 'danger',
@@ -423,13 +428,23 @@ class InventoryResource extends Resource
 
                                 Infolists\Components\TextEntry::make('min_stock')
                                     ->label(__('inventory.fields.min_stock'))
-                                    ->suffix(' unidades')
+                                    ->suffix(function ($record) {
+                                        if ($record->stockable && method_exists($record->stockable, 'getAttribute')) {
+                                            return ' ' . ($record->stockable->unit ?? __('inventory.fields.units'));
+                                        }
+                                        return ' ' . __('inventory.fields.units');
+                                    })
                                     ->color('gray')
                                     ->icon('heroicon-o-arrow-down-circle'),
 
                                 Infolists\Components\TextEntry::make('max_stock')
                                     ->label(__('inventory.fields.max_stock'))
-                                    ->suffix(' unidades')
+                                    ->suffix(function ($record) {
+                                        if ($record->stockable && method_exists($record->stockable, 'getAttribute')) {
+                                            return ' ' . ($record->stockable->unit ?? __('inventory.fields.units'));
+                                        }
+                                        return ' ' . __('inventory.fields.units');
+                                    })
                                     ->color('gray')
                                     ->icon('heroicon-o-arrow-up-circle'),
                             ]),                        
