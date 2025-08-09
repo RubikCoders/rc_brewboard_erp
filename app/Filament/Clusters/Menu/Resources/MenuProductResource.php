@@ -219,6 +219,7 @@ class MenuProductResource extends Resource
                                     ]),
 
                                 Forms\Components\Repeater::make('options')
+                                    ->label('Opciones')
                                     ->relationship()
                                     ->schema([
                                         Forms\Components\Grid::make(2)
