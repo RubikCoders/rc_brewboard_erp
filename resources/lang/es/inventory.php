@@ -1,14 +1,14 @@
 <?php
 
 return [
-  "model" => "Inventario",
-  "item" => "Artículo de Inventario",
-  "manage_inventory" => "Gestionar Inventario",
-  "inventory_management" => "Gestión de Inventario",
+  "model" => "Suministros",
+  "item" => "suministro",
+  "manage_inventory" => "Gestionar Suministros",
+  "inventory_management" => "Gestión de Suministros",
   "unknown_item" => "Artículo desconocido",
 
   "navigation" => [
-    "inventory" => "Inventario",
+    "inventory" => "Suministros",
     "ingredients" => "Ingredientes",
     "stock_alerts" => "Alertas de Existencia",
   ],
@@ -60,7 +60,7 @@ return [
   ],
 
   "tabs" => [
-    "all" => "Todo el Inventario",
+    "all" => "Todos los Suministros",
     "ingredients" => "Materias Primas",
     "products" => "Productos",
     "customizations" => "Personalizaciones",
@@ -79,7 +79,7 @@ return [
   ],
 
   "actions" => [
-    "create" => "Crear Inventario",
+    "create" => "Crear Suministro",
     "quick_adjust" => "Ajuste Rápido",
     "bulk_adjust" => "Ajuste Masivo",
     "add_stock" => "Agregar Existencia",
@@ -93,36 +93,35 @@ return [
   ],
 
   "notifications" => [
-    "created" => "Inventario creado",
-    "updated" => "Inventario actualizado",
+    "created" => "Suministro creado",
+    "updated" => "Suministro actualizado",
     "adjusted" => "Existencia ajustada correctamente",
-    "imported" => "Inventario importado exitosamente",
-    "already_exists" => "Inventario ya existe",
-    "status_good" => "Estado del inventario: Bueno",
-    "attention_required" => "Atención requerida en inventario",
+    "already_exists" => "El suministro ya existe",
+    "status_good" => "Estado de los suministros: Bueno",
+    "attention_required" => "Atención requerida en suministros",
   ],
 
   "messages" => [
-    "item_created_successfully" => "El artículo se ha agregado al inventario correctamente",
-    "item_updated_successfully" => "La información del inventario se ha actualizado",
-    "inventory_already_exists" => "Ya existe un registro de inventario para este artículo",
-    "all_items_ok" => "Todos los :total artículos están en niveles óptimos",
-    "ingredient_with_inventory_exists" => "Este ingrediente ya tiene un registro de inventario",
-    "customization_with_inventory_exists" => "Esta opción de personalización ya tiene un registro de inventario",
+    "item_created_successfully" => "El artículo se ha agregado a los suministros correctamente",
+    "item_updated_successfully" => "La información del suministro se ha actualizado",
+    "inventory_already_exists" => "Ya existe un registro para este suministro",
+    "all_items_ok" => "Todos los :total suministros están en niveles óptimos",
+    "ingredient_with_inventory_exists" => "Este ingrediente ya se encuentra registrado",
+    "customization_with_inventory_exists" => "Esta opción de personalización ya se encuentra registrado",
     "invalid_item_type" => "Tipo de artículo no válido",
   ],
 
   "placeholders" => [
     "reason" => "Ej: Recepción de mercancía, venta, merma, conteo físico...",
-    "bulk_reason" => "Ej: Conteo físico mensual, ajuste por inventario...",
+    "bulk_reason" => "Ej: Conteo físico mensual, ajuste por suministro...",
     "ingredient_unit_placeholder" => "ej: kg, litros, unidades",
     "ingredient_category_placeholder" => "ej: Lácteos, Granos, Bebidas",
     "customization_option_placeholder" => "ej: Leche de soya, Extra shot",
   ],
 
   "tooltips" => [
-    "check_all" => "Verificar el estado de todo el inventario",
-    "report" => "Descargar reporte completo de inventario",
+    "check_all" => "Verificar el estado de todo los suministros",
+    "report" => "Descargar reporte completo de los suministros",
     "coming_soon" => "Funcionalidad próximamente disponible",
   ],
 
@@ -130,7 +129,7 @@ return [
     "sections" => [
       "item_details" => [
         "title" => "Detalles del Artículo",
-        "description" => "Información básica del elemento en inventario"
+        "description" => "Información básica del suministro"
       ],
       "stock_info" => [
         "title" => "Información de Existencias",
@@ -186,12 +185,12 @@ return [
     "urgent_restock" => "Reabastecimiento urgente",
     "low_stock_warning" => "Advertencia de existencia baja",
     "out_of_stock_alert" => "Alerta: Sin existencia",
-    "excess_inventory" => "Inventario excesivo",
+    "excess_inventory" => "Cantidad excesiva",
   ],
 
   "help_text" => [
     "stock_levels" => "La existencia mínima determina cuándo recibir alertas. El máximo define el nivel objetivo.",
-    "quick_adjust" => "Realiza ajustes rápidos de inventario con registro de motivo.",
+    "quick_adjust" => "Realiza ajustes rápidos de existencias con registro de motivo.",
     "bulk_operations" => "Selecciona múltiples artículos para operaciones masivas.",
     "import_data" => "Importa datos desde archivos CSV o Excel para actualización masiva.",
   ],
