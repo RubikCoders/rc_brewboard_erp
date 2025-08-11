@@ -94,7 +94,9 @@ class OrderReviewResource extends Resource
             TextColumn::make('image')
                 ->label(__("orderreview.fields.photo"))
                 ->getStateUsing(function (OrderReview $record) {
-                    $url = route('private.image', ['path' => $record->image_path ?? OrderReview::PLACEHOLDER_IMAGE]);
+                    // $url = route('private.image', ['path' => $record->image_path ?? OrderReview::PLACEHOLDER_IMAGE]);
+
+                    $url = asset("storage/reviews/" . $record->image_path ?? OrderReview::PLACEHOLDER_IMAGE);
 
                     return new HtmlString("
                     <div style='

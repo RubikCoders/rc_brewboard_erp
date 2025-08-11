@@ -20,15 +20,6 @@ Route::middleware(['web', \App\Http\Middleware\LandingPageMiddleware::class])->g
 });
 
 Route::get('/private-image/{path}', function ($path) {
-    abort_unless(Auth::check(), 403); // o tu lógica de permisos
-
-    $file = Storage::disk('private_reviews')->get($path);
-    return response($file)->header('Content-Type', 'image/jpeg');
-})->where('path', '.*')->name('private.image');
-
-Route::get('/private-image/{path}', function ($path) {
-    abort_unless(Auth::check(), 403); // o tu lógica de permisos
-
     $file = Storage::disk('private_reviews')->get($path);
     return response($file)->header('Content-Type', 'image/jpeg');
 })->where('path', '.*')->name('private.image');

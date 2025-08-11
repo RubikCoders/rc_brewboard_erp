@@ -41,7 +41,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
@@ -62,8 +62,8 @@ return [
 
         'private_reviews' => [
             'driver' => 'local',
-            'root' => storage_path('app/private/reviews'),
-            'visibility' => 'private',
+            'root' => storage_path('app/public/reviews'),
+            'visibility' => 'public',
         ],
     ],
 
