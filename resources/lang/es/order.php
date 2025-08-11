@@ -39,7 +39,7 @@ return [
         "status" => [
             "label" => "Estado",
             0 => "Pendiente",
-            1 => "Entregada",
+            1 => "Pagada",
             2 => "Cancelada"
         ],
         "cancel_reason" => "Razón de la cancelación",

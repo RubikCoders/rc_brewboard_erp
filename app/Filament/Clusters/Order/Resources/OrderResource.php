@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\HtmlString;
 use App\Filament\Clusters\Order\Resources\OrderResource\Widgets\OrderListWidget;
+use Filament\Notifications\Notification;
 
 class OrderResource extends Resource
 {
@@ -83,7 +84,82 @@ class OrderResource extends Resource
             ->actions([
                 ViewAction::make('view'),
                 self::viewOrderTicketAction(),
+                Action::make('Pagar')
+                    ->icon('heroicon-o-currency-dollar')
+                    ->color('primary')
+                    ->requiresConfirmation()
+                    // Mostrar solo si: kiosko + pendiente + efectivo
+                    ->visible(
+                        fn(Order $record) =>
+                        $record->from === Order::FROM_CSP &&
+                            $record->status === Order::STATUS_WAITING &&
+                            $record->payment_method === Order::PAYMENT_METHOD_CASH
+                    )
+                    ->form([
+                        Forms\Components\TextInput::make('total')
+                            ->label('Total')
+                            ->prefix('$')
+                            ->readOnly()
+                            ->default(fn(Order $record) => number_format($record->total, 2)),
+
+                        Forms\Components\TextInput::make('paid')
+                            ->label('Monto pagado')
+                            ->prefix('$')
+                            ->numeric()
+                            ->required()
+                            ->rules('required|numeric|min:0')
+                            ->default(fn(Order $record) => $record->total),
+                    ])
+                    // Lógica de pago
+                    ->action(function (Order $record, array $data) {
+                        // Revalidación por seguridad
+                        if (!(
+                            $record->from === Order::FROM_CSP &&
+                            $record->status === Order::STATUS_WAITING &&
+                            $record->payment_method === Order::PAYMENT_METHOD_CASH
+                        )) {
+                            Notification::make()
+                                ->title('No se puede procesar el pago')
+                                ->danger()
+                                ->send();
+                            return;
+                        }
+
+                        $total = (float) $record->total;
+                        $paid = (float) $data['paid'];
+
+                        if ($paid === $total) {
+                            $record->status = Order::STATUS_FINISHED;
+                            $record->save();
+
+                            Notification::make()
+                                ->title('Pagado exitosamente')
+                                ->success()
+                                ->send();
+                            return;
+                        }
+
+                        if ($paid > $total) {
+                            $record->status = Order::STATUS_FINISHED;
+                            $record->save();
+
+                            $change = $paid - $total;
+
+                            Notification::make()
+                                ->title('Pago recibido')
+                                ->body('Cambio a entregar: $' . number_format($change, 2))
+                                ->success()
+                                ->send();
+                            return;
+                        }
+
+                        Notification::make()
+                            ->title('El monto ingresado es insuficiente')
+                            ->danger()
+                            ->send();
+                    }),
             ])
+
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([
                 //     Tables\Actions\DeleteBulkAction::make(),
@@ -226,68 +302,68 @@ class OrderResource extends Resource
     {
         return
             Wizard\Step::make(__("order.select_products"))
-                ->icon('heroicon-o-shopping-cart')
-                ->description(__("order.select_products_description"))
-                ->columns(12)
-                ->schema([
-                    Forms\Components\TextInput::make('customer_name')
-                        ->label(__("order.fields.customer_name"))
-                        ->columnSpan(12)
-                        ->required(),
-                    Repeater::make("")
-                        ->statePath("products")
-                        ->collapsible()
-                        ->defaultItems(1)
-                        ->columnSpan(12)
-                        ->cloneable()
-                        ->schema([
-                            Select::make('product_id')
-                                ->label(__('order.fields.product_id'))
-                                ->columnSpan(11)
-                                ->native(false)
-                                ->searchable()
-                                ->required()
-                                ->options(function () {
-                                    return MenuProduct::with('category')
-                                        ->where('is_available', 1)
-                                        ->get()
-                                        ->groupBy(fn($product) => $product->category->name)
-                                        ->map(function ($products) {
-                                            return $products->mapWithKeys(function ($product) {
-                                                return [
-                                                    $product->id => static::getCleanOptionString($product)
-                                                ];
-                                            });
-                                        })
-                                        ->toArray();
-                                })
-                                ->reactive()
-                                ->live()
-                                ->allowHtml()
-                                ->getSearchResultsUsing(function (string $search) {
-                                    $products = MenuProduct::where('name', 'like', "%{$search}%")->limit(50)->get();
+            ->icon('heroicon-o-shopping-cart')
+            ->description(__("order.select_products_description"))
+            ->columns(12)
+            ->schema([
+                Forms\Components\TextInput::make('customer_name')
+                    ->label(__("order.fields.customer_name"))
+                    ->columnSpan(12)
+                    ->required(),
+                Repeater::make("")
+                    ->statePath("products")
+                    ->collapsible()
+                    ->defaultItems(1)
+                    ->columnSpan(12)
+                    ->cloneable()
+                    ->schema([
+                        Select::make('product_id')
+                            ->label(__('order.fields.product_id'))
+                            ->columnSpan(11)
+                            ->native(false)
+                            ->searchable()
+                            ->required()
+                            ->options(function () {
+                                return MenuProduct::with('category')
+                                    ->where('is_available', 1)
+                                    ->get()
+                                    ->groupBy(fn($product) => $product->category->name)
+                                    ->map(function ($products) {
+                                        return $products->mapWithKeys(function ($product) {
+                                            return [
+                                                $product->id => static::getCleanOptionString($product)
+                                            ];
+                                        });
+                                    })
+                                    ->toArray();
+                            })
+                            ->reactive()
+                            ->live()
+                            ->allowHtml()
+                            ->getSearchResultsUsing(function (string $search) {
+                                $products = MenuProduct::where('name', 'like', "%{$search}%")->limit(50)->get();
 
-                                    return $products->mapWithKeys(function ($product) {
-                                        return [$product->getKey() => static::getCleanOptionString($product)];
-                                    })->toArray();
-                                })
-                                ->getOptionLabelUsing(function ($value): string {
-                                    $product = MenuProduct::find($value);
+                                return $products->mapWithKeys(function ($product) {
+                                    return [$product->getKey() => static::getCleanOptionString($product)];
+                                })->toArray();
+                            })
+                            ->getOptionLabelUsing(function ($value): string {
+                                $product = MenuProduct::find($value);
 
-                                    return static::getCleanOptionString($product);
-                                }),
-                            self::getProductCustomizationsFields()
-                        ])
-                ])
-                // Set total and tax after product setting
-                ->afterValidation(function (Forms\Get $get, Forms\Set $set) {
-                    $data = Pages\CreateOrder::cleanData($get("products"));
-                    //                    dd($data);
-                    $total = Pages\CreateOrder::calculateTotal($data);
+                                return static::getCleanOptionString($product);
+                            }),
+                        self::getProductCustomizationsFields()
+                    ])
+            ])
+            // Set total and tax after product setting
+            ->afterValidation(function (Forms\Get $get, Forms\Set $set) {
+                $data = Pages\CreateOrder::cleanData($get("products"));
+                //                    dd($data);
+                $total = Pages\CreateOrder::calculateTotal($data);
 
-                    $set("total", $total);
-                    $set("tax", Pages\CreateOrder::calculateTax($total));
-                });
+                $set("total", $total);
+                $set("tax", Pages\CreateOrder::calculateTax($total));
+            });
     }
 
     /**
@@ -299,9 +375,9 @@ class OrderResource extends Resource
     {
         return
             view('filament.components.select-product-result')
-                ->with('name', $model?->name)
-                ->with('image_url', $model?->image_url)
-                ->render();
+            ->with('name', $model?->name)
+            ->with('image_url', $model?->image_url)
+            ->render();
     }
 
     /**
@@ -342,32 +418,32 @@ class OrderResource extends Resource
                     if ($customization->required) {
                         $requiredFields[] =
                             Select::make("customizations.{$customization->id}")
-                                ->label($customization->name)
-                                ->required($customization->required)
-                                ->native(false)
-                                ->options(
+                            ->label($customization->name)
+                            ->required($customization->required)
+                            ->native(false)
+                            ->options(
                                 // Show option the name and contact the extra price
-                                    $customization->options->mapWithKeys(function ($option) {
-                                        return [
-                                            $option->id => $option->name . ' (+' . Money::format($option->extra_price) . ')'
-                                        ];
-                                    })->toArray()
-                                );
+                                $customization->options->mapWithKeys(function ($option) {
+                                    return [
+                                        $option->id => $option->name . ' (+' . Money::format($option->extra_price) . ')'
+                                    ];
+                                })->toArray()
+                            );
                     } else {
                         $optionalFields[] =
                             Select::make("customizations.{$customization->id}")
-                                ->label($customization->name)
-                                ->native(false)
-                                ->options(
+                            ->label($customization->name)
+                            ->native(false)
+                            ->options(
                                 // Show option the name and contact the extra price
-                                    $customization->options->mapWithKeys(function ($option) {
-                                        return [
-                                            $option->id => $option->name . ' (+' . Money::format($option->extra_price) . ')'
-                                        ];
-                                    })->toArray()
-                                )
-                                ->live()
-                                ->multiple();
+                                $customization->options->mapWithKeys(function ($option) {
+                                    return [
+                                        $option->id => $option->name . ' (+' . Money::format($option->extra_price) . ')'
+                                    ];
+                                })->toArray()
+                            )
+                            ->live()
+                            ->multiple();
                     }
                 }
 
@@ -434,8 +510,8 @@ class OrderResource extends Resource
                     ->mask('999999')
                     ->placeholder('XXXXXX')
                     ->maxLength(6)
-                    ->hidden(fn (Forms\Get $get): bool => $get('payment_method') != ucfirst(Order::PAYMENT_METHOD_CARD))
-                    ->required(fn (Forms\Get $get): bool => $get('payment_method') == ucfirst(Order::PAYMENT_METHOD_CARD))
+                    ->hidden(fn(Forms\Get $get): bool => $get('payment_method') != ucfirst(Order::PAYMENT_METHOD_CARD))
+                    ->required(fn(Forms\Get $get): bool => $get('payment_method') == ucfirst(Order::PAYMENT_METHOD_CARD))
                     ->prefix("#"),
                 Forms\Components\TextInput::make('total')
                     ->label(__("order.fields.total"))
@@ -493,36 +569,23 @@ class OrderResource extends Resource
                 $product = MenuProduct::find($productData['product_id']);
                 $productFields[] =
                     Forms\Components\Section::make($product->name . " - " . Money::format($product->base_price) ?? "")
-                        ->columnSpan([
-                            'sm' => 12,
-                            'lg' => 6,
-                            'xl' => 4
-                        ])
-                        ->collapsible()
-                        ->schema(function () use ($productData, $product) {
-                            $fields = [];
-                            $subtotal = $product->base_price;
-                            if (!key_exists('customizations', $productData)) return [];
+                    ->columnSpan([
+                        'sm' => 12,
+                        'lg' => 6,
+                        'xl' => 4
+                    ])
+                    ->collapsible()
+                    ->schema(function () use ($productData, $product) {
+                        $fields = [];
+                        $subtotal = $product->base_price;
+                        if (!key_exists('customizations', $productData)) return [];
 
-                            // List customizations
-                            foreach ($productData['customizations'] as $customizationId) {
-                                // If when the customization is non-required, so, it's an array
-                                if (is_array($customizationId)) {
-                                    foreach ($customizationId as $sub) {
-                                        $customization = CustomizationOption::find($sub);
-                                        $subtotal += $customization->extra_price;
-                                        $fields[] = Forms\Components\Placeholder::make("")
-                                            ->content(function () use ($customization) {
-                                                $name = $customization->customization->name;
-                                                $value = $customization->name;
-                                                $extraPrice = Money::format($customization->extra_price);
-                                                return new HtmlString(
-                                                    "<b>$name:</b> $value - $extraPrice"
-                                                );
-                                            });
-                                    }
-                                } else {
-                                    $customization = CustomizationOption::find($customizationId);
+                        // List customizations
+                        foreach ($productData['customizations'] as $customizationId) {
+                            // If when the customization is non-required, so, it's an array
+                            if (is_array($customizationId)) {
+                                foreach ($customizationId as $sub) {
+                                    $customization = CustomizationOption::find($sub);
                                     $subtotal += $customization->extra_price;
                                     $fields[] = Forms\Components\Placeholder::make("")
                                         ->content(function () use ($customization) {
@@ -534,20 +597,33 @@ class OrderResource extends Resource
                                             );
                                         });
                                 }
+                            } else {
+                                $customization = CustomizationOption::find($customizationId);
+                                $subtotal += $customization->extra_price;
+                                $fields[] = Forms\Components\Placeholder::make("")
+                                    ->content(function () use ($customization) {
+                                        $name = $customization->customization->name;
+                                        $value = $customization->name;
+                                        $extraPrice = Money::format($customization->extra_price);
+                                        return new HtmlString(
+                                            "<b>$name:</b> $value - $extraPrice"
+                                        );
+                                    });
                             }
+                        }
 
-                            // Show subtotal
-                            // separator
-                            $fields[] = Forms\Components\Placeholder::make("")
-                                ->content(new HtmlString("<hr>"));
-                            $fields[] = Forms\Components\Placeholder::make("")
-                                ->content(function () use ($subtotal) {
-                                    return
-                                        new HtmlString("<b>" . __("order.subtotal") . ":</b> " . Money::format($subtotal));
-                                });
+                        // Show subtotal
+                        // separator
+                        $fields[] = Forms\Components\Placeholder::make("")
+                            ->content(new HtmlString("<hr>"));
+                        $fields[] = Forms\Components\Placeholder::make("")
+                            ->content(function () use ($subtotal) {
+                                return
+                                    new HtmlString("<b>" . __("order.subtotal") . ":</b> " . Money::format($subtotal));
+                            });
 
-                            return $fields;
-                        });
+                        return $fields;
+                    });
             }
 
             return $productFields;
