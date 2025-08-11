@@ -1,4 +1,6 @@
 *
 !products/
 !products/**
+!reviews/
+!reviews/**
 !.gitignore
