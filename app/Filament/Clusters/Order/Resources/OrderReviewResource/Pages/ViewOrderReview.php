@@ -42,7 +42,7 @@ class ViewOrderReview extends ViewRecord
                     ->label("")
                     ->content(function () {
                         $base64 = base64_encode(Storage::disk('private_reviews')->get(OrderReview::PLACEHOLDER_IMAGE));
-                    $url = asset("storage/reviews/" . $record->image_path ?? OrderReview::PLACEHOLDER_IMAGE);
+                    $url = asset("storage/reviews/" . $this->record->image_path ?? OrderReview::PLACEHOLDER_IMAGE);
 
                         if ($this->record->image_path) {
                             $base64 = base64_encode(Storage::disk('private_reviews')->get($this->record->image_path));
