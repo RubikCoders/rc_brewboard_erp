@@ -130,6 +130,7 @@ class MenuProductResource extends Resource
                                 Forms\Components\Toggle::make('is_available')
                                     ->label(__('product.fields.is_available'))
                                     ->default(true)
+                                    ->inline(false)
                                     ->columnSpan(1),
                             ])
                     ])
@@ -148,7 +149,7 @@ class MenuProductResource extends Resource
                                         Forms\Components\Select::make('ingredient_type')
                                             ->label('Tipo de Ingrediente')
                                             ->options([
-                                                Ingredient::class => 'Materia Prima',
+                                                Ingredient::class => 'Ingrediente Base',
                                                 MenuProduct::class => 'Producto Compuesto',
                                             ])
                                             ->rules(['required', 'string'])
@@ -192,7 +193,7 @@ class MenuProductResource extends Resource
                     ])
                     ->columnSpan(2)
                     ->collapsible()
-                    ->collapsed(),
+                    ->collapsed(false),
 
                 // Sección de personalizaciones
                 Forms\Components\Section::make(__('product.sections.customizations.title'))
@@ -213,10 +214,12 @@ class MenuProductResource extends Resource
                                         Forms\Components\Toggle::make('required')
                                             ->label(__('product.fields.customization_required'))
                                             ->default(false)
+                                            ->inline(false)
                                             ->columnSpan(1),
                                     ]),
 
                                 Forms\Components\Repeater::make('options')
+                                    ->label('Opciones')
                                     ->relationship()
                                     ->schema([
                                         Forms\Components\Grid::make(2)

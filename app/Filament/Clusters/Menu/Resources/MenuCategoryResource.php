@@ -128,8 +128,8 @@ class MenuCategoryResource extends Resource
                         $record->products_count > 0
                             ? MenuProductResource::getUrl('index', [
                                 'tableFilters' => [
-                                    'category_id' => [
-                                        'values' => [$record->id]
+                                    'category' => [
+                                        'value' => [$record->id]
                                     ]
                                 ]
                             ])
@@ -141,7 +141,6 @@ class MenuCategoryResource extends Resource
                             ? "Clic para ver los {$record->products_count} producto(s) de esta categoría"
                             : 'Esta categoría no tiene productos'
                     )
-                    // ->openUrlInNewTab(fn(MenuCategory $record): bool => $record->products_count > 0)
                     ->extraAttributes(
                         fn(MenuCategory $record): array =>
                         $record->products_count > 0
